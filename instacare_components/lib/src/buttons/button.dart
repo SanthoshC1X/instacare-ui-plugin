@@ -36,6 +36,8 @@ class InstaCareButton extends StatelessWidget {
     this.isDisabled = false,
   }) : _variant = _ButtonVariant.secondary;
 
+  bool get _enabled => onPressed != null && !isLoading && !isDisabled;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -45,9 +47,10 @@ class InstaCareButton extends StatelessWidget {
         final textSize = (width * 0.045).clamp(13.0, 16.0);
         final iconSize = (width * 0.05).clamp(16.0, 18.0);
         final skeletonWidth = (width * 0.34).clamp(56.0, 120.0);
-        final textColor = _variant == _ButtonVariant.primary
+
+        final Color textColor = _variant == _ButtonVariant.primary
             ? AppColors.baseWhite
-            : AppColors.gray2;
+            : (_enabled ? AppColors.primary3 : AppColors.gray5);
 
         final Widget child = isLoading
             ? InstaCareSkeletonLoading(
@@ -73,8 +76,10 @@ class InstaCareButton extends StatelessWidget {
                     child: Text(
                       text,
                       overflow: TextOverflow.ellipsis,
-                      style: InstaCareTypography.r
-                          .copyWith(fontSize: textSize, color: textColor),
+                      style: InstaCareTypography.r.copyWith(
+                        fontSize: textSize,
+                        color: textColor,
+                      ),
                     ),
                   ),
                 ],
@@ -97,30 +102,38 @@ class InstaCareButton extends StatelessWidget {
     switch (_variant) {
       case _ButtonVariant.primary:
         return ElevatedButton(
-          onPressed: (isLoading || isDisabled) ? null : onPressed,
+          onPressed: _enabled ? onPressed : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: theme.colorScheme.primary,
+            backgroundColor:
+                _enabled ? theme.colorScheme.primary : AppColors.gray6,
             foregroundColor: AppColors.baseWhite,
             padding: size.padding,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
             elevation: 0,
           ),
           child: child,
         );
+
       case _ButtonVariant.secondary:
         return OutlinedButton(
-          onPressed: (isLoading || isDisabled) ? null : onPressed,
+          onPressed: _enabled ? onPressed : null,
           style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.gray2,
-            backgroundColor: AppColors.primary8,
+            foregroundColor:
+                _enabled ? AppColors.primary3 : AppColors.gray5,
+            backgroundColor:
+                _enabled ? AppColors.primary8 : AppColors.gray9,
             padding: size.padding,
             side: BorderSide(
-              color: isDisabled ? AppColors.gray6 : theme.colorScheme.primary,
+              color: _enabled
+                  ? theme.colorScheme.primary
+                  : AppColors.gray6,
               width: 1.2,
             ),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           child: child,
         );
