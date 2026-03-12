@@ -15,14 +15,14 @@ This file is a full reference for the `instacare_components` plugin:
 
 `instacare_components` is a reusable Flutter UI component plugin used to build Instacare screens quickly with:
 - shared design tokens (`AppColors`, `InstaCareTypography`, `ButtonSize`)
-- prebuilt widgets for buttons, forms, cards, selection, feedback, dialogs, navigation, upload, and step progress
+- prebuilt widgets for buttons, forms, cards, selection, feedback, dialogs, navigation, upload, animation, markdown, and step progress
 
 Package info (from `instacare_components/pubspec.yaml`):
 - Package name: `instacare_components`
 - Version: `1.0.0`
 - Dart SDK: `>=3.0.0 <4.0.0`
 - Flutter: `>=3.16.0`
-- Extra dependency: `country_flags`
+- Extra dependencies: `country_flags`, `flutter_markdown`, `markdown`
 
 ---
 
@@ -50,6 +50,7 @@ instacare-ui-plugin/
         animation/
           carousel.dart
           skeleton_loading.dart
+          markdown.dart
         badges/
           status_badge.dart
         buttons/
@@ -210,6 +211,7 @@ Extension values:
 |---|---|---|---|
 | `InstaCareSkeletonLoading(...)` | `StatefulWidget` | none | `width: double?`, `height: double = 14`, `borderRadius: BorderRadiusGeometry = Radius.circular(8)`, `baseColor: Color?`, `highlightColor: Color?`, `duration: Duration = 1200ms` |
 | `InstaCareCarousel(...)` | `StatefulWidget` | `items: List<Widget>` | `height: double = 200`, `autoPlayDuration: Duration = 3s`, `autoPlay: bool = true`, `showIndicators: bool = true`, `indicatorActiveColor: Color?`, `indicatorInactiveColor: Color?`, `padding: EdgeInsetsGeometry?`, `viewportFraction: double = 0.9`, `onPageChanged: ValueChanged<int>?` |
+| `InstaCareMarkdown(...)` | `StatelessWidget` | `data: String` | `padding: EdgeInsetsGeometry?`, `styleSheet: MarkdownStyleSheet?`, `onTapLink: void Function(String,String?,String)?`, `selectable: bool = false`, `imageDirectory: String?`, `maxImageHeight: double = 240` |
 | `InstaCareStatusBadge(...)` | `StatelessWidget` | `label: String` | `type: InstaCareStatusBadgeType = custom` |
 | `InstaCareButton(...)` | `StatelessWidget` | `text: String` | `onPressed: VoidCallback?`, `isLoading: bool = false`, `size: ButtonSize = medium`, `icon: IconData?`, `fullWidth: bool = false`, `isDisabled: bool = false` |
 | `InstaCareButton.secondary(...)` | named constructor | `text: String` | same optional fields as primary |
@@ -370,6 +372,26 @@ Container(
 )
 ```
 
+### 8.5 Markdown Renderer
+```dart
+InstaCareMarkdown(
+  data: '''
+# Title
+
+- [x] Task
+- [ ] Pending
+
+| Name | Value |
+| --- | --- |
+| A | 1 |
+''',
+  selectable: true,
+  onTapLink: (text, href, title) {
+    // Handle links
+  },
+)
+```
+
 ---
 
 ## 9) Folder-to-Use Mapping (Quick)
@@ -385,7 +407,7 @@ Container(
 - `src/navigation`: app top/bottom navigation widgets
 - `src/pills`: compact status/summary pills
 - `src/steps`: stepper progression UI
-- `src/animation`: skeleton and carousel
+- `src/animation`: skeleton, carousel, and markdown renderer
 - `src/upload`: file upload tile
 
 ---
@@ -407,6 +429,7 @@ Container(
 - `InstaCareTopHeaderTitle` uses default AppBar text style unless your app theme overrides it.
 - `InstaCareRadioButtons` label text uses default `Text()` style (not tokenized in component).
 - `InstaCareBookingCard` has several required display-label strings (`bookingIdPrefix`, etc.); pass all of them.
+- Example app (`example/lib/main.dart`) includes a Markdown demo with a toggle to switch between raw markdown text and rendered output using a slide animation.
 - `create-plugin.sh` is for scaffold generation and can wipe existing package folder.
 
 ---

@@ -81,6 +81,7 @@ class _GalleryState extends State<Gallery> {
   bool checkOne = false;
   bool checkboxCard1 = false;
   bool checkboxCard2 = true;
+  bool consentChecked = false;
   String selectedRadio = 'Yes';
   final Set<String> selectedFilters = <String>{'Wound Dressing'};
   Set<String> selectedMultiDropdown = <String>{'check box 2'};
@@ -733,12 +734,178 @@ class _GalleryState extends State<Gallery> {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       children: [
         _sectionHeading('Patient Components'),
+        _sectionHeading('Services'),
         _componentBlock(
-          title: 'No Components',
-          fileName: 'partner_only',
-          child: const Text(
-            'not yet ready ...',
+          title: 'Service Category Grid',
+          fileName: 'service_category_grid.dart',
+          child: InstaCareServiceCategoryGrid(
+            categories: const [
+              InstaCareServiceCategory(
+                name: 'Nursing',
+                description: 'Compassionate care',
+                price: 'from \u20B9499',
+                imagePath: 'packages/instacare_components/lib/src/assessts_patient/nursing.png',
+              ),
+              InstaCareServiceCategory(
+                name: 'Physiotherapy',
+                description: 'Professional care',
+                price: 'from \u20B9599',
+                imagePath: 'packages/instacare_components/lib/src/assessts_patient/physiotheraphy.png',
+              ),
+              InstaCareServiceCategory(
+                name: 'Caretaker',
+                description: 'Verified care',
+                price: 'from \u20B9699',
+                imagePath: 'packages/instacare_components/lib/src/assessts_patient/caretaker.png',
+              ),
+              InstaCareServiceCategory(
+                name: 'Live-in Care',
+                description: 'Assured care',
+                price: 'from \u20B9899',
+                imagePath: 'packages/instacare_components/lib/src/assessts_patient/liveincare.png',
+              ),
+            ],
+            onCategoryTap: (category) {
+              showServiceCategoryDialog(
+                context: context,
+                category: category,
+                onNavigate: () {},
+              );
+            },
           ),
+        ),
+        _sectionHeading('Navigation'),
+        _componentBlock(
+          title: 'Welcome Header',
+          fileName: 'welcome_header.dart',
+          child: const InstaCareWelcomeHeader(
+            userName: 'Anjana',
+            searchHint: 'What care do you need today?',
+          ),
+        ),
+        _componentBlock(
+          title: 'Bottom Nav Bar (Patient)',
+          fileName: 'bottom_app_nav_bar.dart',
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: InstaCareBottomAppNavBar(
+              currentIndex: currentNavIndex,
+              onTap: (index) => setState(() => currentNavIndex = index),
+              backgroundColor: AppColors.primary9,
+              selectedItemColor: AppColors.primary2,
+              unselectedItemColor: AppColors.primary6,
+              topBorderColor: AppColors.primary2,
+              showShadow: true,
+              items: const [
+                InstaCareBottomNavItem(
+                    icon: Icons.home_outlined, label: 'Home'),
+                InstaCareBottomNavItem(
+                    icon: Icons.grid_view_outlined, label: 'Services'),
+                InstaCareBottomNavItem(
+                    icon: Icons.headset_mic_outlined, label: 'Support'),
+                InstaCareBottomNavItem(
+                    icon: Icons.person_outline, label: 'Profile'),
+              ],
+            ),
+          ),
+        ),
+        _sectionHeading('Inputs'),
+        _componentBlock(
+          title: 'Service Search Bar',
+          fileName: 'search_bar.dart',
+          child: const InstaCareSearchBar(
+            hint: 'What service(s) do you need today?',
+          ),
+        ),
+        _componentBlock(
+          title: 'Title with Back Button',
+          fileName: 'theme/heading.dart',
+          child: InstaCareHeading.titleWithBackButton(
+            text: 'Title',
+            onBackPressed: () {},
+          ),
+        ),
+        _componentBlock(
+          title: 'Consent Checkbox',
+          fileName: 'consent_checkbox.dart',
+          child: InstaCareConsentCheckbox(
+            value: consentChecked,
+            onChanged: (v) => setState(() => consentChecked = v ?? false),
+            onLinkTap: () {},
+          ),
+        ),
+        _sectionHeading('Badges & Status'),
+        _componentBlock(
+          title: 'Status Badge',
+          fileName: 'status_badge.dart',
+          child: const InstaCareStatusBadge(
+            label: 'Status',
+            type: InstaCareStatusBadgeType.custom,
+          ),
+        ),
+        _componentBlock(
+          title: 'OTP Input',
+          fileName: 'otp_input.dart',
+          child: InstaCareOtpInput(
+            length: 4,
+            onChanged: (value) {},
+            onCompleted: (value) {},
+          ),
+        ),
+        _sectionHeading('Cards'),
+        _componentBlock(
+          title: 'Patient Partner Connect',
+          fileName: 'patient_partner_connect.dart',
+          child: const InstaCarePatientPartnerConnect(
+            patientName: 'Anjana',
+            partnerName: 'Keerthana',
+          ),
+        ),
+        _componentBlock(
+          title: 'Cancel Booking (Danger Button)',
+          fileName: 'danger_button.dart',
+          child: InstaCareDangerButton(
+            text: 'Cancel this Booking',
+            fullWidth: true,
+            onPressed: () {},
+          ),
+        ),
+        _componentBlock(
+          title: 'Service List Tile',
+          fileName: 'service_list_tile.dart',
+          child: InstaCareServiceListTile(
+            items: const [
+              InstaCareServiceListItem(
+                name: 'Vital Signs Monitoring',
+                duration: '30 - 45 mins',
+                price: '\u20B9500',
+                description:
+                    'Monitoring essential body parameters such as blood pressure, pulse, and oxygen levels.',
+                isNew: true,
+              ),
+              InstaCareServiceListItem(
+                name: 'Wound Dressing (Minor)',
+                duration: '30 - 45 mins',
+                price: '\u20B9500',
+                description:
+                    'Basic cleaning and dressing of small cuts, abrasions, or minor wounds.',
+              ),
+              InstaCareServiceListItem(
+                name: 'Wound Dressing (Major)',
+                duration: '30 - 45 mins',
+                price: '\u20B9500',
+                description:
+                    'Sterile dressing and care for large, deep, or post-surgical wounds.',
+              ),
+            ],
+            onItemTap: (item) {},
+          ),
+        ),
+        _sectionHeading('Signature'),
+        _componentBlock(
+          title: 'Signature Pad',
+          fileName: 'signature_pad.dart',
+          child: const InstaCareSignaturePad(),
         ),
       ],
     );

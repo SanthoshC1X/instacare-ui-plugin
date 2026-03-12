@@ -63,7 +63,8 @@ Source scope: `instacare_components/lib/src/**`
 | `InstaCareAppointmentStatusPills` | wrap spacing 8, runSpacing 8 | Uses `InstaCareStatusBadge` label style | Uses `InstaCareStatusBadge` content style |
 | `InstaCareVerticalStepper` | step circle `26-38`, step number size `12-16`, connector height 2, connector horizontal padding 6 | Step number is label-like: `sm` with override `w600` | Same as label |
 | `InstaCareFileUploadTile` | full width, radius 12, padding 16, upload icon 28, title-subtitle gap 4 | Title: `r w700` | Subtitle: `r w400` |
-
+| `InstaCareCarousel` | default height 
+| Instacre
 ## Label vs No-Label Quick Rule
 - **Label** in this document means explicit field labels or heading/title text.
 - **No-label/content** means input value text, hint text, body text, helper text, option text, or message text.

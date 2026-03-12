@@ -16,6 +16,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^4.0.0
 flutter:
+  assets:
+    - lib/src/assessts_patient/
   plugin:
     platforms:
       android:
