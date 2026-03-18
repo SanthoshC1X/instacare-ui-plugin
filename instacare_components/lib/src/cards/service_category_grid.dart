@@ -36,7 +36,7 @@ class InstaCareServiceCategoryGrid extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 1.35,
+        childAspectRatio: 2.2,
       ),
       itemCount: categories.length,
       itemBuilder: (context, index) {
@@ -82,11 +82,11 @@ class _ServiceCategoryCard extends StatelessWidget {
         ],
       ),
       clipBehavior: Clip.antiAlias,
-      child: FittedBox(
-        fit: BoxFit.fill,
-        child: Image.asset(
-          category.imagePath!,
-        ),
+      child: Image.asset(
+        category.imagePath!,
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover,
       ),
     );
   }
