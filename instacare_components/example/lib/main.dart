@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instacare_components/instacare_components.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'themes/partner_theme.dart';
 import 'themes/user_theme.dart';
 
@@ -744,25 +745,29 @@ class _GalleryState extends State<Gallery> {
                 name: 'Nursing',
                 description: 'Compassionate care',
                 price: 'from \u20B9499',
-                imagePath: 'packages/instacare_components/lib/src/assessts_patient/nursing.png',
+                imagePath:
+                    'packages/instacare_components/lib/src/assessts_patient/nursing.png',
               ),
               InstaCareServiceCategory(
                 name: 'Physiotherapy',
                 description: 'Professional care',
                 price: 'from \u20B9599',
-                imagePath: 'packages/instacare_components/lib/src/assessts_patient/physiotheraphy.png',
+                imagePath:
+                    'packages/instacare_components/lib/src/assessts_patient/physiotheraphy.png',
               ),
               InstaCareServiceCategory(
                 name: 'Caretaker',
                 description: 'Verified care',
                 price: 'from \u20B9699',
-                imagePath: 'packages/instacare_components/lib/src/assessts_patient/caretaker.png',
+                imagePath:
+                    'packages/instacare_components/lib/src/assessts_patient/caretaker.png',
               ),
               InstaCareServiceCategory(
                 name: 'Live-in Care',
                 description: 'Assured care',
                 price: 'from \u20B9899',
-                imagePath: 'packages/instacare_components/lib/src/assessts_patient/liveincare.png',
+                imagePath:
+                    'packages/instacare_components/lib/src/assessts_patient/liveincare.png',
               ),
             ],
             onCategoryTap: (category) {
@@ -911,11 +916,158 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
+  Widget _buildFontWeightsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFontWeightsGrid(GoogleFonts.crimsonPro, 'Crimson Pro (Headings)'),
+        const SizedBox(height: 32),
+        const Divider(height: 1, color: AppColors.ivory3),
+        const SizedBox(height: 32),
+        _buildFontWeightsGrid(GoogleFonts.figtree, 'Figtree (Body)'),
+      ],
+    );
+  }
+
+  Widget _buildFontWeightsGrid(
+    TextStyle Function({
+      TextStyle? textStyle,
+      Color? color,
+      Color? backgroundColor,
+      double? fontSize,
+      FontWeight? fontWeight,
+      FontStyle? fontStyle,
+      double? letterSpacing,
+      double? wordSpacing,
+      TextBaseline? textBaseline,
+      double? height,
+      Locale? locale,
+      Paint? foreground,
+      Paint? background,
+      List<Shadow>? shadows,
+      List<FontFeature>? fontFeatures,
+      TextDecoration? decoration,
+      Color? decorationColor,
+      TextDecorationStyle? decorationStyle,
+      double? decorationThickness,
+    }) fontStyle,
+    String name,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.gray5,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ...[100, 200, 300, 400, 500, 600, 700, 800, 900].map((w) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 40,
+                  child: Text(
+                    'w$w',
+                    style:
+                        const TextStyle(fontSize: 12, color: AppColors.gray1),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    'The quick brown fox jumps over the lazy dog',
+                    style: fontStyle(
+                      fontWeight: FontWeight.values[w ~/ 100 - 1],
+                      fontSize: 16,
+                    ).copyWith(color: AppColors.gray2),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildTextStylesSection() {
+    final styles = [
+      ('h1', InstaCareTypography.h1, '24/Auto'),
+      ('h2', InstaCareTypography.h2, '20/Auto'),
+      ('h3', InstaCareTypography.h3, '18/Auto'),
+      ('h4', InstaCareTypography.h4, '14/Auto'),
+      ('p', InstaCareTypography.p, '14/Auto'),
+      ('r', InstaCareTypography.r, '14/Auto'),
+      ('m', InstaCareTypography.m, '14/Auto'),
+      ('s', InstaCareTypography.s, '12/Auto'),
+      ('sm', InstaCareTypography.sm, '12/Auto'),
+      ('xs', InstaCareTypography.xs, '10/Auto'),
+    ];
+
+    return Column(
+      children: styles.map((styleInfo) {
+        final (label, style, detail) = styleInfo;
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Ag',
+                  style: style.copyWith(color: AppColors.gray1, height: 1),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                  color: AppColors.gray1,
+                ),
+              ),
+              Text(
+                ' \u00B7 ',
+                style: TextStyle(color: AppColors.gray5.withValues(alpha: 0.5)),
+              ),
+              Text(
+                detail,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.gray5,
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   Widget _buildCommonPage() {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       children: [
         _sectionHeading('Common Components'),
+        _sectionHeading('Typography'),
+        _componentBlock(
+          title: 'Font Weights',
+          fileName: 'google_fonts',
+          child: _buildFontWeightsSection(),
+        ),
+        _componentBlock(
+          title: 'Text Styles',
+          fileName: 'typography.dart',
+          child: _buildTextStylesSection(),
+        ),
         _sectionHeading('Headings'),
         _componentBlock(
           title: 'Top Header Title',

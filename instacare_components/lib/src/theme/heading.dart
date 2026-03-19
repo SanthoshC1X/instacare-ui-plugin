@@ -6,12 +6,12 @@ import 'typography.dart';
 /// Provides consistent heading styles across the app
 class InstaCareHeading {
   /// Top Header Title - Used for main page headers
-  static Widget topHeaderTitle(String text) {
+  static Widget topHeaderTitle(String text, {Color? color}) {
     return Text(
       text,
       style: InstaCareTypography.h2.copyWith(
         fontWeight: FontWeight.w600,
-        color: AppColors.gray200,
+        color: color ?? AppColors.gray200,
       ),
     );
   }
@@ -20,11 +20,12 @@ class InstaCareHeading {
   static Widget titleWithBackButton({
     required String text,
     VoidCallback? onBackPressed,
+    Color? color,
   }) {
     return Row(
       children: [
         IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new,
             color: AppColors.gray100,
             size: 28,

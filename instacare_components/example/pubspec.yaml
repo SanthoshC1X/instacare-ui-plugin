@@ -5,6 +5,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^8.0.2
   instacare_components:
     path: ../
 dev_dependencies:

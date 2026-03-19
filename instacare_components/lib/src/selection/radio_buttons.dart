@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
+import '../theme/typography.dart';
 
 class InstaCareRadioOption<T> {
   final T value;
@@ -60,7 +61,12 @@ class InstaCareRadioButtons<T> extends StatelessWidget {
                         : null,
                   ),
                   const SizedBox(width: 8),
-                  Text(option.label),
+                  Text(
+                    option.label,
+                    style: InstaCareTypography.r.copyWith(
+                      color: AppColors.gray2,
+                    ),
+                  ),
                 ],
               ),
             ),

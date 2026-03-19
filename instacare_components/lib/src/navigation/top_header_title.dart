@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../theme/typography.dart';
+import '../theme/color.dart';
 
 class InstaCareTopHeaderTitle extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -18,7 +20,13 @@ class InstaCareTopHeaderTitle extends StatelessWidget implements PreferredSizeWi
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        style: InstaCareTypography.h2.copyWith(
+          fontWeight: FontWeight.w600,
+          color: AppColors.gray2,
+        ),
+      ),
       leading: onBack == null ? null : IconButton(icon: const Icon(Icons.arrow_back_ios_new), onPressed: onBack),
       actions: actions,
     );
