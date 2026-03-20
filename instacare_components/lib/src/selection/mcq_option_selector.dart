@@ -38,7 +38,7 @@ class InstaCareMcqOptionSelector extends StatelessWidget {
           children: [
             Text(
               question,
-              style: InstaCareTypography.h3.copyWith(color: AppColors.gray200),
+              style: InstaCareTypography.h3.copyWith(color: AppColors.gray800),
             ),
             const SizedBox(height: 18),
             ...options.map(
@@ -55,7 +55,7 @@ class InstaCareMcqOptionSelector extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isSelected ? Theme.of(context).colorScheme.primary : AppColors.primary700,
+                          color: isSelected ? Theme.of(context).colorScheme.primary : AppColors.primary300,
                           width: 1.4,
                         ),
                       ),
@@ -67,7 +67,7 @@ class InstaCareMcqOptionSelector extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: isSelected ? Theme.of(context).colorScheme.primary : AppColors.primary200,
+                                color: isSelected ? Theme.of(context).colorScheme.primary : AppColors.primary800,
                                 width: 2,
                               ),
                             ),
@@ -88,7 +88,7 @@ class InstaCareMcqOptionSelector extends StatelessWidget {
                           Expanded(
                             child: Text(
                               option,
-                              style: InstaCareTypography.r.copyWith(color: AppColors.gray200),
+                              style: InstaCareTypography.r.copyWith(color: AppColors.gray800),
                             ),
                           ),
                         ],

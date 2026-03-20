@@ -47,3 +47,4 @@ export 'src/inputs/signature_pad.dart';
 export 'src/cards/service_category_grid.dart';
 export 'src/cards/service_list_tile.dart';
 export 'src/cards/patient_partner_connect.dart';
+export 'src/navigation/keyboard_aware_scaffold.dart';

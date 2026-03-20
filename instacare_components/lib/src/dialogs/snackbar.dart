@@ -160,7 +160,7 @@ class _InstaCareSnackbarWidgetState extends State<_InstaCareSnackbarWidget>
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.gray600.withValues(alpha: 0.2),
+                    color: AppColors.gray400.withValues(alpha: 0.2),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),

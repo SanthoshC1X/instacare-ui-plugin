@@ -122,7 +122,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.primary300),
+                  border: Border.all(color: AppColors.primary700),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
@@ -147,7 +147,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                           },
                           child: Container(
                             color: isSelected
-                                ? AppColors.gray800
+                                ? AppColors.gray200
                                 : Colors.transparent,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -157,8 +157,8 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                               label,
                               style: InstaCareTypography.r.copyWith(
                                 color: isSelected
-                                    ? AppColors.gray100
-                                    : AppColors.gray200,
+                                    ? AppColors.gray900
+                                    : AppColors.gray800,
                                 fontWeight: isSelected
                                     ? FontWeight.w500
                                     : FontWeight.w400,
@@ -193,7 +193,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
             widget.label!,
             style: InstaCareTypography.r.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColors.gray200,
+              color: AppColors.gray800,
             ),
           ),
           const SizedBox(height: 8),
@@ -207,7 +207,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
             child: InputDecorator(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: AppColors.ivory700,
+                fillColor: AppColors.ivory300,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 14,
@@ -216,20 +216,20 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                   _expanded
                       ? Icons.keyboard_arrow_up
                       : Icons.keyboard_arrow_down,
-                  color: AppColors.gray400,
+                  color: AppColors.gray600,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.primary300),
+                  borderSide: const BorderSide(color: AppColors.primary700),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.primary300),
+                  borderSide: const BorderSide(color: AppColors.primary700),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
-                    color: AppColors.primary100,
+                    color: AppColors.primary900,
                     width: 2,
                   ),
                 ),
@@ -240,7 +240,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                 overflow: TextOverflow.ellipsis,
                 style: InstaCareTypography.r.copyWith(
                   color:
-                      widget.value == null ? AppColors.gray600 : AppColors.gray200,
+                      widget.value == null ? AppColors.gray400 : AppColors.gray800,
                 ),
               ),
             ),

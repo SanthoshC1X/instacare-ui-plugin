@@ -30,24 +30,24 @@ class _MyAppState extends State<MyApp> {
 }
 
 class _BookingCardDemoState {
-  final String category;
-  final String serviceName;
   final String patientName;
+  final String? patientGender;
+  final int? patientAge;
+  final String? partnerName;
   final String bookingId;
-  final String location;
+  final String serviceName;
   final String dateTime;
-  final String? durationText;
-  final InstaCareStatusBadgeType status;
+  final int? daysUntil;
 
   const _BookingCardDemoState({
-    required this.category,
-    required this.serviceName,
     required this.patientName,
+    this.patientGender,
+    this.patientAge,
+    this.partnerName,
     required this.bookingId,
-    required this.location,
+    required this.serviceName,
     required this.dateTime,
-    required this.status,
-    this.durationText,
+    this.daysUntil,
   });
 }
 
@@ -160,51 +160,50 @@ class _GalleryState extends State<Gallery> {
   final List<_BookingCardDemoState> _bookingCardStates =
       const <_BookingCardDemoState>[
     _BookingCardDemoState(
-      category: 'Nursing',
-      serviceName: 'Vitals Monitoring',
-      patientName: 'Jimmy',
-      bookingId: '0125',
-      location: 'Anna Nagar',
-      dateTime: 'Sep 08, 10.30 AM',
-      status: InstaCareStatusBadgeType.active,
+      patientName: 'Anjana',
+      patientGender: 'F',
+      patientAge: 34,
+      partnerName: 'Rithika',
+      bookingId: '786452',
+      serviceName: 'Blood Sugar Monitoring',
+      dateTime: 'February 14, 2026 | 6:30 p.m.',
     ),
     _BookingCardDemoState(
-      category: 'Nursing',
-      serviceName: 'Vitals Monitoring',
-      patientName: 'Jimmy',
-      bookingId: '0125',
-      location: 'Anna Nagar',
-      dateTime: 'Sep 08, 10.30 AM',
-      durationText: 'Duration : 1h 30m',
-      status: InstaCareStatusBadgeType.inTravel,
+      patientName: 'Anjana',
+      patientGender: 'F',
+      patientAge: 34,
+      partnerName: 'Rithika',
+      bookingId: '786452',
+      serviceName: 'Nebulization',
+      dateTime: 'February 16, 2026 | 7:30 p.m.',
+      daysUntil: 2,
     ),
     _BookingCardDemoState(
-      category: 'Nursing',
-      serviceName: 'Vitals Monitoring',
       patientName: 'John Durai',
-      bookingId: '0125',
-      location: 'Anna Nagar',
-      dateTime: 'Sep 08, 10.30 AM',
-      status: InstaCareStatusBadgeType.upcoming,
+      patientGender: 'M',
+      patientAge: 45,
+      partnerName: 'Priya',
+      bookingId: '786500',
+      serviceName: 'Postnatal Physiotherapy',
+      dateTime: 'February 17, 2026 | 5:00 p.m.',
+      daysUntil: 3,
     ),
     _BookingCardDemoState(
-      category: 'Nursing',
-      serviceName: 'Vitals Monitoring',
       patientName: 'Jimmy',
-      bookingId: '0125',
-      location: 'Anna Nagar',
-      dateTime: 'Sep 08, 10.30 AM',
-      durationText: 'Duration : 1h 30m',
-      status: InstaCareStatusBadgeType.completed,
+      patientGender: 'M',
+      patientAge: 28,
+      bookingId: '786321',
+      serviceName: 'Vitals Monitoring',
+      dateTime: 'February 10, 2026 | 10:30 a.m.',
     ),
     _BookingCardDemoState(
-      category: 'Nursing',
-      serviceName: 'Vitals Monitoring',
-      patientName: 'Jimmy',
-      bookingId: '0125',
-      location: 'Anna Nagar',
-      dateTime: 'Sep 08, 10.30 AM',
-      status: InstaCareStatusBadgeType.cancelled,
+      patientName: 'Meera',
+      patientGender: 'F',
+      patientAge: 60,
+      partnerName: 'Kavitha',
+      bookingId: '786100',
+      serviceName: 'Wound Dressing',
+      dateTime: 'February 8, 2026 | 9:00 a.m.',
     ),
   ];
 
@@ -242,7 +241,7 @@ class _GalleryState extends State<Gallery> {
           decoration: BoxDecoration(
             color: AppColors.baseWhite,
             borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: AppColors.primary800),
+            border: Border.all(color: AppColors.primary200),
           ),
           child: Stack(
             children: [
@@ -286,7 +285,7 @@ class _GalleryState extends State<Gallery> {
             label,
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              color: active ? AppColors.baseWhite : AppColors.gray300,
+              color: active ? AppColors.baseWhite : AppColors.gray700,
             ),
           ),
         ),
@@ -302,7 +301,7 @@ class _GalleryState extends State<Gallery> {
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: AppColors.gray200,
+          color: AppColors.gray800,
         ),
       ),
     );
@@ -323,7 +322,7 @@ class _GalleryState extends State<Gallery> {
               child: Text(
                 '${index + 1}',
                 style: InstaCareTypography.m.copyWith(
-                  color: isSelected ? AppColors.primary200 : AppColors.gray400,
+                  color: isSelected ? AppColors.primary800: AppColors.gray600,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 ),
               ),
@@ -343,9 +342,9 @@ class _GalleryState extends State<Gallery> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.ivory700,
+        color: AppColors.ivory300,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary900, width: 1.4),
+        border: Border.all(color: AppColors.primary100, width: 1.4),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,7 +354,7 @@ class _GalleryState extends State<Gallery> {
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,
-              color: AppColors.gray200,
+              color: AppColors.gray800,
             ),
           ),
           const SizedBox(height: 2),
@@ -441,10 +440,10 @@ class _GalleryState extends State<Gallery> {
         child: InstaCareBottomAppNavBar(
           currentIndex: currentNavIndex,
           onTap: (index) => setState(() => currentNavIndex = index),
-          backgroundColor: AppColors.ivory700,
-          selectedItemColor: AppColors.primary200,
-          unselectedItemColor: AppColors.primary600,
-          topBorderColor: AppColors.primary200,
+          backgroundColor: AppColors.ivory300,
+          selectedItemColor: AppColors.primary800,
+          unselectedItemColor: AppColors.primary400,
+          topBorderColor: AppColors.primary800,
           showShadow: true,
           items: const [
             InstaCareBottomNavItem(icon: Icons.home_outlined, label: 'Home'),
@@ -502,7 +501,7 @@ class _GalleryState extends State<Gallery> {
                   decoration: BoxDecoration(
                     color: AppColors.baseWhite,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.primary800),
+                    border: Border.all(color: AppColors.primary200),
                   ),
                   child: const InstaCareMarkdown(data: _markdownSample),
                 )
@@ -513,14 +512,14 @@ class _GalleryState extends State<Gallery> {
                   decoration: BoxDecoration(
                     color: AppColors.baseWhite,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.primary800),
+                    border: Border.all(color: AppColors.primary200),
                   ),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SelectableText(
                       _markdownSample,
                       style: InstaCareTypography.s.copyWith(
-                        color: AppColors.gray200,
+                        color: AppColors.gray800,
                         fontFamily: 'monospace',
                         height: 1.5,
                       ),
@@ -578,19 +577,14 @@ class _GalleryState extends State<Gallery> {
           title: 'Booking Card',
           fileName: 'booking_card.dart',
           child: InstaCareBookingCard(
-            category: bookingState.category,
-            serviceName: bookingState.serviceName,
             patientName: bookingState.patientName,
+            patientGender: bookingState.patientGender,
+            patientAge: bookingState.patientAge,
+            partnerName: bookingState.partnerName,
             bookingId: bookingState.bookingId,
-            location: bookingState.location,
+            serviceName: bookingState.serviceName,
             dateTime: bookingState.dateTime,
-            durationText: bookingState.durationText,
-            status: bookingState.status,
-            backgroundColor: AppColors.ivory700,
-            bookingIdPrefix: 'Booking ID:',
-            inTravelStatusLabel: 'In-Travel',
-            fallbackPatientInitial: 'P',
-            categoryServiceSeparator: ' - ',
+            daysUntil: bookingState.daysUntil,
           ),
         ),
         _bookingStateControl(),
@@ -602,7 +596,7 @@ class _GalleryState extends State<Gallery> {
             amount: 'Rs 0',
             redeemButtonText: 'Redeem',
             onRedeem: () {},
-            backgroundColor: AppColors.ivory700,
+            backgroundColor: AppColors.ivory300,
           ),
         ),
         _componentBlock(
@@ -612,7 +606,7 @@ class _GalleryState extends State<Gallery> {
             items: [
               InstaCareCardListItem(
                 card: InstaCareCard(
-                  backgroundColor: AppColors.ivory700,
+                  backgroundColor: AppColors.ivory300,
                   child: Center(child: Text('Card')),
                 ),
                 title: 'Wound Dressing',
@@ -620,7 +614,7 @@ class _GalleryState extends State<Gallery> {
               ),
               InstaCareCardListItem(
                 card: InstaCareCard(
-                  backgroundColor: AppColors.ivory700,
+                  backgroundColor: AppColors.ivory300,
                   child: Center(child: Text('Card')),
                 ),
                 title: 'Nursing Visit',
@@ -796,10 +790,10 @@ class _GalleryState extends State<Gallery> {
             child: InstaCareBottomAppNavBar(
               currentIndex: currentNavIndex,
               onTap: (index) => setState(() => currentNavIndex = index),
-              backgroundColor: AppColors.primary900,
-              selectedItemColor: AppColors.primary200,
-              unselectedItemColor: AppColors.primary600,
-              topBorderColor: AppColors.primary200,
+              backgroundColor: AppColors.primary100,
+              selectedItemColor: AppColors.primary800,
+              unselectedItemColor: AppColors.primary400,
+              topBorderColor: AppColors.primary800,
               showShadow: true,
               items: const [
                 InstaCareBottomNavItem(
@@ -922,7 +916,7 @@ class _GalleryState extends State<Gallery> {
       children: [
         _buildFontWeightsGrid(GoogleFonts.crimsonPro, 'Crimson Pro (Headings)'),
         const SizedBox(height: 32),
-        const Divider(height: 1, color: AppColors.ivory300),
+        const Divider(height: 1, color: AppColors.ivory700),
         const SizedBox(height: 32),
         _buildFontWeightsGrid(GoogleFonts.figtree, 'Figtree (Body)'),
       ],
@@ -976,7 +970,7 @@ class _GalleryState extends State<Gallery> {
                   child: Text(
                     'w$w',
                     style:
-                        const TextStyle(fontSize: 12, color: AppColors.gray100),
+                        const TextStyle(fontSize: 12, color: AppColors.gray900),
                   ),
                 ),
                 Expanded(
@@ -985,7 +979,7 @@ class _GalleryState extends State<Gallery> {
                     style: fontStyle(
                       fontWeight: FontWeight.values[w ~/ 100 - 1],
                       fontSize: 16,
-                    ).copyWith(color: AppColors.gray200),
+                    ).copyWith(color: AppColors.gray800),
                   ),
                 ),
               ],
@@ -1022,7 +1016,7 @@ class _GalleryState extends State<Gallery> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Ag',
-                  style: style.copyWith(color: AppColors.gray100, height: 1),
+                  style: style.copyWith(color: AppColors.gray900, height: 1),
                 ),
               ),
               const SizedBox(width: 16),
@@ -1031,7 +1025,7 @@ class _GalleryState extends State<Gallery> {
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 15,
-                  color: AppColors .gray100,
+                  color: AppColors .gray900,
                 ),
               ),
               Text(
@@ -1096,12 +1090,12 @@ class _GalleryState extends State<Gallery> {
             items: [
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.primary900,
+                  color: AppColors.primary100,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.ivory300),
+                  border: Border.all(color: AppColors.ivory700),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.gray600.withValues(alpha: 0.15),
+                      color: AppColors.gray400.withValues(alpha: 0.15),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -1113,19 +1107,19 @@ class _GalleryState extends State<Gallery> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.gray200,
+                      color: AppColors.gray800,
                     ),
                   ),
                 ),
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.ivory700,
+                  color: AppColors.ivory300,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.ivory300),
+                  border: Border.all(color: AppColors.ivory700),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.gray600.withValues(alpha: 0.15),
+                      color: AppColors.gray400.withValues(alpha: 0.15),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -1137,19 +1131,19 @@ class _GalleryState extends State<Gallery> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.gray200,
+                      color: AppColors.gray800,
                     ),
                   ),
                 ),
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.primary800,
+                  color: AppColors.primary200,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.ivory300),
+                  border: Border.all(color: AppColors.ivory700),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.gray600.withValues(alpha: 0.15),
+                      color: AppColors.gray400.withValues(alpha: 0.15),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -1161,7 +1155,7 @@ class _GalleryState extends State<Gallery> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.gray200,
+                      color: AppColors.gray800,
                     ),
                   ),
                 ),
@@ -1217,10 +1211,10 @@ class _GalleryState extends State<Gallery> {
               InstaCareTextField(
                 label: 'Text Input',
                 hint: 'placeholder',
-                fillColor: AppColors.ivory700,
-                borderColor: AppColors.primary300,
-                focusedBorderColor: AppColors.primary200,
-                hintColor: AppColors.gray600,
+                fillColor: AppColors.ivory300,
+                borderColor: AppColors.primary700,
+                focusedBorderColor: AppColors.primary800,
+                hintColor: AppColors.gray400,
               ),
               SizedBox(height: 12),
               InstaCareTextField(
@@ -1444,7 +1438,7 @@ class _GalleryState extends State<Gallery> {
         margin: const EdgeInsets.all(12),
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: AppColors.ivory700,
+          color: AppColors.ivory300,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Container(

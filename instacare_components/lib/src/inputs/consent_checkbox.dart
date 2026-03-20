@@ -51,14 +51,14 @@ class InstaCareConsentCheckbox extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   style: InstaCareTypography.r.copyWith(
-                    color: AppColors.gray300,
+                    color: AppColors.gray700,
                   ),
                   children: [
                     TextSpan(text: preText),
                     TextSpan(
                       text: linkText,
                       style: InstaCareTypography.r.copyWith(
-                        color: AppColors.primary300,
+                        color: AppColors.primary700,
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w600,
                       ),

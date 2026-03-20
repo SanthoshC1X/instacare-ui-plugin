@@ -24,7 +24,7 @@ class InstaCareCard extends StatelessWidget {
       color: backgroundColor ?? AppColors.baseWhite,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side:BorderSide(color: backgroundColor ?? AppColors.primary300), 
+        side:BorderSide(color: backgroundColor ?? AppColors.primary700), 
       ),
       child: InkWell(
         onTap: onTap,

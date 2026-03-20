@@ -24,7 +24,7 @@ class InstaCareTopHeaderTitle extends StatelessWidget implements PreferredSizeWi
         title,
         style: InstaCareTypography.h2.copyWith(
           fontWeight: FontWeight.w600,
-          color: AppColors.gray200,
+          color: AppColors.gray800,
         ),
       ),
       leading: onBack == null ? null : IconButton(icon: const Icon(Icons.arrow_back_ios_new), onPressed: onBack),

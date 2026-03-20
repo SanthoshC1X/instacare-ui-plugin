@@ -92,7 +92,7 @@ class _ICTextFieldState extends State<InstaCareTextField> {
             widget.label!,
             style: InstaCareTypography.r.copyWith(
               fontWeight: FontWeight.w600,
-              color: widget.labelColor ?? AppColors.gray200,
+              color: widget.labelColor ?? AppColors.gray800,
             ),
           ),
           const SizedBox(height: 8),
@@ -109,38 +109,38 @@ class _ICTextFieldState extends State<InstaCareTextField> {
           decoration: InputDecoration(
             hintText: widget.hint,
             hintStyle: InstaCareTypography.r
-                .copyWith(color: widget.hintColor ?? AppColors.gray600),
+                .copyWith(color: widget.hintColor ?? AppColors.gray400),
             prefixIcon: widget.prefixIcon != null
-                ? Icon(widget.prefixIcon, color: AppColors.gray400)
+                ? Icon(widget.prefixIcon, color: AppColors.gray600)
                 : null,
             suffixIcon: _buildSuffixIcon(),
             errorText: widget.errorText,
             filled: true,
-            fillColor: widget.fillColor ?? AppColors.ivory700,
+            fillColor: widget.fillColor ?? AppColors.ivory300,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.primary300,
+                color: widget.borderColor ?? AppColors.primary700,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.primary300,
+                color: widget.borderColor ?? AppColors.primary700,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: BorderSide(
-                color: widget.focusedBorderColor ?? AppColors.primary100,
+                color: widget.focusedBorderColor ?? AppColors.primary900,
                 width: 2,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
-              borderSide: const BorderSide(color: AppColors.error300),
+              borderSide: const BorderSide(color: AppColors.error700),
             ),
             counterText: '',
           ),
@@ -156,7 +156,7 @@ class _ICTextFieldState extends State<InstaCareTextField> {
           _obscureText
               ? Icons.visibility_outlined
               : Icons.visibility_off_outlined,
-          color: AppColors.gray400,
+          color: AppColors.gray600,
         ),
         onPressed: () => setState(() => _obscureText = !_obscureText),
       );

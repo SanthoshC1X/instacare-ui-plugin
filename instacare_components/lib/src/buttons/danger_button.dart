@@ -74,7 +74,7 @@ class InstaCareDangerButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: _enabled ? onPressed : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _enabled ? AppColors.error100 : AppColors.gray600,
+              backgroundColor: _enabled ? AppColors.error900 : AppColors.gray400,
               foregroundColor: AppColors.baseWhite,
               padding: size.padding,
               shape: RoundedRectangleBorder(

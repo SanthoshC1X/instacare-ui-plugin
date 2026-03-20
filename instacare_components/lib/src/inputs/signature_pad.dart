@@ -23,10 +23,10 @@ class InstaCareSignaturePad extends StatefulWidget {
     this.confirmLabel = 'Confirm',
     this.buttonLabel = 'Tap to sign',
     this.height = 250,
-    this.strokeColor = AppColors.gray200,
+    this.strokeColor = AppColors.gray800,
     this.strokeWidth = 2.0,
     this.backgroundColor = AppColors.baseWhite,
-    this.borderColor = AppColors.primary800,
+    this.borderColor = AppColors.primary200,
     this.onChanged,
     this.onConfirm,
   });
@@ -104,7 +104,7 @@ class InstaCareSignaturePadState extends State<InstaCareSignaturePad> {
         Text(
           widget.label,
           style: InstaCareTypography.m.copyWith(
-            color: AppColors.gray200,
+            color: AppColors.gray800,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -126,14 +126,14 @@ class InstaCareSignaturePadState extends State<InstaCareSignaturePad> {
                       children: [
                         const Icon(
                           Icons.draw_outlined,
-                          color: AppColors.gray600,
+                          color: AppColors.gray400,
                           size: 20,
                         ),
                         const SizedBox(width: 8),
                         Text(
                           widget.buttonLabel,
                           style: InstaCareTypography.r.copyWith(
-                            color: AppColors.gray600,
+                            color: AppColors.gray400,
                           ),
                         ),
                       ],
@@ -235,13 +235,13 @@ class _SignaturePopupDialogState extends State<_SignaturePopupDialog> {
                 Text(
                   widget.label,
                   style: InstaCareTypography.m.copyWith(
-                    color: AppColors.gray200,
+                    color: AppColors.gray800,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 GestureDetector(
                   onTap: widget.onCancel,
-                  child: const Icon(Icons.close, color: AppColors.gray400),
+                  child: const Icon(Icons.close, color: AppColors.gray600),
                 ),
               ],
             ),
@@ -296,7 +296,7 @@ class _SignaturePopupDialogState extends State<_SignaturePopupDialog> {
                           child: Text(
                             'Sign here',
                             style: InstaCareTypography.r.copyWith(
-                              color: AppColors.gray600,
+                              color: AppColors.gray400,
                             ),
                           ),
                         ),
@@ -315,7 +315,7 @@ class _SignaturePopupDialogState extends State<_SignaturePopupDialog> {
                     onPressed: _isEmpty ? null : _clear,
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(
-                        color: _isEmpty ? AppColors.gray600 : AppColors.primary300,
+                        color: _isEmpty ? AppColors.gray400 : AppColors.primary700,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -325,7 +325,7 @@ class _SignaturePopupDialogState extends State<_SignaturePopupDialog> {
                     child: Text(
                       widget.clearLabel,
                       style: InstaCareTypography.r.copyWith(
-                        color: _isEmpty ? AppColors.gray600 : AppColors.primary300,
+                        color: _isEmpty ? AppColors.gray400 : AppColors.primary700,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -338,8 +338,8 @@ class _SignaturePopupDialogState extends State<_SignaturePopupDialog> {
                         ? null
                         : () => widget.onConfirm(_strokes),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary300,
-                      disabledBackgroundColor: AppColors.gray700,
+                      backgroundColor: AppColors.primary700,
+                      disabledBackgroundColor: AppColors.gray300,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -348,7 +348,7 @@ class _SignaturePopupDialogState extends State<_SignaturePopupDialog> {
                     child: Text(
                       widget.confirmLabel,
                       style: InstaCareTypography.r.copyWith(
-                        color: _isEmpty ? AppColors.gray600 : AppColors.baseWhite,
+                        color: _isEmpty ? AppColors.gray400 : AppColors.baseWhite,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

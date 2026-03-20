@@ -44,7 +44,7 @@ class InstaCareWelcomeHeader extends StatelessWidget {
                 style: InstaCareTypography.h1.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.gray200,
+                  color: AppColors.gray800,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -59,31 +59,31 @@ class InstaCareWelcomeHeader extends StatelessWidget {
           decoration: InputDecoration(
             hintText: searchHint,
             hintStyle: InstaCareTypography.r.copyWith(
-              color: AppColors.gray600,
+              color: AppColors.gray400,
             ),
             suffixIcon: const Icon(
               Icons.auto_awesome_outlined,
               size: 22,
-              color: AppColors.secondary400,
+              color: AppColors.secondary600,
             ),
             filled: true,
-            fillColor: AppColors.ivory800,
+            fillColor: AppColors.ivory200,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 14,
               vertical: 13,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.secondary600),
+              borderSide: const BorderSide(color: AppColors.secondary400),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.secondary600),
+              borderSide: const BorderSide(color: AppColors.secondary400),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: AppColors.primary100,
+                color: AppColors.primary900,
                 width: 2,
               ),
             ),

@@ -23,30 +23,30 @@ class InstaCareSearchBar extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: InstaCareTypography.r.copyWith(
-          color: AppColors.gray600,
+          color: AppColors.gray400,
         ),
         prefixIcon: const Icon(
           Icons.search,
-          color: AppColors.gray400,
+          color: AppColors.gray600,
         ),
         filled: true,
-        fillColor: AppColors.ivory700,
+        fillColor: AppColors.ivory300,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primary300),
+          borderSide: const BorderSide(color: AppColors.primary700),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primary300),
+          borderSide: const BorderSide(color: AppColors.primary700),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
-            color: AppColors.primary100,
+            color: AppColors.primary900,
             width: 2,
           ),
         ),

@@ -43,7 +43,7 @@ Future<bool> showInstaCareConfirmationDialog({
                 verticalPadding,
               ),
               decoration: BoxDecoration(
-                color: AppColors.gray900,
+                color: AppColors.gray100,
                 borderRadius: BorderRadius.circular(radius),
               ),
               child: Column(
@@ -55,7 +55,7 @@ Future<bool> showInstaCareConfirmationDialog({
                     textAlign: TextAlign.center,
                     style: InstaCareTypography.h2.copyWith(
                       fontSize: titleSize,
-                      color: AppColors.primary200,
+                      color: AppColors.primary800,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -82,10 +82,10 @@ Future<bool> showInstaCareConfirmationDialog({
                           height: buttonHeight,
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: AppColors.gray800,
-                              foregroundColor: AppColors.primary200,
+                              backgroundColor: AppColors.gray200,
+                              foregroundColor: AppColors.primary800,
                               side: const BorderSide(
-                                color: AppColors.primary200,
+                                color: AppColors.primary800,
                                 width: 1.6,
                               ),
                               shape: RoundedRectangleBorder(
@@ -112,7 +112,7 @@ Future<bool> showInstaCareConfirmationDialog({
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                  AppColors.primary100,
+                                  AppColors.primary900,
                               foregroundColor:
                                   AppColors.baseWhite,
                               elevation: 0,

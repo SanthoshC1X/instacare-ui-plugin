@@ -126,8 +126,8 @@ class _InstaCareCarouselState extends State<InstaCareCarousel> {
           height: 8,
           decoration: BoxDecoration(
             color: _currentPage == index
-                ? (widget.indicatorActiveColor ?? AppColors.primary400)
-                : (widget.indicatorInactiveColor ?? AppColors.gray600),
+                ? (widget.indicatorActiveColor ?? AppColors.primary600)
+                : (widget.indicatorInactiveColor ?? AppColors.gray400),
             borderRadius: BorderRadius.circular(4),
           ),
         ),

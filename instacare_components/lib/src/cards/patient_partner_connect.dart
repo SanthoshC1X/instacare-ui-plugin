@@ -25,7 +25,7 @@ class InstaCarePatientPartnerConnect extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       decoration: BoxDecoration(
-        color: AppColors.ivory900,
+        color: AppColors.ivory100,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -36,7 +36,7 @@ class InstaCarePatientPartnerConnect extends StatelessWidget {
             avatar: patientAvatar ??
                 const CircleAvatar(
                   radius: 26,
-                  backgroundColor: AppColors.natural600,
+                  backgroundColor: AppColors.natural400,
                   child: Icon(
                     Icons.person_outline_rounded,
                     size: 28,
@@ -49,7 +49,7 @@ class InstaCarePatientPartnerConnect extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: CustomPaint(
                 size: Size(double.infinity, 2),
-                painter: _DottedLinePainter(color: AppColors.natural700),
+                painter: _DottedLinePainter(color: AppColors.natural300),
               ),
             ),
           ),
@@ -90,7 +90,7 @@ class InstaCarePatientPartnerConnect extends StatelessWidget {
               style: InstaCareTypography.m.copyWith(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: AppColors.gray200,
+                color: AppColors.gray800,
               ),
             ),
             const SizedBox(height: 2),

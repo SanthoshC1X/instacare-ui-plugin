@@ -17,10 +17,10 @@ class InstaCarePillChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderColor =
-        selected ? Theme.of(context).colorScheme.primary : AppColors.primary700;
-    final backgroundColor = selected ? AppColors.primary900 : AppColors.baseWhite;
+        selected ? Theme.of(context).colorScheme.primary : AppColors.primary300;
+    final backgroundColor = selected ? AppColors.primary100 : AppColors.baseWhite;
     final textColor =
-        selected ? Theme.of(context).colorScheme.primary : AppColors.gray300;
+        selected ? Theme.of(context).colorScheme.primary : AppColors.gray700;
 
     return InkWell(
       borderRadius: BorderRadius.circular(999),

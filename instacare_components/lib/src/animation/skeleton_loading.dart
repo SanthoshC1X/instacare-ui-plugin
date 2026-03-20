@@ -39,7 +39,7 @@ class _InstaCareSkeletonLoadingState extends State<InstaCareSkeletonLoading>
 
   @override
   Widget build(BuildContext context) {
-    final base = widget.baseColor ?? AppColors.gray800;
+    final base = widget.baseColor ?? AppColors.gray200;
     final highlight = widget.highlightColor ?? AppColors.baseWhite;
 
     return AnimatedBuilder(

@@ -50,7 +50,7 @@ class InstaCareButton extends StatelessWidget {
 
         final Color textColor = _variant == _ButtonVariant.primary
             ? AppColors.baseWhite
-            : (_enabled ? AppColors.primary300 : AppColors.gray500);
+            : (_enabled ? AppColors.primary700 : AppColors.gray500);
 
         final Widget child = isLoading
             ? InstaCareSkeletonLoading(
@@ -59,7 +59,7 @@ class InstaCareButton extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(999)),
                 baseColor: _variant == _ButtonVariant.primary
                     ? AppColors.baseWhite.withValues(alpha: 0.24)
-                    : AppColors.gray800,
+                    : AppColors.gray200,
                 highlightColor: _variant == _ButtonVariant.primary
                     ? AppColors.baseWhite.withValues(alpha: 0.6)
                     : AppColors.baseWhite,
@@ -105,7 +105,7 @@ class InstaCareButton extends StatelessWidget {
           onPressed: _enabled ? onPressed : null,
           style: ElevatedButton.styleFrom(
             backgroundColor:
-                _enabled ? theme.colorScheme.primary : AppColors.gray600,
+                _enabled ? theme.colorScheme.primary : AppColors.gray400,
             foregroundColor: AppColors.baseWhite,
             padding: size.padding,
             shape: RoundedRectangleBorder(
@@ -121,14 +121,14 @@ class InstaCareButton extends StatelessWidget {
           onPressed: _enabled ? onPressed : null,
           style: OutlinedButton.styleFrom(
             foregroundColor:
-                _enabled ? AppColors.primary300 : AppColors.gray500,
+                _enabled ? AppColors.primary700 : AppColors.gray500,
             backgroundColor:
-                _enabled ? AppColors.primary800 : AppColors.gray900,
+                _enabled ? AppColors.primary200 : AppColors.gray100,
             padding: size.padding,
             side: BorderSide(
               color: _enabled
                   ? theme.colorScheme.primary
-                  : AppColors.gray600,
+                  : AppColors.gray400,
               width: 1.2,
             ),
             shape: RoundedRectangleBorder(

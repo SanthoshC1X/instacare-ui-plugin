@@ -33,7 +33,7 @@ class InstaCareCheckboxField extends StatelessWidget {
             Flexible(
               child: Text(
                 label,
-                style: InstaCareTypography.r.copyWith(color: AppColors.gray200),
+                style: InstaCareTypography.r.copyWith(color: AppColors.gray800),
               ),
             ),
           ],

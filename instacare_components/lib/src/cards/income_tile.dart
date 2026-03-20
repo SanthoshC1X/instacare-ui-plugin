@@ -32,7 +32,7 @@ class InstaCareIncomeTile extends StatelessWidget {
             textAlign: TextAlign.center,
             style: InstaCareTypography.h2.copyWith(
               fontSize: 18,
-              color: AppColors.gray200,
+              color: AppColors.gray800,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -41,7 +41,7 @@ class InstaCareIncomeTile extends StatelessWidget {
             amount,
             textAlign: TextAlign.center,
             style: InstaCareTypography.h1.copyWith(
-              color: AppColors.gray100,
+              color: AppColors.gray900,
               fontSize: 56,
               fontWeight: FontWeight.w700,
               height: 1,

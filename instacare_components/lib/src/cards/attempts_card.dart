@@ -84,14 +84,14 @@ class InstaCareAttemptsCard extends StatelessWidget {
                           'Attempts Remaining',
                           style: InstaCareTypography.r.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.gray200,
+                            color: AppColors.gray800,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           'You have used $usedAttempts out of $totalAttempts attempts for this assessment.',
                           style: InstaCareTypography.r.copyWith(
-                            color: AppColors.gray400,
+                            color: AppColors.gray600,
                           ),
                         ),
                       ],
@@ -140,7 +140,7 @@ class InstaCareAttemptsCard extends StatelessWidget {
                   Text(
                     '$usedAttempts / $totalAttempts used',
                     style: InstaCareTypography.r.copyWith(
-                      color: AppColors.gray400,
+                      color: AppColors.gray600,
                     ),
                   ),
                 ],
@@ -199,7 +199,7 @@ class InstaCareAttemptsCard extends StatelessWidget {
                     Text(
                       description,
                       style: InstaCareTypography.r.copyWith(
-                        color: AppColors.gray400,
+                        color: AppColors.gray600,
                       ),
                     ),
                   ],
