@@ -342,7 +342,7 @@ class _GalleryState extends State<Gallery> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.ivory300,
+        color: AppColors.ivory50,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.primary100, width: 1.4),
       ),
@@ -1210,10 +1210,7 @@ class _GalleryState extends State<Gallery> {
             children: [
               InstaCareTextField(
                 label: 'Text Input',
-                hint: 'placeholder',
-                fillColor: AppColors.ivory300,
-                borderColor: AppColors.primary700,
-                focusedBorderColor: AppColors.primary800,
+                hint: 'Enter your text',
                 hintColor: AppColors.gray400,
               ),
               SizedBox(height: 12),
