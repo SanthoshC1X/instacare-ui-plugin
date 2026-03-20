@@ -1031,12 +1031,13 @@ class _GalleryState extends State<Gallery> {
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 15,
-                  color: AppColors .gray100,
+                  color: AppColors.gray100,
                 ),
               ),
               Text(
                 ' \u00B7 ',
-                style: TextStyle(color: AppColors.gray500.withValues(alpha: 0.5)),
+                style:
+                    TextStyle(color: AppColors.gray500.withValues(alpha: 0.5)),
               ),
               Text(
                 detail,
@@ -1071,13 +1072,13 @@ class _GalleryState extends State<Gallery> {
         _componentBlock(
           title: 'LogoIcon',
           fileName: 'common/logo.dart',
-          child: const InstaCareLogoIcon(size: 32, color: AppColors.primary3),
+          child: const InstaCareLogoIcon(size: 32, color: AppColors.primary300),
         ),
         _componentBlock(
           title: 'LogoText',
           fileName: 'common/logo.dart',
-          child:
-              const InstaCareLogoText(fontSize: 24, color: AppColors.primary3),
+          child: const InstaCareLogoText(
+              fontSize: 24, color: AppColors.primary300),
         ),
         _sectionHeading('Typography'),
         _componentBlock(

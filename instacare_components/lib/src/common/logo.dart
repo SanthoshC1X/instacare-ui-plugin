@@ -19,7 +19,7 @@ class InstaCareLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logoColor = color ?? AppColors.primary2;
+    final logoColor = color ?? AppColors.primary200;
 
     final double logoHeight = size;
     final double logoWidth = size * (22.22 / 20.0);
@@ -62,7 +62,7 @@ class InstaCareLogoIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logoColor = color ?? AppColors.primary3;
+    final logoColor = color ?? AppColors.primary300;
     final double logoHeight = size;
     final double logoWidth = size * (22.22 / 20.0);
 
@@ -88,7 +88,7 @@ class InstaCareLogoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = color ?? AppColors.primary3;
+    final textColor = color ?? AppColors.primary300;
 
     return Text(
       'InstaCare',
