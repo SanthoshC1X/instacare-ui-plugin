@@ -29,6 +29,36 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Section entry — lightweight metadata; widget is only built when visible
+// ---------------------------------------------------------------------------
+class _SectionEntry {
+  final String? heading;
+  final String? title;
+  final String? fileName;
+  final WidgetBuilder? builder;
+
+  const _SectionEntry.heading(this.heading)
+      : title = null,
+        fileName = null,
+        builder = null;
+
+  const _SectionEntry.component({
+    required this.title,
+    required this.fileName,
+    required this.builder,
+  }) : heading = null;
+
+  /// Extra widget (like booking state control) that is not wrapped in a block.
+  const _SectionEntry.raw(this.builder)
+      : heading = null,
+        title = null,
+        fileName = null;
+}
+
+// ---------------------------------------------------------------------------
+// Booking card demo state
+// ---------------------------------------------------------------------------
 class _BookingCardDemoState {
   final String patientName;
   final String? patientGender;
@@ -51,6 +81,9 @@ class _BookingCardDemoState {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Gallery
+// ---------------------------------------------------------------------------
 class Gallery extends StatefulWidget {
   final bool isPartner;
   final ValueChanged<bool> onRoleChanged;
@@ -144,7 +177,7 @@ class _GalleryState extends State<Gallery> {
 
 ## Blockquote
 
-> Good design is obvious.  
+> Good design is obvious.
 > Great design is transparent.
 
 ---
@@ -220,6 +253,9 @@ class _GalleryState extends State<Gallery> {
     super.dispose();
   }
 
+  // -------------------------------------------------------------------------
+  // Role slider
+  // -------------------------------------------------------------------------
   void _selectRole(int index) {
     if (_selectedRoleIndex == index) return;
 
@@ -293,6 +329,9 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
+  // -------------------------------------------------------------------------
+  // Shared helpers
+  // -------------------------------------------------------------------------
   Widget _sectionHeading(String name) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -303,32 +342,6 @@ class _GalleryState extends State<Gallery> {
           fontWeight: FontWeight.w700,
           color: AppColors.gray800,
         ),
-      ),
-    );
-  }
-
-  Widget _bookingStateControl() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(_bookingCardStates.length, (index) {
-          final isSelected = bookingCardStateIndex == index;
-          return InkWell(
-            borderRadius: BorderRadius.circular(8),
-            onTap: () => setState(() => bookingCardStateIndex = index),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              child: Text(
-                '${index + 1}',
-                style: InstaCareTypography.m.copyWith(
-                  color: isSelected ? AppColors.primary800: AppColors.gray600,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                ),
-              ),
-            ),
-          );
-        }),
       ),
     );
   }
@@ -369,6 +382,35 @@ class _GalleryState extends State<Gallery> {
           const SizedBox(height: 12),
           child,
         ],
+      ),
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // Reusable sub-widgets (kept as methods, called lazily by builders)
+  // -------------------------------------------------------------------------
+  Widget _bookingStateControl() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(_bookingCardStates.length, (index) {
+          final isSelected = bookingCardStateIndex == index;
+          return InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () => setState(() => bookingCardStateIndex = index),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: Text(
+                '${index + 1}',
+                style: InstaCareTypography.m.copyWith(
+                  color: isSelected ? AppColors.primary800 : AppColors.gray600,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -531,385 +573,765 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
-  Widget _buildPartnerPage() {
+  // -------------------------------------------------------------------------
+  // Section registries — lightweight lists; builders fire only when visible
+  // -------------------------------------------------------------------------
+  List<_SectionEntry> get _partnerSections {
     final bookingState = _bookingCardStates[
         bookingCardStateIndex.clamp(0, _bookingCardStates.length - 1)];
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      children: [
-        _sectionHeading('Partner Components'),
-        _sectionHeading('Feedback'),
-        _componentBlock(
-          title: 'Message Box',
-          fileName: 'message_box.dart',
-          child: const Column(
-            children: [
-              InstaCareMessageBox(
-                  type: InstaCareMessageType.info,
-                  title: 'Info message box',
-                  body: 'Body text goes here'),
-              SizedBox(height: 8),
-              InstaCareMessageBox(
-                  type: InstaCareMessageType.error,
-                  title: 'Error message box',
-                  body: 'Body text goes here'),
-              SizedBox(height: 8),
-              InstaCareMessageBox(
-                  type: InstaCareMessageType.pending,
-                  title: 'Pending message box',
-                  body: 'Body text goes here'),
-              SizedBox(height: 8),
-              InstaCareMessageBox(
-                  type: InstaCareMessageType.success,
-                  title: 'Success message box',
-                  body: 'Body text goes here'),
-            ],
-          ),
+    return [
+      const _SectionEntry.heading('Partner Components'),
+      const _SectionEntry.heading('Feedback'),
+      _SectionEntry.component(
+        title: 'Message Box',
+        fileName: 'message_box.dart',
+        builder: (_) => const Column(
+          children: [
+            InstaCareMessageBox(
+                type: InstaCareMessageType.info,
+                title: 'Info message box',
+                body: 'Body text goes here'),
+            SizedBox(height: 8),
+            InstaCareMessageBox(
+                type: InstaCareMessageType.error,
+                title: 'Error message box',
+                body: 'Body text goes here'),
+            SizedBox(height: 8),
+            InstaCareMessageBox(
+                type: InstaCareMessageType.pending,
+                title: 'Pending message box',
+                body: 'Body text goes here'),
+            SizedBox(height: 8),
+            InstaCareMessageBox(
+                type: InstaCareMessageType.success,
+                title: 'Success message box',
+                body: 'Body text goes here'),
+          ],
         ),
-        _componentBlock(
-          title: 'Progress Bar',
-          fileName: 'progress_bar.dart',
-          child: const InstaCareProgressBar(value: 0.65, label: 'Progress bar'),
+      ),
+      _SectionEntry.component(
+        title: 'Progress Bar',
+        fileName: 'progress_bar.dart',
+        builder: (_) =>
+            const InstaCareProgressBar(value: 0.65, label: 'Progress bar'),
+      ),
+      const _SectionEntry.heading('Cards'),
+      _SectionEntry.component(
+        title: 'Booking Card',
+        fileName: 'booking_card.dart',
+        builder: (_) => InstaCareBookingCard(
+          patientName: bookingState.patientName,
+          patientGender: bookingState.patientGender,
+          patientAge: bookingState.patientAge,
+          partnerName: bookingState.partnerName,
+          bookingId: bookingState.bookingId,
+          serviceName: bookingState.serviceName,
+          dateTime: bookingState.dateTime,
+          daysUntil: bookingState.daysUntil,
         ),
-        _sectionHeading('Cards'),
-        _componentBlock(
-          title: 'Booking Card',
-          fileName: 'booking_card.dart',
-          child: InstaCareBookingCard(
-            patientName: bookingState.patientName,
-            patientGender: bookingState.patientGender,
-            patientAge: bookingState.patientAge,
-            partnerName: bookingState.partnerName,
-            bookingId: bookingState.bookingId,
-            serviceName: bookingState.serviceName,
-            dateTime: bookingState.dateTime,
-            daysUntil: bookingState.daysUntil,
-          ),
+      ),
+      _SectionEntry.raw((_) => _bookingStateControl()),
+      _SectionEntry.component(
+        title: 'Income Tile',
+        fileName: 'income_tile.dart',
+        builder: (_) => InstaCareIncomeTile(
+          title: "This month's earnings",
+          amount: 'Rs 0',
+          redeemButtonText: 'Redeem',
+          onRedeem: () {},
+          backgroundColor: AppColors.ivory300,
         ),
-        _bookingStateControl(),
-        _componentBlock(
-          title: 'Income Tile',
-          fileName: 'income_tile.dart',
-          child: InstaCareIncomeTile(
-            title: "This month's earnings",
-            amount: 'Rs 0',
-            redeemButtonText: 'Redeem',
-            onRedeem: () {},
-            backgroundColor: AppColors.ivory300,
-          ),
-        ),
-        _componentBlock(
-          title: 'Card List View',
-          fileName: 'card_list_view.dart',
-          child: const InstaCareCardListView(
-            items: [
-              InstaCareCardListItem(
-                card: InstaCareCard(
-                  backgroundColor: AppColors.ivory300,
-                  child: Center(child: Text('Card')),
-                ),
-                title: 'Wound Dressing',
-                body: 'Daily care service with dressing change.',
+      ),
+      _SectionEntry.component(
+        title: 'Card List View',
+        fileName: 'card_list_view.dart',
+        builder: (_) => const InstaCareCardListView(
+          items: [
+            InstaCareCardListItem(
+              card: InstaCareCard(
+                backgroundColor: AppColors.ivory300,
+                child: Center(child: Text('Card')),
               ),
-              InstaCareCardListItem(
-                card: InstaCareCard(
-                  backgroundColor: AppColors.ivory300,
-                  child: Center(child: Text('Card')),
-                ),
-                title: 'Nursing Visit',
-                body: 'Vitals check and medication support.',
-              ),
-            ],
-          ),
-        ),
-        _componentBlock(
-          title: 'Checkbox Card',
-          fileName: 'checkbox_card.dart',
-          child: Column(
-            children: [
-              InstaCareCheckboxCard(
-                title: 'Card Title 1',
-                message:
-                    'This is a small message text that describes the card content.',
-                isSelected: checkboxCard1,
-                onChanged: (value) => setState(() => checkboxCard1 = value),
-              ),
-              const SizedBox(height: 12),
-              InstaCareCheckboxCard(
-                title: 'Card Title 2',
-                message:
-                    'Another card with a different message for demonstration.',
-                isSelected: checkboxCard2,
-                onChanged: (value) => setState(() => checkboxCard2 = value),
-              ),
-            ],
-          ),
-        ),
-        _componentBlock(
-          title: 'Attempts Card',
-          fileName: 'attempts_card.dart',
-          child: const Column(
-            children: [
-              InstaCareAttemptsCard(
-                totalAttempts: 3,
-                usedAttempts: 1,
-                hasPassed: false,
-              ),
-              SizedBox(height: 12),
-              InstaCareAttemptsCard(
-                totalAttempts: 3,
-                usedAttempts: 3,
-                hasPassed: false,
-              ),
-              SizedBox(height: 12),
-              InstaCareAttemptsCard(
-                totalAttempts: 3,
-                usedAttempts: 2,
-                hasPassed: true,
-              ),
-            ],
-          ),
-        ),
-        _sectionHeading('Badges'),
-        _componentBlock(
-          title: 'Appointment Status Pills',
-          fileName: 'appointment_status_pills.dart',
-          child: const InstaCareAppointmentStatusPills(),
-        ),
-        _sectionHeading('Pills'),
-        _componentBlock(
-          title: 'Hours Summary Pill',
-          fileName: 'hours_summary_pill.dart',
-          child:
-              const InstaCareHoursSummaryPill(text: 'Selected hours: 04h 30m'),
-        ),
-        _sectionHeading('Steps'),
-        _componentBlock(
-          title: 'MCQ Option Selector',
-          fileName: 'mcq_option_selector.dart',
-          child: InstaCareMcqOptionSelector(
-            question: 'Question',
-            options: const ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
-            selected: selectedMcq,
-            onSelected: (value) => setState(() => selectedMcq = value),
-            previousLabel: 'Previous Question',
-            nextLabel: 'Next Question',
-            onPrevious: () {},
-            onNext: () {},
-          ),
-        ),
-        _componentBlock(
-          title: 'Horizontal Stepper',
-          fileName: 'stepper.dart',
-          child: InstaCareVerticalStepper(
-            currentStep: currentStepperStep,
-            onStepChanged: (step) => setState(() => currentStepperStep = step),
-            items: const [
-              InstaCareStepperItem(title: 'Step 1'),
-              InstaCareStepperItem(title: 'Step 2'),
-              InstaCareStepperItem(title: 'Step 3'),
-            ],
-          ),
-        ),
-        _sectionHeading('Upload'),
-        _componentBlock(
-          title: 'File Upload Tile',
-          fileName: 'file_upload_tile.dart',
-          child: InstaCareFileUploadTile(onTap: () {}),
-        ),
-        _sectionHeading('Navigation'),
-        _bottomNavDemo(),
-      ],
-    );
-  }
-
-  Widget _buildPatientPage() {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      children: [
-        _sectionHeading('Patient Components'),
-        _sectionHeading('Services'),
-        _componentBlock(
-          title: 'Service Category Grid',
-          fileName: 'service_category_grid.dart',
-          child: InstaCareServiceCategoryGrid(
-            categories: const [
-              InstaCareServiceCategory(
-                name: 'Nursing',
-                description: 'Compassionate care',
-                price: 'from \u20B9499',
-                imagePath:
-                    'packages/instacare_components/lib/src/assessts_patient/nursing.png',
-              ),
-              InstaCareServiceCategory(
-                name: 'Physiotherapy',
-                description: 'Professional care',
-                price: 'from \u20B9599',
-                imagePath:
-                    'packages/instacare_components/lib/src/assessts_patient/physiotheraphy.png',
-              ),
-              InstaCareServiceCategory(
-                name: 'Caretaker',
-                description: 'Verified care',
-                price: 'from \u20B9699',
-                imagePath:
-                    'packages/instacare_components/lib/src/assessts_patient/caretaker.png',
-              ),
-              InstaCareServiceCategory(
-                name: 'Live-in Care',
-                description: 'Assured care',
-                price: 'from \u20B9899',
-                imagePath:
-                    'packages/instacare_components/lib/src/assessts_patient/liveincare.png',
-              ),
-            ],
-            onCategoryTap: (category) {
-              showServiceCategoryDialog(
-                context: context,
-                category: category,
-                onNavigate: () {},
-              );
-            },
-          ),
-        ),
-        _sectionHeading('Navigation'),
-        _componentBlock(
-          title: 'Welcome Header',
-          fileName: 'welcome_header.dart',
-          child: const InstaCareWelcomeHeader(
-            userName: 'Anjana',
-            searchHint: 'What care do you need today?',
-          ),
-        ),
-        _componentBlock(
-          title: 'Bottom Nav Bar (Patient)',
-          fileName: 'bottom_app_nav_bar.dart',
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: InstaCareBottomAppNavBar(
-              currentIndex: currentNavIndex,
-              onTap: (index) => setState(() => currentNavIndex = index),
-              backgroundColor: AppColors.primary100,
-              selectedItemColor: AppColors.primary800,
-              unselectedItemColor: AppColors.primary400,
-              topBorderColor: AppColors.primary800,
-              showShadow: true,
-              items: const [
-                InstaCareBottomNavItem(
-                    icon: Icons.home_outlined, label: 'Home'),
-                InstaCareBottomNavItem(
-                    icon: Icons.grid_view_outlined, label: 'Services'),
-                InstaCareBottomNavItem(
-                    icon: Icons.headset_mic_outlined, label: 'Support'),
-                InstaCareBottomNavItem(
-                    icon: Icons.person_outline, label: 'Profile'),
-              ],
+              title: 'Wound Dressing',
+              body: 'Daily care service with dressing change.',
             ),
-          ),
-        ),
-        _sectionHeading('Inputs'),
-        _componentBlock(
-          title: 'Service Search Bar',
-          fileName: 'search_bar.dart',
-          child: const InstaCareSearchBar(
-            hint: 'What service(s) do you need today?',
-          ),
-        ),
-        _componentBlock(
-          title: 'Title with Back Button',
-          fileName: 'theme/heading.dart',
-          child: InstaCareHeading.titleWithBackButton(
-            text: 'Title',
-            onBackPressed: () {},
-          ),
-        ),
-        _componentBlock(
-          title: 'Consent Checkbox',
-          fileName: 'consent_checkbox.dart',
-          child: InstaCareConsentCheckbox(
-            value: consentChecked,
-            onChanged: (v) => setState(() => consentChecked = v ?? false),
-            onLinkTap: () {},
-          ),
-        ),
-        _sectionHeading('Badges & Status'),
-        _componentBlock(
-          title: 'Status Badge',
-          fileName: 'status_badge.dart',
-          child: const InstaCareStatusBadge(
-            label: 'Status',
-            type: InstaCareStatusBadgeType.custom,
-          ),
-        ),
-        _componentBlock(
-          title: 'OTP Input',
-          fileName: 'otp_input.dart',
-          child: InstaCareOtpInput(
-            length: 4,
-            onChanged: (value) {},
-            onCompleted: (value) {},
-          ),
-        ),
-        _sectionHeading('Cards'),
-        _componentBlock(
-          title: 'Patient Partner Connect',
-          fileName: 'patient_partner_connect.dart',
-          child: const InstaCarePatientPartnerConnect(
-            patientName: 'Anjana',
-            partnerName: 'Keerthana',
-          ),
-        ),
-        _componentBlock(
-          title: 'Cancel Booking (Danger Button)',
-          fileName: 'danger_button.dart',
-          child: InstaCareDangerButton(
-            text: 'Cancel this Booking',
-            fullWidth: true,
-            onPressed: () {},
-          ),
-        ),
-        _componentBlock(
-          title: 'Service List Tile',
-          fileName: 'service_list_tile.dart',
-          child: InstaCareServiceListTile(
-            items: const [
-              InstaCareServiceListItem(
-                name: 'Vital Signs Monitoring',
-                duration: '30 - 45 mins',
-                price: '\u20B9500',
-                description:
-                    'Monitoring essential body parameters such as blood pressure, pulse, and oxygen levels.',
-                isNew: true,
+            InstaCareCardListItem(
+              card: InstaCareCard(
+                backgroundColor: AppColors.ivory300,
+                child: Center(child: Text('Card')),
               ),
-              InstaCareServiceListItem(
-                name: 'Wound Dressing (Minor)',
-                duration: '30 - 45 mins',
-                price: '\u20B9500',
-                description:
-                    'Basic cleaning and dressing of small cuts, abrasions, or minor wounds.',
-              ),
-              InstaCareServiceListItem(
-                name: 'Wound Dressing (Major)',
-                duration: '30 - 45 mins',
-                price: '\u20B9500',
-                description:
-                    'Sterile dressing and care for large, deep, or post-surgical wounds.',
-              ),
-            ],
-            onItemTap: (item) {},
-          ),
+              title: 'Nursing Visit',
+              body: 'Vitals check and medication support.',
+            ),
+          ],
         ),
-        _sectionHeading('Signature'),
-        _componentBlock(
-          title: 'Signature Pad',
-          fileName: 'signature_pad.dart',
-          child: const InstaCareSignaturePad(),
+      ),
+      _SectionEntry.component(
+        title: 'Checkbox Card',
+        fileName: 'checkbox_card.dart',
+        builder: (_) => Column(
+          children: [
+            InstaCareCheckboxCard(
+              title: 'Card Title 1',
+              message:
+                  'This is a small message text that describes the card content.',
+              isSelected: checkboxCard1,
+              onChanged: (value) => setState(() => checkboxCard1 = value),
+            ),
+            const SizedBox(height: 12),
+            InstaCareCheckboxCard(
+              title: 'Card Title 2',
+              message:
+                  'Another card with a different message for demonstration.',
+              isSelected: checkboxCard2,
+              onChanged: (value) => setState(() => checkboxCard2 = value),
+            ),
+          ],
         ),
-      ],
-    );
+      ),
+      _SectionEntry.component(
+        title: 'Attempts Card',
+        fileName: 'attempts_card.dart',
+        builder: (_) => const Column(
+          children: [
+            InstaCareAttemptsCard(
+              totalAttempts: 3,
+              usedAttempts: 1,
+              hasPassed: false,
+            ),
+            SizedBox(height: 12),
+            InstaCareAttemptsCard(
+              totalAttempts: 3,
+              usedAttempts: 3,
+              hasPassed: false,
+            ),
+            SizedBox(height: 12),
+            InstaCareAttemptsCard(
+              totalAttempts: 3,
+              usedAttempts: 2,
+              hasPassed: true,
+            ),
+          ],
+        ),
+      ),
+      const _SectionEntry.heading('Badges'),
+      _SectionEntry.component(
+        title: 'Appointment Status Pills',
+        fileName: 'appointment_status_pills.dart',
+        builder: (_) => const InstaCareAppointmentStatusPills(),
+      ),
+      const _SectionEntry.heading('Pills'),
+      _SectionEntry.component(
+        title: 'Hours Summary Pill',
+        fileName: 'hours_summary_pill.dart',
+        builder: (_) =>
+            const InstaCareHoursSummaryPill(text: 'Selected hours: 04h 30m'),
+      ),
+      const _SectionEntry.heading('Steps'),
+      _SectionEntry.component(
+        title: 'MCQ Option Selector',
+        fileName: 'mcq_option_selector.dart',
+        builder: (_) => InstaCareMcqOptionSelector(
+          question: 'Question',
+          options: const ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+          selected: selectedMcq,
+          onSelected: (value) => setState(() => selectedMcq = value),
+          previousLabel: 'Previous Question',
+          nextLabel: 'Next Question',
+          onPrevious: () {},
+          onNext: () {},
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Horizontal Stepper',
+        fileName: 'stepper.dart',
+        builder: (_) => InstaCareVerticalStepper(
+          currentStep: currentStepperStep,
+          onStepChanged: (step) => setState(() => currentStepperStep = step),
+          items: const [
+            InstaCareStepperItem(title: 'Step 1'),
+            InstaCareStepperItem(title: 'Step 2'),
+            InstaCareStepperItem(title: 'Step 3'),
+          ],
+        ),
+      ),
+      const _SectionEntry.heading('Upload'),
+      _SectionEntry.component(
+        title: 'File Upload Tile',
+        fileName: 'file_upload_tile.dart',
+        builder: (_) => InstaCareFileUploadTile(onTap: () {}),
+      ),
+      const _SectionEntry.heading('Navigation'),
+      _SectionEntry.raw((_) => _bottomNavDemo()),
+    ];
   }
 
+  List<_SectionEntry> get _patientSections {
+    return [
+      const _SectionEntry.heading('Patient Components'),
+      const _SectionEntry.heading('Services'),
+      _SectionEntry.component(
+        title: 'Service Category Grid',
+        fileName: 'service_category_grid.dart',
+        builder: (ctx) => InstaCareServiceCategoryGrid(
+          categories: const [
+            InstaCareServiceCategory(
+              name: 'Nursing',
+              description: 'Compassionate care',
+              price: 'from \u20B9499',
+              imagePath:
+                  'packages/instacare_components/lib/src/assessts_patient/nursing.png',
+            ),
+            InstaCareServiceCategory(
+              name: 'Physiotherapy',
+              description: 'Professional care',
+              price: 'from \u20B9599',
+              imagePath:
+                  'packages/instacare_components/lib/src/assessts_patient/physiotheraphy.png',
+            ),
+            InstaCareServiceCategory(
+              name: 'Caretaker',
+              description: 'Verified care',
+              price: 'from \u20B9699',
+              imagePath:
+                  'packages/instacare_components/lib/src/assessts_patient/caretaker.png',
+            ),
+            InstaCareServiceCategory(
+              name: 'Live-in Care',
+              description: 'Assured care',
+              price: 'from \u20B9899',
+              imagePath:
+                  'packages/instacare_components/lib/src/assessts_patient/liveincare.png',
+            ),
+          ],
+          onCategoryTap: (category) {
+            showServiceCategoryDialog(
+              context: ctx,
+              category: category,
+              onNavigate: () {},
+            );
+          },
+        ),
+      ),
+      const _SectionEntry.heading('Navigation'),
+      _SectionEntry.component(
+        title: 'Welcome Header',
+        fileName: 'welcome_header.dart',
+        builder: (_) => const InstaCareWelcomeHeader(
+          userName: 'Anjana',
+          searchHint: 'What care do you need today?',
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Bottom Nav Bar (Patient)',
+        fileName: 'bottom_app_nav_bar.dart',
+        builder: (_) => ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: InstaCareBottomAppNavBar(
+            currentIndex: currentNavIndex,
+            onTap: (index) => setState(() => currentNavIndex = index),
+            backgroundColor: AppColors.primary100,
+            selectedItemColor: AppColors.primary800,
+            unselectedItemColor: AppColors.primary400,
+            topBorderColor: AppColors.primary800,
+            showShadow: true,
+            items: const [
+              InstaCareBottomNavItem(
+                  icon: Icons.home_outlined, label: 'Home'),
+              InstaCareBottomNavItem(
+                  icon: Icons.grid_view_outlined, label: 'Services'),
+              InstaCareBottomNavItem(
+                  icon: Icons.headset_mic_outlined, label: 'Support'),
+              InstaCareBottomNavItem(
+                  icon: Icons.person_outline, label: 'Profile'),
+            ],
+          ),
+        ),
+      ),
+      const _SectionEntry.heading('Inputs'),
+      _SectionEntry.component(
+        title: 'Service Search Bar',
+        fileName: 'search_bar.dart',
+        builder: (_) => const InstaCareSearchBar(
+          hint: 'What service(s) do you need today?',
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Title with Back Button',
+        fileName: 'theme/heading.dart',
+        builder: (_) => InstaCareHeading.titleWithBackButton(
+          text: 'Title',
+          onBackPressed: () {},
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Consent Checkbox',
+        fileName: 'consent_checkbox.dart',
+        builder: (_) => InstaCareConsentCheckbox(
+          value: consentChecked,
+          onChanged: (v) => setState(() => consentChecked = v ?? false),
+          onLinkTap: () {},
+        ),
+      ),
+      const _SectionEntry.heading('Badges & Status'),
+      _SectionEntry.component(
+        title: 'Status Badge',
+        fileName: 'status_badge.dart',
+        builder: (_) => const InstaCareStatusBadge(
+          label: 'Status',
+          type: InstaCareStatusBadgeType.custom,
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'OTP Input',
+        fileName: 'otp_input.dart',
+        builder: (_) => InstaCareOtpInput(
+          length: 4,
+          onChanged: (value) {},
+          onCompleted: (value) {},
+        ),
+      ),
+      const _SectionEntry.heading('Cards'),
+      _SectionEntry.component(
+        title: 'Patient Partner Connect',
+        fileName: 'patient_partner_connect.dart',
+        builder: (_) => const InstaCarePatientPartnerConnect(
+          patientName: 'Anjana',
+          partnerName: 'Keerthana',
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Cancel Booking (Danger Button)',
+        fileName: 'danger_button.dart',
+        builder: (_) => InstaCareDangerButton(
+          text: 'Cancel this Booking',
+          fullWidth: true,
+          onPressed: () {},
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Service List Tile',
+        fileName: 'service_list_tile.dart',
+        builder: (_) => InstaCareServiceListTile(
+          items: const [
+            InstaCareServiceListItem(
+              name: 'Vital Signs Monitoring',
+              duration: '30 - 45 mins',
+              price: '\u20B9500',
+              description:
+                  'Monitoring essential body parameters such as blood pressure, pulse, and oxygen levels.',
+              isNew: true,
+            ),
+            InstaCareServiceListItem(
+              name: 'Wound Dressing (Minor)',
+              duration: '30 - 45 mins',
+              price: '\u20B9500',
+              description:
+                  'Basic cleaning and dressing of small cuts, abrasions, or minor wounds.',
+            ),
+            InstaCareServiceListItem(
+              name: 'Wound Dressing (Major)',
+              duration: '30 - 45 mins',
+              price: '\u20B9500',
+              description:
+                  'Sterile dressing and care for large, deep, or post-surgical wounds.',
+            ),
+          ],
+          onItemTap: (item) {},
+        ),
+      ),
+      const _SectionEntry.heading('Signature'),
+      _SectionEntry.component(
+        title: 'Signature Pad',
+        fileName: 'signature_pad.dart',
+        builder: (_) => const InstaCareSignaturePad(),
+      ),
+    ];
+  }
+
+  List<_SectionEntry> get _commonSections {
+    return [
+      const _SectionEntry.heading('Common Components'),
+      const _SectionEntry.heading('Typography'),
+      _SectionEntry.component(
+        title: 'Font Weights',
+        fileName: 'google_fonts',
+        builder: (_) => _buildFontWeightsSection(),
+      ),
+      _SectionEntry.component(
+        title: 'Text Styles',
+        fileName: 'typography.dart',
+        builder: (_) => _buildTextStylesSection(),
+      ),
+      const _SectionEntry.heading('Headings'),
+      _SectionEntry.component(
+        title: 'Top Header Title',
+        fileName: 'theme/heading.dart',
+        builder: (_) => InstaCareHeading.topHeaderTitle('Top Header Title'),
+      ),
+      _SectionEntry.component(
+        title: 'Title with Back Button',
+        fileName: 'theme/heading.dart',
+        builder: (_) => InstaCareHeading.titleWithBackButton(
+          text: 'Title',
+          onBackPressed: () {},
+        ),
+      ),
+      const _SectionEntry.heading('Animation'),
+      _SectionEntry.component(
+        title: 'Skeleton Loading',
+        fileName: 'animation/skeleton_loading.dart',
+        builder: (_) => _skeletonPagePreview(),
+      ),
+      _SectionEntry.component(
+        title: 'Carousel',
+        fileName: 'animation/carousel.dart',
+        builder: (_) => InstaCareCarousel(
+          height: 160,
+          items: [
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.primary100,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.ivory700),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.gray400.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Text(
+                  'Card 1',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.gray800,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.ivory300,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.ivory700),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.gray400.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Text(
+                  'Card 2',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.gray800,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.primary200,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.ivory700),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.gray400.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Text(
+                  'Card 3',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.gray800,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Markdown Render Widget',
+        fileName: 'common/markdown.dart',
+        builder: (_) => _markdownTogglePreview(),
+      ),
+      const _SectionEntry.heading('Buttons'),
+      _SectionEntry.component(
+        title: 'Button States',
+        fileName: 'button.dart',
+        builder: (_) => Column(
+          children: [
+            InstaCareButton(
+                text: 'Primary Button', fullWidth: true, onPressed: () {}),
+            const SizedBox(height: 10),
+            InstaCareButton.secondary(
+                text: 'Secondary Button', fullWidth: true, onPressed: () {}),
+            const SizedBox(height: 10),
+            InstaCareButton(
+              text: loading ? 'Loading...' : 'Load Data',
+              isLoading: loading,
+              fullWidth: true,
+              onPressed: () {
+                setState(() => loading = true);
+                Future.delayed(const Duration(seconds: 1), () {
+                  if (mounted) {
+                    setState(() => loading = false);
+                  }
+                });
+              },
+            ),
+            const SizedBox(height: 10),
+            const InstaCareButton(
+                text: 'Disabled',
+                fullWidth: true,
+                isDisabled: true,
+                onPressed: null),
+          ],
+        ),
+      ),
+      const _SectionEntry.heading('Inputs'),
+      _SectionEntry.component(
+        title: 'Text Inputs',
+        fileName: 'text_field.dart',
+        builder: (_) => const Column(
+          children: [
+            InstaCareTextField(
+              label: 'Text Input',
+              hint: 'placeholder',
+              fillColor: AppColors.ivory300,
+              borderColor: AppColors.primary700,
+              focusedBorderColor: AppColors.primary800,
+              hintColor: AppColors.gray400,
+            ),
+            SizedBox(height: 12),
+            InstaCareTextField(
+              label: 'Email',
+              hint: 'Enter your email',
+              prefixIcon: Icons.email_outlined,
+            ),
+          ],
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Phone Input',
+        fileName: 'phone_input.dart',
+        builder: (_) => const InstaCarePhoneInput(
+          label: 'Mobile Number With Region Selector',
+          hint: '87921 34521',
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Dropdown',
+        fileName: 'dropdown.dart',
+        builder: (_) => InstaCareDropdown<String>(
+          label: 'Gender',
+          hint: 'Select gender',
+          value: selectedGender,
+          items: const ['Male', 'Female', 'Other'],
+          onChanged: (value) => setState(() => selectedGender = value),
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Dropdown With Checkbox',
+        fileName: 'dropdown_with_checkbox.dart',
+        builder: (_) => InstaCareDropdownWithCheckbox<String>(
+          label: 'Drop Down With Check Box',
+          hint: 'Select options',
+          items: const ['check box 1', 'check box 2', 'check box 3'],
+          selectedItems: selectedMultiDropdown,
+          onChanged: (next) => setState(() => selectedMultiDropdown = next),
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Date Picker',
+        fileName: 'date_picker_field.dart',
+        builder: (_) => InstaCareDatePickerField(
+          label: 'Date Picker',
+          value: selectedDate,
+          onChanged: (next) => setState(() => selectedDate = next),
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Search Bar',
+        fileName: 'search_bar.dart',
+        builder: (_) => const InstaCareSearchBar(hint: 'Search services'),
+      ),
+      _SectionEntry.component(
+        title: 'Checkbox',
+        fileName: 'checkbox_field.dart',
+        builder: (_) => InstaCareCheckboxField(
+          value: checkOne,
+          onChanged: (checked) => setState(() => checkOne = checked ?? false),
+          label: 'Checkbox 1',
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'OTP Input',
+        fileName: 'otp_input.dart',
+        builder: (_) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InstaCareOtpInput(
+              length: 6,
+              onChanged: (value) => setState(() => otp = value),
+              onCompleted: (value) => setState(() => otp = value),
+            ),
+            if (otp.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text('Entered OTP: $otp'),
+            ],
+          ],
+        ),
+      ),
+      const _SectionEntry.heading('Selection'),
+      _SectionEntry.component(
+        title: 'Radio Buttons',
+        fileName: 'radio_buttons.dart',
+        builder: (_) => InstaCareRadioButtons<String>(
+          groupValue: selectedRadio,
+          options: const [
+            InstaCareRadioOption(value: 'Yes', label: 'Yes'),
+            InstaCareRadioOption(value: 'No', label: 'No'),
+          ],
+          onChanged: (value) =>
+              setState(() => selectedRadio = value ?? 'Yes'),
+          direction: Axis.horizontal,
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Service Pills',
+        fileName: 'service_pills.dart',
+        builder: (_) => InstaCareServicePills(
+          services: const ['Minor', 'Major', 'Nursing'],
+          selected: selectedService,
+          onSelected: (value) => setState(() => selectedService = value),
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Filter Pills',
+        fileName: 'filter_pills.dart',
+        builder: (_) => InstaCareFilterPills(
+          items: const ['Wound Dressing', 'Injection', 'Vitals'],
+          selected: selectedFilters,
+          onToggle: (item) {
+            setState(() {
+              if (selectedFilters.contains(item)) {
+                selectedFilters.remove(item);
+              } else {
+                selectedFilters.add(item);
+              }
+            });
+          },
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Rating Scale',
+        fileName: 'rating_scale.dart',
+        builder: (_) => InstaCareRatingScale(
+          currentRating: rating,
+          onRatingChanged: (value) => setState(() => rating = value),
+        ),
+      ),
+      const _SectionEntry.heading('Dialogs'),
+      _SectionEntry.component(
+        title: 'Confirmation Dialog',
+        fileName: 'confirmation_dialog.dart',
+        builder: (ctx) => InstaCareButton.secondary(
+          text: 'Pop confirmation',
+          onPressed: () async {
+            final confirmed = await showInstaCareConfirmationDialog(
+              context: ctx,
+              title: 'Confirmation',
+              body: 'Do you want to continue?',
+            );
+            if (!ctx.mounted) return;
+            if (confirmed) {
+              ScaffoldMessenger.of(ctx)
+                  .showSnackBar(const SnackBar(content: Text('Confirmed')));
+            }
+          },
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Snackbar',
+        fileName: 'snackbar.dart',
+        builder: (ctx) => Column(
+          children: [
+            InstaCareButton(
+              text: 'Show Success Snackbar',
+              fullWidth: true,
+              onPressed: () {
+                InstaCareSnackbar.show(
+                  context: ctx,
+                  type: InstaCareSnackbarType.success,
+                  title: 'Success',
+                  message: 'Your action was completed successfully!',
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            InstaCareButton(
+              text: 'Show Error Snackbar',
+              fullWidth: true,
+              onPressed: () {
+                InstaCareSnackbar.show(
+                  context: ctx,
+                  type: InstaCareSnackbarType.error,
+                  title: 'Error',
+                  message: 'Something went wrong. Please try again.',
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            InstaCareButton(
+              text: 'Show Info Snackbar',
+              fullWidth: true,
+              onPressed: () {
+                InstaCareSnackbar.show(
+                  context: ctx,
+                  type: InstaCareSnackbarType.info,
+                  title: 'Information',
+                  message: 'Here is some useful information for you.',
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            InstaCareButton(
+              text: 'Show Pending Snackbar',
+              fullWidth: true,
+              onPressed: () {
+                InstaCareSnackbar.show(
+                  context: ctx,
+                  type: InstaCareSnackbarType.pending,
+                  title: 'Pending',
+                  message: 'Your request is being processed.',
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
+  // -------------------------------------------------------------------------
+  // Typography helpers
+  // -------------------------------------------------------------------------
   Widget _buildFontWeightsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1025,7 +1447,7 @@ class _GalleryState extends State<Gallery> {
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 15,
-                  color: AppColors .gray900,
+                  color: AppColors.gray900,
                 ),
               ),
               Text(
@@ -1046,385 +1468,39 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
-  Widget _buildCommonPage() {
-    return ListView(
+  // -------------------------------------------------------------------------
+  // Lazy page builder — shared by all 3 tabs
+  // -------------------------------------------------------------------------
+  Widget _buildLazyPage(List<_SectionEntry> sections) {
+    return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      children: [
-        _sectionHeading('Common Components'),
-        _sectionHeading('Typography'),
-        _componentBlock(
-          title: 'Font Weights',
-          fileName: 'google_fonts',
-          child: _buildFontWeightsSection(),
-        ),
-        _componentBlock(
-          title: 'Text Styles',
-          fileName: 'typography.dart',
-          child: _buildTextStylesSection(),
-        ),
-        _sectionHeading('Headings'),
-        _componentBlock(
-          title: 'Top Header Title',
-          fileName: 'theme/heading.dart',
-          child: InstaCareHeading.topHeaderTitle('Top Header Title'),
-        ),
-        _componentBlock(
-          title: 'Title with Back Button',
-          fileName: 'theme/heading.dart',
-          child: InstaCareHeading.titleWithBackButton(
-            text: 'Title',
-            onBackPressed: () {},
-          ),
-        ),
-        _sectionHeading('Animation'),
-        _componentBlock(
-          title: 'Skeleton Loading',
-          fileName: 'animation/skeleton_loading.dart',
-          child: _skeletonPagePreview(),
-        ),
-        _componentBlock(
-          title: 'Carousel',
-          fileName: 'animation/carousel.dart',
-          child: InstaCareCarousel(
-            height: 160,
-            items: [
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.primary100,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.ivory700),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.gray400.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Text(
-                    'Card 1',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.gray800,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.ivory300,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.ivory700),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.gray400.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Text(
-                    'Card 2',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.gray800,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.primary200,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.ivory700),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.gray400.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Text(
-                    'Card 3',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.gray800,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        _componentBlock(
-          title: 'Markdown Render Widget',
-          fileName: 'common/markdown.dart',
-          child: _markdownTogglePreview(),
-        ),
-        _sectionHeading('Buttons'),
-        _componentBlock(
-          title: 'Button States',
-          fileName: 'button.dart',
-          child: Column(
-            children: [
-              InstaCareButton(
-                  text: 'Primary Button', fullWidth: true, onPressed: () {}),
-              const SizedBox(height: 10),
-              InstaCareButton.secondary(
-                  text: 'Secondary Button', fullWidth: true, onPressed: () {}),
-              const SizedBox(height: 10),
-              InstaCareButton(
-                text: loading ? 'Loading...' : 'Load Data',
-                isLoading: loading,
-                fullWidth: true,
-                onPressed: () {
-                  setState(() => loading = true);
-                  Future.delayed(const Duration(seconds: 1), () {
-                    if (mounted) {
-                      setState(() => loading = false);
-                    }
-                  });
-                },
-              ),
-              const SizedBox(height: 10),
-              const InstaCareButton(
-                  text: 'Disabled',
-                  fullWidth: true,
-                  isDisabled: true,
-                  onPressed: null),
-            ],
-          ),
-        ),
-        _sectionHeading('Inputs'),
-        _componentBlock(
-          title: 'Text Inputs',
-          fileName: 'text_field.dart',
-          child: const Column(
-            children: [
-              InstaCareTextField(
-                label: 'Text Input',
-                hint: 'Enter your text',
-                hintColor: AppColors.gray400,
-              ),
-              SizedBox(height: 12),
-              InstaCareTextField(
-                label: 'Email',
-                hint: 'Enter your email',
-                prefixIcon: Icons.email_outlined,
-              ),
-            ],
-          ),
-        ),
-        _componentBlock(
-          title: 'Phone Input',
-          fileName: 'phone_input.dart',
-          child: const InstaCarePhoneInput(
-            label: 'Mobile Number With Region Selector',
-            hint: '87921 34521',
-          ),
-        ),
-        _componentBlock(
-          title: 'Dropdown',
-          fileName: 'dropdown.dart',
-          child: InstaCareDropdown<String>(
-            label: 'Gender',
-            hint: 'Select gender',
-            value: selectedGender,
-            items: const ['Male', 'Female', 'Other'],
-            onChanged: (value) => setState(() => selectedGender = value),
-          ),
-        ),
-        _componentBlock(
-          title: 'Dropdown With Checkbox',
-          fileName: 'dropdown_with_checkbox.dart',
-          child: InstaCareDropdownWithCheckbox<String>(
-            label: 'Drop Down With Check Box',
-            hint: 'Select options',
-            items: const ['check box 1', 'check box 2', 'check box 3'],
-            selectedItems: selectedMultiDropdown,
-            onChanged: (next) => setState(() => selectedMultiDropdown = next),
-          ),
-        ),
-        _componentBlock(
-          title: 'Date Picker',
-          fileName: 'date_picker_field.dart',
-          child: InstaCareDatePickerField(
-            label: 'Date Picker',
-            value: selectedDate,
-            onChanged: (next) => setState(() => selectedDate = next),
-          ),
-        ),
-        _componentBlock(
-          title: 'Search Bar',
-          fileName: 'search_bar.dart',
-          child: const InstaCareSearchBar(hint: 'Search services'),
-        ),
-        _componentBlock(
-          title: 'Checkbox',
-          fileName: 'checkbox_field.dart',
-          child: InstaCareCheckboxField(
-            value: checkOne,
-            onChanged: (checked) => setState(() => checkOne = checked ?? false),
-            label: 'Checkbox 1',
-          ),
-        ),
-        _componentBlock(
-          title: 'OTP Input',
-          fileName: 'otp_input.dart',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InstaCareOtpInput(
-                length: 6,
-                onChanged: (value) => setState(() => otp = value),
-                onCompleted: (value) => setState(() => otp = value),
-              ),
-              if (otp.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Text('Entered OTP: $otp'),
-              ],
-            ],
-          ),
-        ),
-        _sectionHeading('Selection'),
-        _componentBlock(
-          title: 'Radio Buttons',
-          fileName: 'radio_buttons.dart',
-          child: InstaCareRadioButtons<String>(
-            groupValue: selectedRadio,
-            options: const [
-              InstaCareRadioOption(value: 'Yes', label: 'Yes'),
-              InstaCareRadioOption(value: 'No', label: 'No'),
-            ],
-            onChanged: (value) =>
-                setState(() => selectedRadio = value ?? 'Yes'),
-            direction: Axis.horizontal,
-          ),
-        ),
-        _componentBlock(
-          title: 'Service Pills',
-          fileName: 'service_pills.dart',
-          child: InstaCareServicePills(
-            services: const ['Minor', 'Major', 'Nursing'],
-            selected: selectedService,
-            onSelected: (value) => setState(() => selectedService = value),
-          ),
-        ),
-        _componentBlock(
-          title: 'Filter Pills',
-          fileName: 'filter_pills.dart',
-          child: InstaCareFilterPills(
-            items: const ['Wound Dressing', 'Injection', 'Vitals'],
-            selected: selectedFilters,
-            onToggle: (item) {
-              setState(() {
-                if (selectedFilters.contains(item)) {
-                  selectedFilters.remove(item);
-                } else {
-                  selectedFilters.add(item);
-                }
-              });
-            },
-          ),
-        ),
-        _componentBlock(
-          title: 'Rating Scale',
-          fileName: 'rating_scale.dart',
-          child: InstaCareRatingScale(
-            currentRating: rating,
-            onRatingChanged: (value) => setState(() => rating = value),
-          ),
-        ),
-        _sectionHeading('Dialogs'),
-        _componentBlock(
-          title: 'Confirmation Dialog',
-          fileName: 'confirmation_dialog.dart',
-          child: InstaCareButton.secondary(
-            text: 'Pop confirmation',
-            onPressed: () async {
-              final confirmed = await showInstaCareConfirmationDialog(
-                context: context,
-                title: 'Confirmation',
-                body: 'Do you want to continue?',
-              );
-              if (!mounted) return;
-              if (confirmed) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text('Confirmed')));
-              }
-            },
-          ),
-        ),
-        _componentBlock(
-          title: 'Snackbar',
-          fileName: 'snackbar.dart',
-          child: Column(
-            children: [
-              InstaCareButton(
-                text: 'Show Success Snackbar',
-                fullWidth: true,
-                onPressed: () {
-                  InstaCareSnackbar.show(
-                    context: context,
-                    type: InstaCareSnackbarType.success,
-                    title: 'Success',
-                    message: 'Your action was completed successfully!',
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              InstaCareButton(
-                text: 'Show Error Snackbar',
-                fullWidth: true,
-                onPressed: () {
-                  InstaCareSnackbar.show(
-                    context: context,
-                    type: InstaCareSnackbarType.error,
-                    title: 'Error',
-                    message: 'Something went wrong. Please try again.',
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              InstaCareButton(
-                text: 'Show Info Snackbar',
-                fullWidth: true,
-                onPressed: () {
-                  InstaCareSnackbar.show(
-                    context: context,
-                    type: InstaCareSnackbarType.info,
-                    title: 'Information',
-                    message: 'Here is some useful information for you.',
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              InstaCareButton(
-                text: 'Show Pending Snackbar',
-                fullWidth: true,
-                onPressed: () {
-                  InstaCareSnackbar.show(
-                    context: context,
-                    type: InstaCareSnackbarType.pending,
-                    title: 'Pending',
-                    message: 'Your request is being processed.',
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
+      itemCount: sections.length,
+      itemBuilder: (context, index) {
+        final entry = sections[index];
+
+        // Heading row
+        if (entry.heading != null) {
+          return _sectionHeading(entry.heading!);
+        }
+
+        // Raw widget (no component block wrapper)
+        if (entry.title == null && entry.builder != null) {
+          return entry.builder!(context);
+        }
+
+        // Component block (lazy — only built when scrolled into view)
+        return _componentBlock(
+          title: entry.title!,
+          fileName: entry.fileName!,
+          child: entry.builder!(context),
+        );
+      },
     );
   }
 
+  // -------------------------------------------------------------------------
+  // Build
+  // -------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1459,9 +1535,9 @@ class _GalleryState extends State<Gallery> {
                     }
                   },
                   children: [
-                    _buildPartnerPage(),
-                    _buildPatientPage(),
-                    _buildCommonPage(),
+                    _buildLazyPage(_partnerSections),
+                    _buildLazyPage(_patientSections),
+                    _buildLazyPage(_commonSections),
                   ],
                 ),
               ),

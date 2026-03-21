@@ -36,6 +36,8 @@ class InstaCareDangerButton extends StatelessWidget {
         final iconSize = (width * 0.05).clamp(16.0, 18.0);
         final skeletonWidth = (width * 0.34).clamp(56.0, 120.0);
 
+        final Color textColor = _enabled ? AppColors.baseWhite : AppColors.gray400;
+
         final Widget child = isLoading
             ? InstaCareSkeletonLoading(
                 height: 12,
@@ -49,7 +51,7 @@ class InstaCareDangerButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: iconSize, color: AppColors.baseWhite),
+                    Icon(icon, size: iconSize, color: textColor),
                     const SizedBox(width: 8),
                   ],
                   Flexible(
@@ -58,7 +60,7 @@ class InstaCareDangerButton extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: InstaCareTypography.r.copyWith(
                         fontSize: textSize,
-                        color: AppColors.baseWhite,
+                        color: textColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -73,14 +75,39 @@ class InstaCareDangerButton extends StatelessWidget {
           ),
           child: ElevatedButton(
             onPressed: _enabled ? onPressed : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _enabled ? AppColors.error900 : AppColors.gray400,
-              foregroundColor: AppColors.baseWhite,
-              padding: size.padding,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(999),
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.disabled)) {
+                  return AppColors.gray200;
+                }
+                if (states.contains(WidgetState.pressed)) {
+                  return AppColors.error300;
+                }
+                if (states.contains(WidgetState.hovered) ||
+                    states.contains(WidgetState.focused)) {
+                  return AppColors.error200;
+                }
+                return AppColors.error300;
+              }),
+              foregroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.disabled)) {
+                  return AppColors.gray400;
+                }
+                return AppColors.baseWhite;
+              }),
+              overlayColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.pressed)) {
+                  return AppColors.baseWhite.withValues(alpha: 0.1);
+                }
+                return null;
+              }),
+              padding: WidgetStateProperty.all(size.padding),
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
+                ),
               ),
-              elevation: 0,
+              elevation: WidgetStateProperty.all(0),
             ),
             child: child,
           ),
