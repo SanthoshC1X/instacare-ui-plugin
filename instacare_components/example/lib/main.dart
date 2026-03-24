@@ -271,7 +271,7 @@ class _GalleryState extends State<Gallery> {
   Widget _roleSlider() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final segmentWidth = constraints.maxWidth / 3;
+        final segmentWidth = constraints.maxWidth / 2;
         return Container(
           height: 44,
           decoration: BoxDecoration(
@@ -299,8 +299,7 @@ class _GalleryState extends State<Gallery> {
               Row(
                 children: [
                   _roleItem('Partner', 0),
-                  _roleItem('Patient', 1),
-                  _roleItem('Common', 2),
+                  _roleItem('Common', 1),
                 ],
               ),
             ],
@@ -767,113 +766,9 @@ class _GalleryState extends State<Gallery> {
     ];
   }
 
-  List<_SectionEntry> get _patientSections {
+  List<_SectionEntry> get _commonSections {
     return [
-      const _SectionEntry.heading('Patient Components'),
-      const _SectionEntry.heading('Services'),
-      _SectionEntry.component(
-        title: 'Service Category Grid',
-        fileName: 'service_category_grid.dart',
-        builder: (ctx) => InstaCareServiceCategoryGrid(
-          categories: const [
-            InstaCareServiceCategory(
-              name: 'Nursing',
-              description: 'Compassionate care',
-              price: 'from \u20B9499',
-              imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/nursing.png',
-            ),
-            InstaCareServiceCategory(
-              name: 'Physiotherapy',
-              description: 'Professional care',
-              price: 'from \u20B9599',
-              imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/physiotheraphy.png',
-            ),
-            InstaCareServiceCategory(
-              name: 'Caretaker',
-              description: 'Verified care',
-              price: 'from \u20B9699',
-              imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/caretaker.png',
-            ),
-            InstaCareServiceCategory(
-              name: 'Live-in Care',
-              description: 'Assured care',
-              price: 'from \u20B9899',
-              imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/liveincare.png',
-            ),
-          ],
-          onCategoryTap: (category) {
-            showServiceCategoryDialog(
-              context: ctx,
-              category: category,
-              onNavigate: () {},
-            );
-          },
-        ),
-      ),
-      const _SectionEntry.heading('Navigation'),
-      _SectionEntry.component(
-        title: 'Welcome Header',
-        fileName: 'welcome_header.dart',
-        builder: (_) => const InstaCareWelcomeHeader(
-          userName: 'Anjana',
-          searchHint: 'What care do you need today?',
-        ),
-      ),
-      _SectionEntry.component(
-        title: 'Bottom Nav Bar (Patient)',
-        fileName: 'bottom_app_nav_bar.dart',
-        builder: (_) => ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: InstaCareBottomAppNavBar(
-            currentIndex: currentNavIndex,
-            onTap: (index) => setState(() => currentNavIndex = index),
-            backgroundColor: AppColors.primary100,
-            selectedItemColor: AppColors.primary800,
-            unselectedItemColor: AppColors.primary400,
-            topBorderColor: AppColors.primary800,
-            showShadow: true,
-            items: const [
-              InstaCareBottomNavItem(
-                  icon: Icons.home_outlined, label: 'Home'),
-              InstaCareBottomNavItem(
-                  icon: Icons.grid_view_outlined, label: 'Services'),
-              InstaCareBottomNavItem(
-                  icon: Icons.headset_mic_outlined, label: 'Support'),
-              InstaCareBottomNavItem(
-                  icon: Icons.person_outline, label: 'Profile'),
-            ],
-          ),
-        ),
-      ),
-      const _SectionEntry.heading('Inputs'),
-      _SectionEntry.component(
-        title: 'Service Search Bar',
-        fileName: 'search_bar.dart',
-        builder: (_) => const InstaCareSearchBar(
-          hint: 'What service(s) do you need today?',
-        ),
-      ),
-      _SectionEntry.component(
-        title: 'Title with Back Button',
-        fileName: 'theme/heading.dart',
-        builder: (_) => InstaCareHeading.titleWithBackButton(
-          text: 'Title',
-          onBackPressed: () {},
-        ),
-      ),
-      _SectionEntry.component(
-        title: 'Consent Checkbox',
-        fileName: 'consent_checkbox.dart',
-        builder: (_) => InstaCareConsentCheckbox(
-          value: consentChecked,
-          onChanged: (v) => setState(() => consentChecked = v ?? false),
-          onLinkTap: () {},
-        ),
-      ),
+      const _SectionEntry.heading('Common Components'),
       const _SectionEntry.heading('Badges & Status'),
       _SectionEntry.component(
         title: 'Status Badge',
@@ -1211,6 +1106,33 @@ class _GalleryState extends State<Gallery> {
           },
         ),
       ),
+      const _SectionEntry.heading('Navigation'),
+      _SectionEntry.component(
+        title: 'Bottom Nav Bar (Patient)',
+        fileName: 'bottom_app_nav_bar.dart',
+        builder: (_) => ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: InstaCareBottomAppNavBar(
+            currentIndex: currentNavIndex,
+            onTap: (index) => setState(() => currentNavIndex = index),
+            backgroundColor: AppColors.primary100,
+            selectedItemColor: AppColors.primary800,
+            unselectedItemColor: AppColors.primary400,
+            topBorderColor: AppColors.primary800,
+            showShadow: true,
+            items: const [
+              InstaCareBottomNavItem(
+                  icon: Icons.home_outlined, label: 'Home'),
+              InstaCareBottomNavItem(
+                  icon: Icons.grid_view_outlined, label: 'Services'),
+              InstaCareBottomNavItem(
+                  icon: Icons.headset_mic_outlined, label: 'Support'),
+              InstaCareBottomNavItem(
+                  icon: Icons.person_outline, label: 'Profile'),
+            ],
+          ),
+        ),
+      ),
       _SectionEntry.component(
         title: 'Snackbar',
         fileName: 'snackbar.dart',
@@ -1420,7 +1342,6 @@ class _GalleryState extends State<Gallery> {
                   },
                   children: [
                     _buildLazyPage(_partnerSections),
-                    _buildLazyPage(_patientSections),
                     _buildLazyPage(_commonSections),
                   ],
                 ),
