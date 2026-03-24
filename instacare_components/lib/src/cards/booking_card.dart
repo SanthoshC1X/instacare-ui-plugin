@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/network_image.dart';
 import '../theme/color.dart';
 import '../theme/typography.dart';
 
@@ -252,10 +253,11 @@ class InstaCareBookingCard extends StatelessWidget {
 
   Widget _buildServiceImage() {
     if (serviceImageUrl != null && serviceImageUrl!.isNotEmpty) {
-      return Image.network(
-        serviceImageUrl!,
+      return InstaCareNetworkImage(
+        imageUrl: serviceImageUrl!,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _placeholderImage(),
+        borderRadius: BorderRadius.zero,
+        errorWidget: _placeholderImage(),
       );
     }
     return _placeholderImage();

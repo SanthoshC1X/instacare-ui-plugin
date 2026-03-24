@@ -49,6 +49,14 @@ class InstaCareTypography {
     letterSpacing: 0,
     height: 1.0,
   );
+  
+  //h5
+  static final TextStyle h5 = GoogleFonts.figtree(
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0,
+    height: 1.0,
+  );
 
   /// -------------------------------
   /// BODY TEXT (p)

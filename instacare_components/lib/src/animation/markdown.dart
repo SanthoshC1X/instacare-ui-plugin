@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 
+import '../common/network_image.dart';
 import '../theme/color.dart';
 import '../theme/typography.dart';
 
@@ -134,24 +135,22 @@ class InstaCareMarkdown extends StatelessWidget {
   // ---------------------------------------------------------------------------
 
   Widget _buildImage(MarkdownImageConfig config) {
-    return ClipRRect(
+    return InstaCareNetworkImage(
+      imageUrl: config.uri.toString(),
+      height: config.height ?? maxImageHeight,
+      fit: BoxFit.cover,
       borderRadius: BorderRadius.circular(10),
-      child: Image.network(
-        config.uri.toString(),
-        height: config.height ?? maxImageHeight,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => Container(
-          height: 72,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppColors.primary50,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.primary200),
-          ),
-          child: Text(
-            config.alt ?? 'Image unavailable',
-            style: InstaCareTypography.s.copyWith(color: AppColors.gray600),
-          ),
+      errorWidget: Container(
+        height: 72,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.primary50,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColors.primary200),
+        ),
+        child: Text(
+          config.alt ?? 'Image unavailable',
+          style: InstaCareTypography.s.copyWith(color: AppColors.gray600),
         ),
       ),
     );

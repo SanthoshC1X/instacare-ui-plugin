@@ -778,6 +778,108 @@ class _GalleryState extends State<Gallery> {
           type: InstaCareStatusBadgeType.custom,
         ),
       ),
+      _SectionEntry.component(
+        title: 'OTP Input',
+        fileName: 'otp_input.dart',
+        builder: (_) => InstaCareOtpInput(
+          length: 4,
+          onChanged: (value) {},
+          onCompleted: (value) {},
+        ),
+      ),
+      const _SectionEntry.heading('Cards'),
+      _SectionEntry.component(
+        title: 'Patient Partner Connect',
+        fileName: 'patient_partner_connect.dart',
+        builder: (_) => const InstaCarePatientPartnerConnect(
+          patientName: 'Anjana',
+          partnerName: 'Keerthana',
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Cancel Booking (Danger Button)',
+        fileName: 'danger_button.dart',
+        builder: (_) => InstaCareDangerButton(
+          text: 'Cancel this Booking',
+          fullWidth: true,
+          onPressed: () {},
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'Service List Tile',
+        fileName: 'service_list_tile.dart',
+        builder: (_) => InstaCareServiceListTile(
+          items: const [
+            InstaCareServiceListItem(
+              name: 'Vital Signs Monitoring',
+              duration: '30 - 45 mins',
+              price: '\u20B9500',
+              description:
+                  'Monitoring essential body parameters such as blood pressure, pulse, and oxygen levels.',
+              isNew: true,
+            ),
+            InstaCareServiceListItem(
+              name: 'Wound Dressing (Minor)',
+              duration: '30 - 45 mins',
+              price: '\u20B9500',
+              description:
+                  'Basic cleaning and dressing of small cuts, abrasions, or minor wounds.',
+            ),
+            InstaCareServiceListItem(
+              name: 'Wound Dressing (Major)',
+              duration: '30 - 45 mins',
+              price: '\u20B9500',
+              description:
+                  'Sterile dressing and care for large, deep, or post-surgical wounds.',
+            ),
+          ],
+          onItemTap: (item) {},
+        ),
+      ),
+      const _SectionEntry.heading('Signature'),
+      _SectionEntry.component(
+        title: 'Signature Pad',
+        fileName: 'signature_pad.dart',
+        builder: (_) => const InstaCareSignaturePad(),
+      ),
+    ];
+  }
+
+  Widget _buildFontWeightsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFontWeightsGrid(GoogleFonts.crimsonPro, 'Crimson Pro (Headings)'),
+        const SizedBox(height: 32),
+        const Divider(height: 1, color: AppColors.ivory300),
+        const SizedBox(height: 32),
+        _buildFontWeightsGrid(GoogleFonts.figtree, 'Figtree (Body)'),
+      ],
+    );
+  }
+
+
+  List<_SectionEntry> get _commonSections {
+    return [
+      const _SectionEntry.heading('Common Components'),
+      const _SectionEntry.heading('Logo'),
+      _SectionEntry.component(
+        title: 'Instacare Logo',
+        fileName: 'common/logo.dart',
+        builder: (_) => const Column(
+          children: [InstaCareLogo(), SizedBox(height: 20)],
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'LogoIcon',
+        fileName: 'common/logo.dart',
+        builder: (_) => const InstaCareLogoIcon(size: 32, color: AppColors.primary300),
+      ),
+      _SectionEntry.component(
+        title: 'LogoText',
+        fileName: 'common/logo.dart',
+        builder: (_) => const InstaCareLogoText(fontSize: 24, color: AppColors.primary300),
+      ),
       const _SectionEntry.heading('Typography'),
       _SectionEntry.component(
         title: 'Font Weights',
@@ -798,10 +900,7 @@ class _GalleryState extends State<Gallery> {
       _SectionEntry.component(
         title: 'Title with Back Button',
         fileName: 'theme/heading.dart',
-        builder: (_) => InstaCareHeading.titleWithBackButton(
-          text: 'Title',
-          onBackPressed: () {},
-        ),
+        builder: (_) => InstaCareHeading.titleWithBackButton(text: 'Title', onBackPressed: () {}),
       ),
       const _SectionEntry.heading('Animation'),
       _SectionEntry.component(
@@ -817,75 +916,30 @@ class _GalleryState extends State<Gallery> {
           items: [
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primary100,
+                color: AppColors.primary900,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.ivory700),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.gray400.withValues(alpha: 0.15),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                border: Border.all(color: AppColors.ivory300),
+                boxShadow: [BoxShadow(color: AppColors.gray600.withValues(alpha: 0.15), blurRadius: 8, offset: const Offset(0, 2))],
               ),
-              child: const Center(
-                child: Text(
-                  'Card 1',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray800,
-                  ),
-                ),
-              ),
+              child: const Center(child: Text('Card 1', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.gray200))),
             ),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.ivory300,
+                color: AppColors.ivory700,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.ivory700),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.gray400.withValues(alpha: 0.15),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                border: Border.all(color: AppColors.ivory300),
+                boxShadow: [BoxShadow(color: AppColors.gray600.withValues(alpha: 0.15), blurRadius: 8, offset: const Offset(0, 2))],
               ),
-              child: const Center(
-                child: Text(
-                  'Card 2',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray800,
-                  ),
-                ),
-              ),
+              child: const Center(child: Text('Card 2', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.gray200))),
             ),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primary200,
+                color: AppColors.primary800,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.ivory700),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.gray400.withValues(alpha: 0.15),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                border: Border.all(color: AppColors.ivory300),
+                boxShadow: [BoxShadow(color: AppColors.gray600.withValues(alpha: 0.15), blurRadius: 8, offset: const Offset(0, 2))],
               ),
-              child: const Center(
-                child: Text(
-                  'Card 3',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray800,
-                  ),
-                ),
-              ),
+              child: const Center(child: Text('Card 3', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.gray200))),
             ),
           ],
         ),
@@ -901,11 +955,9 @@ class _GalleryState extends State<Gallery> {
         fileName: 'button.dart',
         builder: (_) => Column(
           children: [
-            InstaCareButton(
-                text: 'Primary Button', fullWidth: true, onPressed: () {}),
+            InstaCareButton(text: 'Primary Button', fullWidth: true, onPressed: () {}),
             const SizedBox(height: 10),
-            InstaCareButton.secondary(
-                text: 'Secondary Button', fullWidth: true, onPressed: () {}),
+            InstaCareButton.secondary(text: 'Secondary Button', fullWidth: true, onPressed: () {}),
             const SizedBox(height: 10),
             InstaCareButton(
               text: loading ? 'Loading...' : 'Load Data',
@@ -914,18 +966,12 @@ class _GalleryState extends State<Gallery> {
               onPressed: () {
                 setState(() => loading = true);
                 Future.delayed(const Duration(seconds: 1), () {
-                  if (mounted) {
-                    setState(() => loading = false);
-                  }
+                  if (mounted) setState(() => loading = false);
                 });
               },
             ),
             const SizedBox(height: 10),
-            const InstaCareButton(
-                text: 'Disabled',
-                fullWidth: true,
-                isDisabled: true,
-                onPressed: null),
+            const InstaCareButton(text: 'Disabled', fullWidth: true, isDisabled: true, onPressed: null),
           ],
         ),
       ),
@@ -935,30 +981,16 @@ class _GalleryState extends State<Gallery> {
         fileName: 'text_field.dart',
         builder: (_) => const Column(
           children: [
-            InstaCareTextField(
-              label: 'Text Input',
-              hint: 'placeholder',
-              fillColor: AppColors.ivory300,
-              borderColor: AppColors.primary700,
-              focusedBorderColor: AppColors.primary800,
-              hintColor: AppColors.gray400,
-            ),
+            InstaCareTextField(label: 'Text Input', hint: 'placeholder', fillColor: AppColors.ivory700, borderColor: AppColors.primary300, focusedBorderColor: AppColors.primary200, hintColor: AppColors.gray600),
             SizedBox(height: 12),
-            InstaCareTextField(
-              label: 'Email',
-              hint: 'Enter your email',
-              prefixIcon: Icons.email_outlined,
-            ),
+            InstaCareTextField(label: 'Email', hint: 'Enter your email', prefixIcon: Icons.email_outlined),
           ],
         ),
       ),
       _SectionEntry.component(
         title: 'Phone Input',
         fileName: 'phone_input.dart',
-        builder: (_) => const InstaCarePhoneInput(
-          label: 'Mobile Number With Region Selector',
-          hint: '87921 34521',
-        ),
+        builder: (_) => const InstaCarePhoneInput(label: 'Mobile Number With Region Selector', hint: '87921 34521'),
       ),
       _SectionEntry.component(
         title: 'Dropdown',
@@ -1016,10 +1048,7 @@ class _GalleryState extends State<Gallery> {
               onChanged: (value) => setState(() => otp = value),
               onCompleted: (value) => setState(() => otp = value),
             ),
-            if (otp.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text('Entered OTP: $otp'),
-            ],
+            if (otp.isNotEmpty) ...[const SizedBox(height: 8), Text('Entered OTP: $otp')],
           ],
         ),
       ),
@@ -1029,12 +1058,8 @@ class _GalleryState extends State<Gallery> {
         fileName: 'radio_buttons.dart',
         builder: (_) => InstaCareRadioButtons<String>(
           groupValue: selectedRadio,
-          options: const [
-            InstaCareRadioOption(value: 'Yes', label: 'Yes'),
-            InstaCareRadioOption(value: 'No', label: 'No'),
-          ],
-          onChanged: (value) =>
-              setState(() => selectedRadio = value ?? 'Yes'),
+          options: const [InstaCareRadioOption(value: 'Yes', label: 'Yes'), InstaCareRadioOption(value: 'No', label: 'No')],
+          onChanged: (value) => setState(() => selectedRadio = value ?? 'Yes'),
           direction: Axis.horizontal,
         ),
       ),
@@ -1055,11 +1080,7 @@ class _GalleryState extends State<Gallery> {
           selected: selectedFilters,
           onToggle: (item) {
             setState(() {
-              if (selectedFilters.contains(item)) {
-                selectedFilters.remove(item);
-              } else {
-                selectedFilters.add(item);
-              }
+              selectedFilters.contains(item) ? selectedFilters.remove(item) : selectedFilters.add(item);
             });
           },
         ),
@@ -1079,16 +1100,9 @@ class _GalleryState extends State<Gallery> {
         builder: (ctx) => InstaCareButton.secondary(
           text: 'Pop confirmation',
           onPressed: () async {
-            final confirmed = await showInstaCareConfirmationDialog(
-              context: ctx,
-              title: 'Confirmation',
-              body: 'Do you want to continue?',
-            );
-            if (!ctx.mounted) return;
-            if (confirmed) {
-              ScaffoldMessenger.of(ctx)
-                  .showSnackBar(const SnackBar(content: Text('Confirmed')));
-            }
+            final confirmed = await showInstaCareConfirmationDialog(context: ctx, title: 'Confirmation', body: 'Do you want to continue?');
+            if (!mounted) return;
+            if (confirmed) ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('Confirmed')));
           },
         ),
       ),
@@ -1124,77 +1138,17 @@ class _GalleryState extends State<Gallery> {
         fileName: 'snackbar.dart',
         builder: (ctx) => Column(
           children: [
-            InstaCareButton(
-              text: 'Show Success Snackbar',
-              fullWidth: true,
-              onPressed: () {
-                InstaCareSnackbar.show(
-                  context: ctx,
-                  type: InstaCareSnackbarType.success,
-                  title: 'Success',
-                  message: 'Your action was completed successfully!',
-                );
-              },
-            ),
+            InstaCareButton(text: 'Show Success Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.success, title: 'Success', message: 'Your action was completed successfully!'); }),
             const SizedBox(height: 10),
-            InstaCareButton(
-              text: 'Show Error Snackbar',
-              fullWidth: true,
-              onPressed: () {
-                InstaCareSnackbar.show(
-                  context: ctx,
-                  type: InstaCareSnackbarType.error,
-                  title: 'Error',
-                  message: 'Something went wrong. Please try again.',
-                );
-              },
-            ),
+            InstaCareButton(text: 'Show Error Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.error, title: 'Error', message: 'Something went wrong. Please try again.'); }),
             const SizedBox(height: 10),
-            InstaCareButton(
-              text: 'Show Info Snackbar',
-              fullWidth: true,
-              onPressed: () {
-                InstaCareSnackbar.show(
-                  context: ctx,
-                  type: InstaCareSnackbarType.info,
-                  title: 'Information',
-                  message: 'Here is some useful information for you.',
-                );
-              },
-            ),
+            InstaCareButton(text: 'Show Info Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.info, title: 'Information', message: 'Here is some useful information for you.'); }),
             const SizedBox(height: 10),
-            InstaCareButton(
-              text: 'Show Pending Snackbar',
-              fullWidth: true,
-              onPressed: () {
-                InstaCareSnackbar.show(
-                  context: ctx,
-                  type: InstaCareSnackbarType.pending,
-                  title: 'Pending',
-                  message: 'Your request is being processed.',
-                );
-              },
-            ),
+            InstaCareButton(text: 'Show Pending Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.pending, title: 'Pending', message: 'Your request is being processed.'); }),
           ],
         ),
       ),
     ];
-  }
-
-  // -------------------------------------------------------------------------
-  // Typography helpers
-  // -------------------------------------------------------------------------
-  Widget _buildFontWeightsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildFontWeightsGrid(GoogleFonts.crimsonPro, 'Crimson Pro (Headings)'),
-        const SizedBox(height: 32),
-        const Divider(height: 1, color: AppColors.ivory700),
-        const SizedBox(height: 32),
-        _buildFontWeightsGrid(GoogleFonts.figtree, 'Figtree (Body)'),
-      ],
-    );
   }
 
   Widget _buildFontWeightsGrid(
