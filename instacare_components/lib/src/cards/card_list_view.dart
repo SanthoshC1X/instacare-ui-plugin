@@ -32,18 +32,18 @@ class InstaCareCardListView extends StatelessWidget {
       children: [
         for (int i = 0; i < items.length; i++) ...[
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center, // ✅ FIX
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: cardWidth,
-                child: Center( // ✅ ensures visual centering
+                child: Center(
                   child: items[i].card,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // ✅
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(

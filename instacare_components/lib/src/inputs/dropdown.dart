@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
+import '../theme/input_theme.dart';
 import '../theme/typography.dart';
 
 class InstaCareDropdown<T> extends StatefulWidget {
@@ -205,33 +206,12 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
             borderRadius: BorderRadius.circular(8),
             onTap: _toggleDropdown,
             child: InputDecorator(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: AppColors.ivory300,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
+              decoration: InstaCareInputTheme.decoration(
                 suffixIcon: Icon(
                   _expanded
                       ? Icons.keyboard_arrow_up
                       : Icons.keyboard_arrow_down,
                   color: AppColors.gray600,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.primary700),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.primary700),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: AppColors.primary900,
-                    width: 2,
-                  ),
                 ),
               ),
               child: Text(

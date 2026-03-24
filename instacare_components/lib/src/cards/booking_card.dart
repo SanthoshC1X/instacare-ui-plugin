@@ -154,9 +154,7 @@ class InstaCareBookingCard extends StatelessWidget {
             // ── Divider ──
             Container(height: 1, color: AppColors.gray200),
             // ── Bottom section: Service image + name + time ──
-            Padding(
-              padding: const EdgeInsets.all(0),
-              child: Row(
+            Row(
                 children: [
                   // Service image
                   ClipRRect(
@@ -214,7 +212,6 @@ class InstaCareBookingCard extends StatelessWidget {
                   const SizedBox(width: 14),
                 ],
               ),
-            ),
           ],
         ),
       ),

@@ -589,22 +589,22 @@ class _GalleryState extends State<Gallery> {
         builder: (_) => const Column(
           children: [
             InstaCareMessageBox(
-                type: InstaCareMessageType.info,
+                type: InstaCareFeedbackType.info,
                 title: 'Info message box',
                 body: 'Body text goes here'),
             SizedBox(height: 8),
             InstaCareMessageBox(
-                type: InstaCareMessageType.error,
+                type: InstaCareFeedbackType.error,
                 title: 'Error message box',
                 body: 'Body text goes here'),
             SizedBox(height: 8),
             InstaCareMessageBox(
-                type: InstaCareMessageType.pending,
+                type: InstaCareFeedbackType.pending,
                 title: 'Pending message box',
                 body: 'Body text goes here'),
             SizedBox(height: 8),
             InstaCareMessageBox(
-                type: InstaCareMessageType.success,
+                type: InstaCareFeedbackType.success,
                 title: 'Success message box',
                 body: 'Body text goes here'),
           ],
@@ -781,28 +781,28 @@ class _GalleryState extends State<Gallery> {
               description: 'Compassionate care',
               price: 'from \u20B9499',
               imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/nursing.png',
+                  'packages/instacare_components/lib/src/assets_patient/nursing.png',
             ),
             InstaCareServiceCategory(
               name: 'Physiotherapy',
               description: 'Professional care',
               price: 'from \u20B9599',
               imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/physiotheraphy.png',
+                  'packages/instacare_components/lib/src/assets_patient/physiotheraphy.png',
             ),
             InstaCareServiceCategory(
               name: 'Caretaker',
               description: 'Verified care',
               price: 'from \u20B9699',
               imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/caretaker.png',
+                  'packages/instacare_components/lib/src/assets_patient/caretaker.png',
             ),
             InstaCareServiceCategory(
               name: 'Live-in Care',
               description: 'Assured care',
               price: 'from \u20B9899',
               imagePath:
-                  'packages/instacare_components/lib/src/assessts_patient/liveincare.png',
+                  'packages/instacare_components/lib/src/assets_patient/liveincare.png',
             ),
           ],
           onCategoryTap: (category) {
@@ -1216,13 +1216,13 @@ class _GalleryState extends State<Gallery> {
         fileName: 'snackbar.dart',
         builder: (ctx) => Column(
           children: [
-            InstaCareButton(text: 'Show Success Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.success, title: 'Success', message: 'Your action was completed successfully!'); }),
+            InstaCareButton(text: 'Show Success Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareFeedbackType.success, title: 'Success', message: 'Your action was completed successfully!'); }),
             const SizedBox(height: 10),
-            InstaCareButton(text: 'Show Error Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.error, title: 'Error', message: 'Something went wrong. Please try again.'); }),
+            InstaCareButton(text: 'Show Error Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareFeedbackType.error, title: 'Error', message: 'Something went wrong. Please try again.'); }),
             const SizedBox(height: 10),
-            InstaCareButton(text: 'Show Info Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.info, title: 'Information', message: 'Here is some useful information for you.'); }),
+            InstaCareButton(text: 'Show Info Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareFeedbackType.info, title: 'Information', message: 'Here is some useful information for you.'); }),
             const SizedBox(height: 10),
-            InstaCareButton(text: 'Show Pending Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareSnackbarType.pending, title: 'Pending', message: 'Your request is being processed.'); }),
+            InstaCareButton(text: 'Show Pending Snackbar', fullWidth: true, onPressed: () { InstaCareSnackbar.show(context: ctx, type: InstaCareFeedbackType.pending, title: 'Pending', message: 'Your request is being processed.'); }),
           ],
         ),
       ),

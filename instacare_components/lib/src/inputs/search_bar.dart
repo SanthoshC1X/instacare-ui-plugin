@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
+import '../theme/input_theme.dart';
 import '../theme/typography.dart';
 
 class InstaCareSearchBar extends StatelessWidget {
@@ -20,7 +21,7 @@ class InstaCareSearchBar extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       style: InstaCareTypography.r,
-      decoration: InputDecoration(
+      decoration: InstaCareInputTheme.decoration(
         hintText: hint,
         hintStyle: InstaCareTypography.r.copyWith(
           color: AppColors.gray400,
@@ -28,27 +29,6 @@ class InstaCareSearchBar extends StatelessWidget {
         prefixIcon: const Icon(
           Icons.search,
           color: AppColors.gray600,
-        ),
-        filled: true,
-        fillColor: AppColors.ivory300,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primary700),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primary700),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.primary900,
-            width: 2,
-          ),
         ),
       ),
     );

@@ -36,6 +36,17 @@ class InstaCareButton extends StatelessWidget {
     this.isDisabled = false,
   }) : _variant = _ButtonVariant.secondary;
 
+  const InstaCareButton.danger({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.isLoading = false,
+    this.size = ButtonSize.medium,
+    this.icon,
+    this.fullWidth = false,
+    this.isDisabled = false,
+  }) : _variant = _ButtonVariant.danger;
+
   bool get _enabled => onPressed != null && !isLoading && !isDisabled;
 
   @override
@@ -51,6 +62,7 @@ class InstaCareButton extends StatelessWidget {
         final Color textColor;
         switch (_variant) {
           case _ButtonVariant.primary:
+          case _ButtonVariant.danger:
             textColor = _enabled ? AppColors.baseWhite : AppColors.gray400;
           case _ButtonVariant.secondary:
             textColor = _enabled ? AppColors.primary700 : AppColors.gray400;
@@ -61,12 +73,12 @@ class InstaCareButton extends StatelessWidget {
                 height: 12,
                 width: skeletonWidth,
                 borderRadius: const BorderRadius.all(Radius.circular(999)),
-                baseColor: _variant == _ButtonVariant.primary
-                    ? AppColors.baseWhite.withValues(alpha: 0.24)
-                    : AppColors.gray200,
-                highlightColor: _variant == _ButtonVariant.primary
-                    ? AppColors.baseWhite.withValues(alpha: 0.6)
-                    : AppColors.baseWhite,
+                baseColor: _variant == _ButtonVariant.secondary
+                    ? AppColors.gray200
+                    : AppColors.baseWhite.withValues(alpha: 0.24),
+                highlightColor: _variant == _ButtonVariant.secondary
+                    ? AppColors.baseWhite
+                    : AppColors.baseWhite.withValues(alpha: 0.6),
               )
             : Row(
                 mainAxisSize: MainAxisSize.min,
@@ -196,8 +208,48 @@ class InstaCareButton extends StatelessWidget {
           ),
           child: child,
         );
+
+      case _ButtonVariant.danger:
+        return ElevatedButton(
+          onPressed: _enabled ? onPressed : null,
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return AppColors.gray200;
+              }
+              if (states.contains(WidgetState.pressed)) {
+                return AppColors.error300;
+              }
+              if (states.contains(WidgetState.hovered) ||
+                  states.contains(WidgetState.focused)) {
+                return AppColors.error200;
+              }
+              return AppColors.error300;
+            }),
+            foregroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return AppColors.gray400;
+              }
+              return AppColors.baseWhite;
+            }),
+            overlayColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.pressed)) {
+                return AppColors.baseWhite.withValues(alpha: 0.1);
+              }
+              return null;
+            }),
+            padding: WidgetStateProperty.all(size.padding),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
+            elevation: WidgetStateProperty.all(0),
+          ),
+          child: child,
+        );
     }
   }
 }
 
-enum _ButtonVariant { primary, secondary }
+enum _ButtonVariant { primary, secondary, danger }

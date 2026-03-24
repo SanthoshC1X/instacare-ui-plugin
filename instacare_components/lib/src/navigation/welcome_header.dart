@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
+import '../theme/input_theme.dart';
 import '../theme/typography.dart';
 
 class InstaCareWelcomeHeader extends StatelessWidget {
@@ -56,7 +57,7 @@ class InstaCareWelcomeHeader extends StatelessWidget {
           controller: searchController,
           onChanged: onSearchChanged,
           style: InstaCareTypography.r,
-          decoration: InputDecoration(
+          decoration: InstaCareInputTheme.decoration(
             hintText: searchHint,
             hintStyle: InstaCareTypography.r.copyWith(
               color: AppColors.gray400,
@@ -66,27 +67,8 @@ class InstaCareWelcomeHeader extends StatelessWidget {
               size: 22,
               color: AppColors.secondary600,
             ),
-            filled: true,
             fillColor: AppColors.ivory200,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 13,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.secondary400),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.secondary400),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                color: AppColors.primary900,
-                width: 2,
-              ),
-            ),
+            borderColor: AppColors.secondary400,
           ),
         ),
       ],

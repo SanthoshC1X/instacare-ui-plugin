@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/color.dart';
 import '../theme/typography.dart';
 
-class InstaCareConsentCheckbox extends StatelessWidget {
+class InstaCareConsentCheckbox extends StatefulWidget {
   final bool value;
   final ValueChanged<bool?> onChanged;
   final String preText;
@@ -23,10 +23,38 @@ class InstaCareConsentCheckbox extends StatelessWidget {
   });
 
   @override
+  State<InstaCareConsentCheckbox> createState() =>
+      _InstaCareConsentCheckboxState();
+}
+
+class _InstaCareConsentCheckboxState extends State<InstaCareConsentCheckbox> {
+  late final TapGestureRecognizer _linkRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _linkRecognizer = TapGestureRecognizer()..onTap = widget.onLinkTap;
+  }
+
+  @override
+  void didUpdateWidget(covariant InstaCareConsentCheckbox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.onLinkTap != widget.onLinkTap) {
+      _linkRecognizer.onTap = widget.onLinkTap;
+    }
+  }
+
+  @override
+  void dispose() {
+    _linkRecognizer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: () => onChanged(!value),
+      onTap: () => widget.onChanged(!widget.value),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
         child: Row(
@@ -36,11 +64,12 @@ class InstaCareConsentCheckbox extends StatelessWidget {
               width: 24,
               height: 24,
               child: Checkbox(
-                value: value,
-                onChanged: onChanged,
+                value: widget.value,
+                onChanged: widget.onChanged,
                 activeColor: Theme.of(context).colorScheme.primary,
                 checkColor: AppColors.baseWhite,
-                side: const BorderSide(color: AppColors.primary500, width: 1.5),
+                side: const BorderSide(
+                    color: AppColors.primary500, width: 1.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
@@ -54,17 +83,17 @@ class InstaCareConsentCheckbox extends StatelessWidget {
                     color: AppColors.gray700,
                   ),
                   children: [
-                    TextSpan(text: preText),
+                    TextSpan(text: widget.preText),
                     TextSpan(
-                      text: linkText,
+                      text: widget.linkText,
                       style: InstaCareTypography.r.copyWith(
                         color: AppColors.primary700,
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.w600,
                       ),
-                      recognizer: TapGestureRecognizer()..onTap = onLinkTap,
+                      recognizer: _linkRecognizer,
                     ),
-                    TextSpan(text: postText),
+                    TextSpan(text: widget.postText),
                   ],
                 ),
               ),

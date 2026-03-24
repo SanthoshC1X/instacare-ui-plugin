@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
+import '../theme/input_theme.dart';
 import '../theme/typography.dart';
 
 class InstaCareDatePickerField extends StatelessWidget {
@@ -50,31 +51,10 @@ class InstaCareDatePickerField extends StatelessWidget {
             }
           },
           child: InputDecorator(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: AppColors.ivory300,
+            decoration: InstaCareInputTheme.decoration(
               suffixIcon: const Icon(
                 Icons.calendar_today_outlined,
                 color: AppColors.gray600,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.primary700),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.primary700),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.primary900,
-                  width: 2,
-                ),
               ),
             ),
             child: Text(

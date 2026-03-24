@@ -47,9 +47,11 @@ class InstaCarePatientPartnerConnect extends StatelessWidget {
           const Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),
-              child: CustomPaint(
-                size: Size(double.infinity, 2),
-                painter: _DottedLinePainter(color: AppColors.natural300),
+              child: ExcludeSemantics(
+                child: CustomPaint(
+                  size: Size(double.infinity, 2),
+                  painter: _DottedLinePainter(color: AppColors.natural300),
+                ),
               ),
             ),
           ),
@@ -133,4 +135,7 @@ class _DottedLinePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _DottedLinePainter oldDelegate) =>
       oldDelegate.color != color;
+
+  @override
+  bool shouldRebuildSemantics(covariant _DottedLinePainter oldDelegate) => false;
 }

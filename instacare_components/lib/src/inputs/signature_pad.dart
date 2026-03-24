@@ -147,12 +147,14 @@ class InstaCareSignaturePadState extends State<InstaCareSignaturePad> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: widget.height,
-                        child: CustomPaint(
-                          painter: _SignaturePainter(
-                            strokes: _confirmedStrokes,
-                            currentStroke: null,
-                            strokeColor: widget.strokeColor,
-                            strokeWidth: widget.strokeWidth,
+                        child: ExcludeSemantics(
+                          child: CustomPaint(
+                            painter: _SignaturePainter(
+                              strokes: _confirmedStrokes,
+                              currentStroke: null,
+                              strokeColor: widget.strokeColor,
+                              strokeWidth: widget.strokeWidth,
+                            ),
                           ),
                         ),
                       ),
@@ -282,13 +284,15 @@ class _SignaturePopupDialogState extends State<_SignaturePopupDialog> {
                   },
                   child: Stack(
                     children: [
-                      CustomPaint(
-                        size: Size(double.infinity, widget.height),
-                        painter: _SignaturePainter(
-                          strokes: _strokes,
-                          currentStroke: _currentStroke,
-                          strokeColor: widget.strokeColor,
-                          strokeWidth: widget.strokeWidth,
+                      ExcludeSemantics(
+                        child: CustomPaint(
+                          size: Size(double.infinity, widget.height),
+                          painter: _SignaturePainter(
+                            strokes: _strokes,
+                            currentStroke: _currentStroke,
+                            strokeColor: widget.strokeColor,
+                            strokeWidth: widget.strokeWidth,
+                          ),
                         ),
                       ),
                       if (_isEmpty)
@@ -408,4 +412,7 @@ class _SignaturePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _SignaturePainter oldDelegate) => true;
+
+  @override
+  bool shouldRebuildSemantics(covariant _SignaturePainter oldDelegate) => false;
 }

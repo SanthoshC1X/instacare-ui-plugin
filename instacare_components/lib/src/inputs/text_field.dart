@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
+import '../theme/input_theme.dart';
 import '../theme/typography.dart';
 
 class InstaCareTextField extends StatefulWidget {
@@ -106,7 +107,7 @@ class _ICTextFieldState extends State<InstaCareTextField> {
           maxLines: _obscureText ? 1 : widget.maxLines,
           enabled: widget.enabled,
           style: InstaCareTypography.r,
-          decoration: InputDecoration(
+          decoration: InstaCareInputTheme.decoration(
             hintText: widget.hint,
             hintStyle: InstaCareTypography.r
                 .copyWith(color: widget.hintColor ?? AppColors.gray400),
@@ -115,33 +116,10 @@ class _ICTextFieldState extends State<InstaCareTextField> {
                 : null,
             suffixIcon: _buildSuffixIcon(),
             errorText: widget.errorText,
-            filled: true,
-            fillColor: widget.fillColor ?? AppColors.ivory300,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.primary400,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.primary400,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              borderSide: BorderSide(
-                color: widget.focusedBorderColor ?? AppColors.primary700,
-                width: 2,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              borderSide: const BorderSide(color: AppColors.error700),
-            ),
+            fillColor: widget.fillColor,
+            borderColor: widget.borderColor ?? AppColors.primary400,
+            focusedBorderColor: widget.focusedBorderColor,
+            radius: widget.borderRadius,
             counterText: '',
           ),
         ),

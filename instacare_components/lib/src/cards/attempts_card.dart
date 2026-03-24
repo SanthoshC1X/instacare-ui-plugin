@@ -19,9 +19,7 @@ class InstaCareAttemptsCard extends StatelessWidget {
     final int remaining = totalAttempts - usedAttempts;
     final bool isExhausted = usedAttempts >= totalAttempts;
 
-    /// ============================
-    /// 🟢 PASSED STATE
-    /// ============================
+    // Passed state
     if (hasPassed) {
       return _buildStatusCard(
         color: AppColors.successFg,
@@ -33,9 +31,7 @@ class InstaCareAttemptsCard extends StatelessWidget {
       );
     }
 
-    /// ============================
-    /// 🔴 FAILED STATE (EXHAUSTED)
-    /// ============================
+    // Failed state (exhausted)
     if (isExhausted) {
       return _buildStatusCard(
         color: AppColors.errorFg,
@@ -47,9 +43,7 @@ class InstaCareAttemptsCard extends StatelessWidget {
       );
     }
 
-    /// ============================
-    /// 🟡 IN-PROGRESS STATE
-    /// ============================
+    // In-progress state
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -70,7 +64,6 @@ class InstaCareAttemptsCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              /// HEADER
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -101,7 +94,6 @@ class InstaCareAttemptsCard extends StatelessWidget {
               ),
               SizedBox(height: isSmallScreen ? 12 : 16),
 
-              /// SEGMENTED PROGRESS BAR
               Row(
                 children: List.generate(
                   totalAttempts,
@@ -123,7 +115,6 @@ class InstaCareAttemptsCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              /// FOOTER
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -152,9 +143,6 @@ class InstaCareAttemptsCard extends StatelessWidget {
     );
   }
 
-  /// ============================
-  /// ♻️ REUSABLE STATUS CARD
-  /// ============================
   Widget _buildStatusCard({
     required Color color,
     required Color bgColor,

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
 import '../theme/typography.dart';
+import '../types/feedback_type.dart';
 
-enum InstaCareSnackbarType { info, error, pending, success }
+@Deprecated('Use InstaCareFeedbackType instead')
+typedef InstaCareSnackbarType = InstaCareFeedbackType;
 
 class InstaCareSnackbar {
   static void show({
     required BuildContext context,
-    required InstaCareSnackbarType type,
+    required InstaCareFeedbackType type,
     required String title,
     required String message,
     Duration duration = const Duration(seconds: 4),
@@ -39,7 +41,7 @@ class InstaCareSnackbar {
 }
 
 class _InstaCareSnackbarWidget extends StatefulWidget {
-  final InstaCareSnackbarType type;
+  final InstaCareFeedbackType type;
   final String title;
   final String message;
   final VoidCallback onClose;
@@ -97,39 +99,39 @@ class _InstaCareSnackbarWidgetState extends State<_InstaCareSnackbarWidget>
 
   IconData get _icon {
     switch (widget.type) {
-      case InstaCareSnackbarType.info:
+      case InstaCareFeedbackType.info:
         return Icons.info_outline;
-      case InstaCareSnackbarType.error:
+      case InstaCareFeedbackType.error:
         return Icons.error_outline;
-      case InstaCareSnackbarType.pending:
+      case InstaCareFeedbackType.pending:
         return Icons.hourglass_top;
-      case InstaCareSnackbarType.success:
+      case InstaCareFeedbackType.success:
         return Icons.check_circle_outline;
     }
   }
 
   Color _backgroundColor() {
     switch (widget.type) {
-      case InstaCareSnackbarType.info:
+      case InstaCareFeedbackType.info:
         return AppColors.infoBg;
-      case InstaCareSnackbarType.error:
+      case InstaCareFeedbackType.error:
         return AppColors.errorBg;
-      case InstaCareSnackbarType.pending:
+      case InstaCareFeedbackType.pending:
         return AppColors.warningBg;
-      case InstaCareSnackbarType.success:
+      case InstaCareFeedbackType.success:
         return AppColors.successBg;
     }
   }
 
   Color _foregroundColor() {
     switch (widget.type) {
-      case InstaCareSnackbarType.info:
+      case InstaCareFeedbackType.info:
         return AppColors.infoFg;
-      case InstaCareSnackbarType.error:
+      case InstaCareFeedbackType.error:
         return AppColors.errorFg;
-      case InstaCareSnackbarType.pending:
+      case InstaCareFeedbackType.pending:
         return AppColors.warningFg;
-      case InstaCareSnackbarType.success:
+      case InstaCareFeedbackType.success:
         return AppColors.successFg;
     }
   }

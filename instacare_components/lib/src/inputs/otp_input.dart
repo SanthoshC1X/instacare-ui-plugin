@@ -22,6 +22,7 @@ class InstaCareOtpInput extends StatefulWidget {
 class _ICOtpInputState extends State<InstaCareOtpInput> {
   late List<TextEditingController> _controllers;
   late List<FocusNode> _focusNodes;
+  late List<FocusNode> _keyListenerNodes;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _ICOtpInputState extends State<InstaCareOtpInput> {
       });
       return node;
     });
+    _keyListenerNodes = List.generate(widget.length, (_) => FocusNode());
   }
 
   @override
@@ -47,6 +49,9 @@ class _ICOtpInputState extends State<InstaCareOtpInput> {
       controller.dispose();
     }
     for (var node in _focusNodes) {
+      node.dispose();
+    }
+    for (var node in _keyListenerNodes) {
       node.dispose();
     }
     super.dispose();
@@ -107,7 +112,7 @@ Widget build(BuildContext context) {
               width: cellSize,
               height: cellSize,
               child: KeyboardListener(
-                focusNode: FocusNode(),
+                focusNode: _keyListenerNodes[index],
                 onKeyEvent: (event) => _handleKeyEvent(index, event),
                 child: TextFormField(
                   controller: _controllers[index],

@@ -1,5 +1,5 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../common/painters.dart';
 import '../theme/color.dart';
 import '../theme/typography.dart';
 
@@ -108,12 +108,14 @@ class _ServiceCategoryCard extends StatelessWidget {
           child: Stack(
             children: [
               Positioned.fill(
-                child: CustomPaint(
-                  painter: _DotTexturePainter(
-                    color: AppColors.baseWhite.withValues(alpha: 0.09),
-                    cutOffRight: leafWidth,
-                    spacing: 10,
-                    radius: 0.8,
+                child: ExcludeSemantics(
+                  child: CustomPaint(
+                    painter: DotTexturePainter(
+                      color: AppColors.baseWhite.withValues(alpha: 0.09),
+                      cutOffRight: leafWidth,
+                      spacing: 10,
+                      radius: 0.8,
+                    ),
                   ),
                 ),
               ),
@@ -122,11 +124,13 @@ class _ServiceCategoryCard extends StatelessWidget {
                 top: leafInset,
                 bottom: leafInset,
                 width: leafWidth,
-                child: CustomPaint(
-                  painter: _LeafBranchPainter(
-                    color:
-                        AppColors.serviceCardAccent.withValues(alpha: 0.7),
-                    scale: h / 120,
+                child: ExcludeSemantics(
+                  child: CustomPaint(
+                    painter: LeafBranchPainter(
+                      color:
+                          AppColors.serviceCardAccent.withValues(alpha: 0.7),
+                      scale: h / 120,
+                    ),
                   ),
                 ),
               ),
@@ -199,12 +203,14 @@ Future<void> showServiceCategoryDialog({
                       category.imagePath!,
                       fit: BoxFit.cover,
                     )
-                  : CustomPaint(
-                      size: const Size(120, 120),
-                      painter: _LeafBranchPainter(
-                        color: AppColors.serviceCardAccent
-                            .withValues(alpha: 0.85),
-                        scale: 1.2,
+                  : ExcludeSemantics(
+                      child: CustomPaint(
+                        size: const Size(120, 120),
+                        painter: LeafBranchPainter(
+                          color: AppColors.serviceCardAccent
+                              .withValues(alpha: 0.85),
+                          scale: 1.2,
+                        ),
                       ),
                     ),
             ),
@@ -263,133 +269,4 @@ Future<void> showServiceCategoryDialog({
       ),
     ),
   );
-}
-
-// ---------------------------------------------------------------------------
-// Painters
-// ---------------------------------------------------------------------------
-
-class _DotTexturePainter extends CustomPainter {
-  final Color color;
-  final double cutOffRight;
-  final double spacing;
-  final double radius;
-
-  const _DotTexturePainter({
-    required this.color,
-    required this.cutOffRight,
-    required this.spacing,
-    required this.radius,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    final maxX = size.width - cutOffRight;
-    final startY = spacing + 4;
-    final endY = size.height - spacing;
-
-    for (double y = startY; y < endY; y += spacing) {
-      final rowOffset = ((y / spacing).floor().isEven) ? 0.0 : spacing / 2;
-      for (double x = spacing + rowOffset; x < maxX; x += spacing) {
-        canvas.drawCircle(Offset(x, y), radius, paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _DotTexturePainter old) =>
-      old.color != color ||
-      old.cutOffRight != cutOffRight ||
-      old.spacing != spacing ||
-      old.radius != radius;
-}
-
-class _LeafBranchPainter extends CustomPainter {
-  final Color color;
-  final double scale;
-
-  const _LeafBranchPainter({required this.color, this.scale = 1.0});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final stemPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0 * scale
-      ..strokeCap = StrokeCap.round;
-
-    final leafPaint = Paint()..color = color.withValues(alpha: 0.75);
-
-    // Main curved stem from bottom-center to upper area
-    final stem = Path()
-      ..moveTo(size.width * 0.45, size.height * 0.98)
-      ..quadraticBezierTo(
-        size.width * 0.38,
-        size.height * 0.55,
-        size.width * 0.60,
-        size.height * 0.15,
-      );
-    canvas.drawPath(stem, stemPaint);
-
-    // Right-side leaves along the stem
-    final rightLeaves = <Offset>[
-      Offset(size.width * 0.52, size.height * 0.78),
-      Offset(size.width * 0.56, size.height * 0.65),
-      Offset(size.width * 0.60, size.height * 0.52),
-      Offset(size.width * 0.62, size.height * 0.40),
-      Offset(size.width * 0.60, size.height * 0.28),
-    ];
-
-    for (int i = 0; i < rightLeaves.length; i++) {
-      final leafScale = (1.0 - i * 0.1) * scale;
-      _drawLeaf(
-        canvas,
-        leafPaint,
-        rightLeaves[i],
-        14 * leafScale,
-        -math.pi / 5,
-      );
-    }
-
-    // Left-side leaves
-    final leftLeaves = <Offset>[
-      Offset(size.width * 0.46, size.height * 0.70),
-      Offset(size.width * 0.48, size.height * 0.56),
-      Offset(size.width * 0.52, size.height * 0.44),
-    ];
-
-    for (int i = 0; i < leftLeaves.length; i++) {
-      final leafScale = (0.85 - i * 0.1) * scale;
-      _drawLeaf(
-        canvas,
-        leafPaint,
-        leftLeaves[i],
-        12 * leafScale,
-        math.pi - math.pi / 5,
-      );
-    }
-  }
-
-  void _drawLeaf(
-    Canvas canvas,
-    Paint paint,
-    Offset center,
-    double length,
-    double angle,
-  ) {
-    canvas.save();
-    canvas.translate(center.dx, center.dy);
-    canvas.rotate(angle);
-    final path = Path()
-      ..moveTo(0, 0)
-      ..quadraticBezierTo(length * 0.45, -length * 0.45, length, 0)
-      ..quadraticBezierTo(length * 0.45, length * 0.45, 0, 0);
-    canvas.drawPath(path, paint);
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(covariant _LeafBranchPainter old) =>
-      old.color != color || old.scale != scale;
 }

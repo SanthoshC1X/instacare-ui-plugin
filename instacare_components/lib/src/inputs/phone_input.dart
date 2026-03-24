@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:country_flags/country_flags.dart';
 import '../theme/color.dart';
+import '../theme/input_theme.dart';
 import '../theme/typography.dart';
 
 class InstaCarePhoneInput extends StatelessWidget {
@@ -14,6 +15,8 @@ class InstaCarePhoneInput extends StatelessWidget {
   final String? errorText;
   final FormFieldValidator<String>? validator;
   final int maxDigits;
+  final String? requiredMessage;
+  final String? lengthMessage;
 
   const InstaCarePhoneInput({
     super.key,
@@ -26,10 +29,10 @@ class InstaCarePhoneInput extends StatelessWidget {
     this.errorText,
     this.validator,
     this.maxDigits = 10,
+    this.requiredMessage,
+    this.lengthMessage,
   });
 
-  // ───── Design tokens (matching InstaCareTextField) ─────
-  static const double _radius = 8;
   static const double _flagSize = 20;
 
   static const double _outerPadding = 16;
@@ -60,10 +63,10 @@ class InstaCarePhoneInput extends StatelessWidget {
           validator: validator ??
               (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Phone number is required';
+                  return requiredMessage ?? 'Phone number is required';
                 }
                 if (value.length != maxDigits) {
-                  return 'Phone number must be $maxDigits digits';
+                  return lengthMessage ?? 'Phone number must be $maxDigits digits';
                 }
                 return null;
               },
@@ -72,18 +75,14 @@ class InstaCarePhoneInput extends StatelessWidget {
             LengthLimitingTextInputFormatter(maxDigits),
           ],
           style: InstaCareTypography.r,
-          decoration: InputDecoration(
+          decoration: InstaCareInputTheme.decoration(
             hintText: hint ?? '87921 34521',
             hintStyle: InstaCareTypography.r.copyWith(
               color: AppColors.gray400,
             ),
             errorText: errorText,
-
-            /// IMPORTANT: remove default 48px constraint
             prefixIconConstraints:
                 const BoxConstraints(minWidth: 0, minHeight: 0),
-
-            /// ───── Prefix ─────
             prefixIcon: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: _outerPadding),
@@ -91,7 +90,6 @@ class InstaCarePhoneInput extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Flag
                   Container(
                     width: _flagSize + 8,
                     height: _flagSize + 8,
@@ -107,51 +105,13 @@ class InstaCarePhoneInput extends StatelessWidget {
                       borderRadius: 999,
                     ),
                   ),
-
                   const SizedBox(width: _smallGap),
-
-                  // Country code
                   Text(
                     countryCode,
                     style: InstaCareTypography.r,
                   ),
-
                   const SizedBox(width: _codeGap),
                 ],
-              ),
-            ),
-
-            filled: true,
-            fillColor: AppColors.ivory300,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(_radius),
-              borderSide:
-                  const BorderSide(color: AppColors.primary700),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(_radius),
-              borderSide:
-                  const BorderSide(color: AppColors.primary700),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(_radius),
-              borderSide: const BorderSide(
-                color: AppColors.primary900,
-                width: 2,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(_radius),
-              borderSide: const BorderSide(color: AppColors.error700),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(_radius),
-              borderSide: const BorderSide(
-                color: AppColors.error700,
-                width: 2,
               ),
             ),
           ),

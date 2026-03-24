@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
 import '../theme/typography.dart';
+import '../types/feedback_type.dart';
 
-enum InstaCareMessageType { info, error, pending, success }
+@Deprecated('Use InstaCareFeedbackType instead')
+typedef InstaCareMessageType = InstaCareFeedbackType;
 
 class InstaCareMessageBox extends StatelessWidget {
-  final InstaCareMessageType type;
+  final InstaCareFeedbackType type;
   final String title;
   final String body;
 
@@ -18,39 +20,39 @@ class InstaCareMessageBox extends StatelessWidget {
 
   IconData get _icon {
     switch (type) {
-      case InstaCareMessageType.info:
+      case InstaCareFeedbackType.info:
         return Icons.info_outline;
-      case InstaCareMessageType.error:
+      case InstaCareFeedbackType.error:
         return Icons.error_outline;
-      case InstaCareMessageType.pending:
+      case InstaCareFeedbackType.pending:
         return Icons.hourglass_top;
-      case InstaCareMessageType.success:
+      case InstaCareFeedbackType.success:
         return Icons.check_circle_outline;
     }
   }
 
   Color _backgroundColor() {
     switch (type) {
-      case InstaCareMessageType.info:
+      case InstaCareFeedbackType.info:
         return AppColors.infoBg;
-      case InstaCareMessageType.error:
+      case InstaCareFeedbackType.error:
         return AppColors.errorBg;
-      case InstaCareMessageType.pending:
+      case InstaCareFeedbackType.pending:
         return AppColors.warningBg;
-      case InstaCareMessageType.success:
+      case InstaCareFeedbackType.success:
         return AppColors.successBg;
     }
   }
 
   Color _foregroundColor() {
     switch (type) {
-      case InstaCareMessageType.info:
+      case InstaCareFeedbackType.info:
         return AppColors.infoFg;
-      case InstaCareMessageType.error:
+      case InstaCareFeedbackType.error:
         return AppColors.errorFg;
-      case InstaCareMessageType.pending:
+      case InstaCareFeedbackType.pending:
         return AppColors.warningFg;
-      case InstaCareMessageType.success:
+      case InstaCareFeedbackType.success:
         return AppColors.successFg;
     }
   }
