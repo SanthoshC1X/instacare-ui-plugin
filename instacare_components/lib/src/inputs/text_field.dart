@@ -122,19 +122,19 @@ class _ICTextFieldState extends State<InstaCareTextField> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.primary700,
+                color: widget.borderColor ?? AppColors.primary400,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.primary700,
+                color: widget.borderColor ?? AppColors.primary400,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: BorderSide(
-                color: widget.focusedBorderColor ?? AppColors.primary900,
+                color: widget.focusedBorderColor ?? AppColors.primary700,
                 width: 2,
               ),
             ),

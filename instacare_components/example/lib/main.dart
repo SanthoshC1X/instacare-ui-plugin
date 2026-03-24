@@ -355,7 +355,7 @@ class _GalleryState extends State<Gallery> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.ivory300,
+        color: AppColors.ivory50,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.primary100, width: 1.4),
       ),
