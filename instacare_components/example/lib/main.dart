@@ -766,6 +766,20 @@ class _GalleryState extends State<Gallery> {
     ];
   }
 
+  Widget _buildFontWeightsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFontWeightsGrid(GoogleFonts.crimsonPro, 'Crimson Pro (Headings)'),
+        const SizedBox(height: 32),
+        const Divider(height: 1, color: AppColors.ivory300),
+        const SizedBox(height: 32),
+        _buildFontWeightsGrid(GoogleFonts.figtree, 'Figtree (Body)'),
+      ],
+    );
+  }
+
+
   List<_SectionEntry> get _commonSections {
     return [
       const _SectionEntry.heading('Common Components'),
@@ -787,81 +801,6 @@ class _GalleryState extends State<Gallery> {
           onCompleted: (value) {},
         ),
       ),
-      const _SectionEntry.heading('Cards'),
-      _SectionEntry.component(
-        title: 'Patient Partner Connect',
-        fileName: 'patient_partner_connect.dart',
-        builder: (_) => const InstaCarePatientPartnerConnect(
-          patientName: 'Anjana',
-          partnerName: 'Keerthana',
-        ),
-      ),
-      _SectionEntry.component(
-        title: 'Cancel Booking (Danger Button)',
-        fileName: 'danger_button.dart',
-        builder: (_) => InstaCareDangerButton(
-          text: 'Cancel this Booking',
-          fullWidth: true,
-          onPressed: () {},
-        ),
-      ),
-      _SectionEntry.component(
-        title: 'Service List Tile',
-        fileName: 'service_list_tile.dart',
-        builder: (_) => InstaCareServiceListTile(
-          items: const [
-            InstaCareServiceListItem(
-              name: 'Vital Signs Monitoring',
-              duration: '30 - 45 mins',
-              price: '\u20B9500',
-              description:
-                  'Monitoring essential body parameters such as blood pressure, pulse, and oxygen levels.',
-              isNew: true,
-            ),
-            InstaCareServiceListItem(
-              name: 'Wound Dressing (Minor)',
-              duration: '30 - 45 mins',
-              price: '\u20B9500',
-              description:
-                  'Basic cleaning and dressing of small cuts, abrasions, or minor wounds.',
-            ),
-            InstaCareServiceListItem(
-              name: 'Wound Dressing (Major)',
-              duration: '30 - 45 mins',
-              price: '\u20B9500',
-              description:
-                  'Sterile dressing and care for large, deep, or post-surgical wounds.',
-            ),
-          ],
-          onItemTap: (item) {},
-        ),
-      ),
-      const _SectionEntry.heading('Signature'),
-      _SectionEntry.component(
-        title: 'Signature Pad',
-        fileName: 'signature_pad.dart',
-        builder: (_) => const InstaCareSignaturePad(),
-      ),
-    ];
-  }
-
-  Widget _buildFontWeightsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildFontWeightsGrid(GoogleFonts.crimsonPro, 'Crimson Pro (Headings)'),
-        const SizedBox(height: 32),
-        const Divider(height: 1, color: AppColors.ivory300),
-        const SizedBox(height: 32),
-        _buildFontWeightsGrid(GoogleFonts.figtree, 'Figtree (Body)'),
-      ],
-    );
-  }
-
-
-  List<_SectionEntry> get _commonSections {
-    return [
-      const _SectionEntry.heading('Common Components'),
       const _SectionEntry.heading('Logo'),
       _SectionEntry.component(
         title: 'Instacare Logo',
