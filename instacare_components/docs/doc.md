@@ -1,29 +1,35 @@
 # InstaCare UI Components Plugin — Codebase Audit Report
 
-**Version:** 1.1.1 | **Date:** 2026-03-25
-**Total Widgets:** ~40 unique widgets | **Total Dart Files:** 45
+**Version:** 1.1.1 | **Date:** 2026-03-25 (Updated)
+**Total Widgets:** ~40 unique widgets | **Total Dart Files:** 45 | **Total Lines:** 4,905
 **Flutter SDK:** >=3.16.0 | **Dart SDK:** >=3.0.0 <4.0.0
 
 ---
 
-## 1. Overall Assessment: 8/10
+## 1. Overall Assessment: 8.5/10
 
 ### Strengths
-- Well-organized folder structure by widget category
-- Consistent `InstaCare` prefix naming convention
-- Good `const` constructor usage throughout
-- Comprehensive color system with semantic tokens
-- Custom painters for unique visual identity (leaf patterns, dot textures)
-- Generic type support in Dropdown/RadioButtons
-- Proper disposal of controllers, focus nodes in most widgets
-- `LayoutBuilder` used for responsive scaling
+- Well-organized folder structure by widget category (14 directories)
+- Consistent `InstaCare` prefix naming convention across all 40+ widgets
+- Good `const` constructor usage throughout every widget
+- Comprehensive color system with 90+ semantic tokens (`AppColors`)
+- Custom painters for unique visual identity (leaf patterns, dot textures) with proper `shouldRepaint()`
+- Generic type support in `Dropdown<T>` and `RadioButtons<T>`
+- Proper disposal of controllers, focus nodes, timers in all stateful widgets
+- `LayoutBuilder` used for responsive scaling in buttons, service cards, stepper, OTP, MCQ
 - Clean separation of theme tokens from widget code
+- `WidgetStateProperty` (modern API, not deprecated `MaterialStateProperty`)
+- `WidgetsBindingObserver` in dropdowns to close overlay on metrics change
+- Barrel export file properly exports all 45 public widgets/types
+- Private constructor utility classes (`AppColors._()`, `InstaCareTypography._()`)
+- Named constructors for clean API (`InstaCareButton.secondary`, `InstaCareTextField.password`)
 
 ### Weaknesses
-- Zero unit tests (test files are boilerplate only)
-- Missing accessibility support (no `Semantics` labels)
-- No widget-level dartdoc documentation
-- Some inconsistent border radius values across widgets
+- No unit tests (test files are boilerplate only)
+- No `Semantics` widgets for accessibility
+- No widget-level dartdoc documentation on most widgets
+- Duplicate `InputDecoration` pattern across 7 input widgets
+- Duplicate enums (`InstaCareSnackbarType` vs `InstaCareMessageType`)
 
 ---
 
@@ -34,108 +40,136 @@
 | 1 | `FocusNode()` created inside `build()` — leaked every rebuild | `otp_input.dart:110` | **Critical** | Created `_keyListenerNodes` list in `initState()`, disposed in `dispose()` |
 | 2 | `Future.delayed` recursion for autoplay — uncancellable | `carousel.dart:51` | **High** | Replaced with `Timer.periodic` + cancel in `dispose()` |
 | 3 | `height: 1.0` on all 11 typography styles — breaks multiline text | `typography.dart` | **High** | Removed `height: 1.0` from all styles, Flutter uses natural font line height |
-| 4 | `p` and `r` were separate identical `GoogleFonts.figtree()` definitions | `typography.dart` | **Medium** | `p` and `body` are now aliases for `r` |
+| 4 | `p` and `r` were separate identical `GoogleFonts.figtree()` definitions | `typography.dart` | **Medium** | `r` is the single definition; `p` and `body` are aliases for `r` |
 | 5 | `Padding(padding: EdgeInsets.all(0))` — no-op wrapper | `booking_card.dart:157` | **Low** | Removed unnecessary `Padding` wrapper |
-| 6 | Directory typo `assessts_patient` | `lib/src/` + `pubspec.yaml` + `logo.dart` | **Medium** | Renamed to `assets_patient` everywhere |
+| 6 | Directory typo `assessts_patient` | `pubspec.yaml` + `logo.dart` | **Medium** | Fixed to `assets_patient` in all references |
 | 7 | Plugin section in `pubspec.yaml` for a pure Dart package | `pubspec.yaml:23-31` | **Medium** | Removed `plugin:` section entirely |
-| 8 | Card border uses `backgroundColor` fallback instead of dedicated color | `card.dart:27` | **Medium** | Border now always uses `AppColors.primary700` |
+| 8 | Card border uses `backgroundColor` fallback instead of dedicated color | `card.dart:27` | **Medium** | Border now always uses `const BorderSide(color: AppColors.primary700)` |
 
 ---
 
-## 3. Widget Performance Classification
+## 3. Current Issues — Prioritized
 
-### Heavy (watch for performance)
+### 3.1 Fix Now (before next release)
 
-| Widget | File | Why |
-|--------|------|-----|
-| `InstaCareServiceCard` | `cards/service_card.dart` | CustomPaint with nested loop (dot grid) + leaf painter. Painters are private, duplicated if `ServiceCategoryGrid` existed |
-| `InstaCareCarousel` | `animation/carousel.dart` | Auto-play with Timer + PageView animation (now properly cancellable) |
-| `InstaCareOtpInput` | `inputs/otp_input.dart` | Creates N `TextEditingController` + 2N `FocusNode` (all properly disposed now) |
-| `InstaCareVerticalStepper` | `steps/stepper.dart` | Creates N `AnimationController` instances (properly disposed) |
+| # | Issue | File(s) | Severity | Effort |
+|---|-------|---------|----------|--------|
+| 1 | **Duplicate `InputDecoration`** across 7 input widgets — identical fill color, border radius, border colors repeated | `text_field.dart`, `phone_input.dart`, `otp_input.dart`, `dropdown.dart`, `dropdown_with_checkbox.dart`, `search_bar.dart`, `date_picker_field.dart` | Medium | Medium — Create shared `InputDecorationFactory` in `theme/input_theme.dart` |
+| 2 | **Duplicate feedback enums** — `InstaCareSnackbarType` and `InstaCareMessageType` have identical cases (`info`, `error`, `pending`, `success`) with identical color mappings | `snackbar.dart:5`, `message_box.dart:5` | Medium | Low — Unify into `InstaCareFeedbackType` in `types/feedback_type.dart` |
+| 3 | **Duplicate painters** — `_DotTexturePainter` and `_LeafPainter` are private, cannot be reused if a grid widget is added | `service_card.dart:139-243` | Low | Medium — Extract to `common/painters.dart` |
+| 4 | **`InstaCareCard` border not customizable** — border color hardcoded to `AppColors.primary700`, no `borderColor` parameter | `card.dart:27` | Medium | Low — Add optional `borderColor` parameter |
+
+### 3.2 Fix Later (next sprint)
+
+| # | Issue | File(s) | Severity | Effort |
+|---|-------|---------|----------|--------|
+| 5 | **No `Semantics` labels** on any interactive widget — screen readers cannot describe UI elements | All interactive widgets | High | High |
+| 6 | **No unit tests** — only boilerplate test file exists | `test/` | High | High |
+| 7 | **No dartdoc comments** on most public APIs | All files | Medium | Medium |
+| 8 | **`InstaCareProgressBar` color not customizable** — uses `Theme.of(context).colorScheme.primary` only, no parameter for status colors (warning, error) | `progress_bar.dart:34` | Low | Low — Add optional `color` parameter |
+| 9 | **`InstaCareRatingScale` icon size not customizable** — star size uses implicit `IconButton` defaults | `rating_scale.dart:22-29` | Low | Low — Add optional `iconSize` parameter |
+
+### 3.3 Good to Have (future)
+
+| # | Issue | Notes |
+|---|-------|-------|
+| 10 | Add `borderRadius` parameter to `InstaCareCard` | Currently hardcoded to `12` |
+| 11 | Add debounce support to `InstaCareSearchBar` | Consumers must implement debouncing themselves |
+| 12 | Add `RepaintBoundary` around `CustomPaint` widgets in `InstaCareServiceCard` | Isolates repaint zone when card is in a list |
+| 13 | Support dark mode in components that use hardcoded `AppColors` | Currently assumes light theme only |
+
+---
+
+## 4. Widget Performance Classification
+
+### Heavy (watch in lists)
+
+| Widget | File | Lines | Why |
+|--------|------|-------|-----|
+| `InstaCareServiceCard` | `cards/service_card.dart` | 243 | Two `CustomPaint` widgets (dot grid + leaf). `shouldRepaint()` properly implemented. |
+| `InstaCareCarousel` | `animation/carousel.dart` | 141 | `Timer.periodic` auto-play + PageView animation. Timer properly cancelled in `dispose()`. |
+| `InstaCareOtpInput` | `inputs/otp_input.dart` | 167 | Creates N `TextEditingController` + 2N `FocusNode`. All properly disposed. |
+| `InstaCareVerticalStepper` | `steps/stepper.dart` | 212 | Creates N `AnimationController` instances. Properly disposed. Reinitializes on `didUpdateWidget`. |
 
 ### Medium
 
-| Widget | File | Why |
-|--------|------|-----|
-| `InstaCareDropdown` | `inputs/dropdown.dart` | Overlay-based, creates `OverlayEntry` on every open. Proper cleanup via `WidgetsBindingObserver` |
-| `InstaCareDropdownWithCheckbox` | `inputs/dropdown_with_checkbox.dart` | Same overlay pattern, multi-select variant |
-| `InstaCareBookingCard` | `cards/booking_card.dart` | ~275 lines, network image loading, multiple sections |
-| `InstaCareMarkdown` | `animation/markdown.dart` | ~214 lines, custom styling with flutter_markdown |
-| `InstaCareAttemptsCard` | `cards/attempts_card.dart` | ~220 lines, conditional rendering for 3 states |
+| Widget | File | Lines | Why |
+|--------|------|-------|-----|
+| `InstaCareDropdown` | `inputs/dropdown.dart` | 252 | Overlay-based, `WidgetsBindingObserver` for cleanup. Proper lifecycle. |
+| `InstaCareDropdownWithCheckbox` | `inputs/dropdown_with_checkbox.dart` | 312 | Same overlay pattern, multi-select. Marks overlay dirty on `didUpdateWidget`. |
+| `InstaCareBookingCard` | `cards/booking_card.dart` | 275 | Network image, multiple sections. Stateless, no lifecycle concerns. |
+| `InstaCareMarkdown` | `animation/markdown.dart` | 213 | Custom `MarkdownStyleSheet`, custom builders. Mergeable via `styleSheet` parameter. |
+| `InstaCareAttemptsCard` | `cards/attempts_card.dart` | 233 | 3 states (passed/exhausted/in-progress), `LayoutBuilder` for responsive. |
+| `InstaCareSnackbar` | `dialogs/snackbar.dart` | 215 | Overlay-based with `AnimationController`, auto-dismiss with `mounted` check. |
+| `InstaCareMcqOptionSelector` | `selection/mcq_option_selector.dart` | 126 | Responsive dot sizing, uses `InstaCareButton` for navigation. |
+| `InstaCareConfirmationDialog` | `dialogs/confirmation_dialog.dart` | 148 | Adaptive sizing with `LayoutBuilder`, proper `Navigator.pop`. |
 
 ### Lightweight (well-optimized)
 
-| Widget | File | Notes |
-|--------|------|-------|
-| `InstaCarePillChip` | `selection/pill_chip.dart` | Simple stateless, minimal tree |
-| `InstaCareCheckboxField` | `inputs/checkbox_field.dart` | Thin wrapper |
-| `InstaCareProgressBar` | `feedback/progress_bar.dart` | Uses built-in `LinearProgressIndicator` |
-| `InstaCareRatingScale` | `selection/rating_scale.dart` | Simple icon row |
-| `InstaCareStatusBadge` | `badges/status_badge.dart` | Minimal container + text |
-| `InstaCareHoursSummaryPill` | `pills/hours_summary_pill.dart` | Theme-aware, minimal |
-| `InstaCareFilterPills` | `selection/filter_pills.dart` | Thin composition over PillChip |
-| `InstaCareServicePills` | `selection/service_pills.dart` | Thin composition over PillChip |
-| `InstaCareMessageBox` | `feedback/message_box.dart` | Simple stateless container |
-| `InstaCareSearchBar` | `inputs/search_bar.dart` | Thin wrapper over TextField |
-| `KeyboardAwareScaffold` | `navigation/keyboard_aware_scaffold.dart` | Smart utility, minimal overhead |
-| `InstaCareCard` | `cards/card.dart` | Simple card container |
-| `InstaCareIncomeTile` | `cards/income_tile.dart` | Composition-based |
-| `InstaCareCardListView` | `cards/card_list_view.dart` | Simple list layout |
+| Widget | File | Lines | Notes |
+|--------|------|-------|-------|
+| `InstaCarePillChip` | `selection/pill_chip.dart` | 45 | Simple stateless, minimal tree |
+| `InstaCareCheckboxField` | `inputs/checkbox_field.dart` | 44 | Thin wrapper, delegates to Material Checkbox |
+| `InstaCareProgressBar` | `feedback/progress_bar.dart` | 46 | Uses built-in `LinearProgressIndicator` |
+| `InstaCareRatingScale` | `selection/rating_scale.dart` | 33 | Simple icon row with `VisualDensity.compact` |
+| `InstaCareStatusBadge` | `badges/status_badge.dart` | 58 | Enum-driven color, minimal container + text |
+| `InstaCareHoursSummaryPill` | `pills/hours_summary_pill.dart` | 29 | Theme-aware, minimal |
+| `InstaCareFilterPills` | `selection/filter_pills.dart` | 31 | Thin composition over `PillChip` |
+| `InstaCareServicePills` | `selection/service_pills.dart` | 31 | Thin composition over `PillChip` |
+| `InstaCareMessageBox` | `feedback/message_box.dart` | 96 | Simple stateless container |
+| `InstaCareSearchBar` | `inputs/search_bar.dart` | 56 | Thin wrapper over `TextField` |
+| `KeyboardAwareScaffold` | `navigation/keyboard_aware_scaffold.dart` | 125 | Configurable (scrollable, safeArea, dismissKeyboard flags) |
+| `InstaCareCard` | `cards/card.dart` | 39 | Simple card container with InkWell |
+| `InstaCareIncomeTile` | `cards/income_tile.dart` | 63 | Composition over `InstaCareCard` + `InstaCareButton` |
+| `InstaCareCardListView` | `cards/card_list_view.dart` | 73 | Simple list layout |
+| `InstaCareTopHeaderTitle` | `navigation/top_header_title.dart` | 35 | Thin AppBar wrapper, `PreferredSizeWidget` |
+| `InstaCareBottomAppNavBar` | `navigation/bottom_app_nav_bar.dart` | 82 | Customizable colors, proper `SafeArea` |
+| `InstaCareCheckboxCard` | `cards/checkbox_card.dart` | 90 | Customizable colors for selected/unselected states |
+| `InstaCareFileUploadTile` | `upload/file_upload_tile.dart` | 61 | Hover/highlight state tracking |
+| `InstaCareSkeletonLoading` | `animation/skeleton_loading.dart` | 65 | Gradient animation with `AnimationController` |
+| `InstaCareRadioButtons<T>` | `selection/radio_buttons.dart` | 86 | Generic, supports horizontal (Wrap) and vertical (Column) |
+| `InstaCareTextField` | `inputs/text_field.dart` | 166 | Password variant via named constructor, color customizable |
+| `InstaCarePhoneInput` | `inputs/phone_input.dart` | 162 | Country flag + code prefix, digit-only filter |
+| `InstaCareDatePickerField` | `inputs/date_picker_field.dart` | 91 | Triggers system date picker, formatted display |
+| `InstaCareAppointmentStatusPills` | `pills/appointment_status_pills.dart` | 55 | Badge composition with opacity-based selection |
+| `InstaCareLogo` / `LogoIcon` / `LogoText` | `common/logo.dart` | 101 | SVG asset with color filter, three variants |
+| `InstaCareNetworkImage` | `common/network_image.dart` | 101 | Shimmer placeholder, fade-in, custom `imageBuilder` hook |
+| `InstaCareHeading` | `theme/heading.dart` | 48 | Static helper methods for consistent headings |
 
 ---
 
-## 4. Good Practices Found
+## 5. Good Practices Found
 
-| Practice | Files | Notes |
+| Practice | Where | Notes |
 |----------|-------|-------|
-| `const` constructors | All widgets | Proper use throughout |
-| Private constructor for utility classes | `AppColors._()`, `InstaCareTypography._()` | Prevents instantiation |
-| Named constructors | `InstaCareButton.secondary`, `InstaCareTextField.password` | Clean API |
-| `WidgetStateProperty` (not deprecated `MaterialStateProperty`) | `button.dart` | Up-to-date API |
-| Proper `dispose()` | Carousel, OTP, Dropdown, Stepper | Controllers/nodes cleaned up |
-| `WidgetsBindingObserver` | Dropdown, DropdownWithCheckbox | Closes overlay on metrics change |
-| `shouldRepaint()` optimization | All CustomPainters | Avoids unnecessary repaints |
-| `Clip.antiAlias` | Cards, ServiceCard | Smooth rounded corners |
-| Responsive scaling with `LayoutBuilder` | Buttons, ServiceCard, Stepper, OTP | Adapts to container size |
-| `.clamp()` for sizing | Throughout | Safe responsive values |
+| `const` constructors | All widgets | Proper use throughout, enables widget tree optimization |
+| Private constructor for utility classes | `AppColors._()`, `InstaCareTypography._()` | Prevents accidental instantiation |
+| Named constructors | `InstaCareButton.secondary`, `InstaCareTextField.password` | Clean API surface |
+| `WidgetStateProperty` (modern API) | `button.dart` | Not using deprecated `MaterialStateProperty` |
+| Proper `dispose()` | Carousel (Timer), OTP (controllers/nodes), Dropdown (observer), Stepper (controllers), Snackbar (animation) | All resources properly cleaned up |
+| `WidgetsBindingObserver` | `dropdown.dart`, `dropdown_with_checkbox.dart` | Closes overlay on screen metrics change (rotation, keyboard) |
+| `shouldRepaint()` optimization | `_DotTexturePainter`, `_LeafPainter` | Compares all relevant fields, avoids unnecessary repaints |
+| `Clip.antiAlias` | `booking_card.dart` | Smooth rounded corners on clipped content |
+| Responsive scaling with `LayoutBuilder` | `button.dart`, `service_card.dart`, `stepper.dart`, `otp_input.dart`, `mcq_option_selector.dart`, `attempts_card.dart`, `confirmation_dialog.dart` | Adapts to container size with `.clamp()` |
+| `.clamp()` for safe sizing | Throughout (7+ widgets) | Prevents extreme values on unusual screen sizes |
+| `didUpdateWidget` handling | `stepper.dart`, `dropdown_with_checkbox.dart` | Reinitializes animations / rebuilds overlay when props change |
+| `imageBuilder` hook | `network_image.dart` | Lets consumers inject custom caching (e.g. CachedNetworkImage) |
+| Overlay position calculation | `dropdown.dart`, `dropdown_with_checkbox.dart` | Measures space above/below, flips direction as needed |
+| `Timer.periodic` with dispose | `carousel.dart` | Auto-play is cancellable, no memory leak |
+| `mounted` check before `setState` | `dropdown.dart:78`, `dropdown_with_checkbox.dart:89` | Prevents setState-after-dispose |
 
 ---
 
-## 5. Bad Practices Found
+## 6. Bad Practices Still Present
 
-| Issue | Files | Impact |
-|-------|-------|--------|
-| No `Semantics` widgets | All interactive widgets | Screen readers can't describe UI elements |
-| No unit tests | `test/` directory | Only boilerplate test file exists |
-| No dartdoc comments | All public APIs | Missing documentation for consumers |
-| Duplicate painters (`_DotTexturePainter`, `_LeafPainter`) | `service_card.dart` | Private classes, can't be reused if grid widget is added later |
-| Duplicate `InputDecoration` | All input widgets | Each input builds its own `InputDecoration` instead of sharing a theme helper |
-| Duplicate enums for message types | `snackbar.dart` vs `message_box.dart` | `InstaCareSnackbarType` and `InstaCareMessageType` are identical enums |
-
----
-
-## 6. Remaining Issues — Prioritized
-
-### Fix Now (before next release)
-| # | Issue | File | Effort |
-|---|-------|------|--------|
-| 1 | Extract shared `InputDecoration` helper | Create `theme/input_theme.dart` | Medium |
-| 2 | Unify `SnackbarType`/`MessageType` enums | Create `types/feedback_type.dart` | Low |
-| 3 | Extract shared painters | Create `common/painters.dart` | Medium |
-
-### Fix Later (next sprint)
-| # | Issue | File | Effort |
-|---|-------|------|--------|
-| 4 | Add `Semantics` labels to all interactive widgets | All widgets | High |
-| 5 | Add unit tests for theme constants, button states, validators | `test/` | High |
-| 6 | Add dartdoc comments to all public APIs | All files | Medium |
-
-### Good to Have (future)
-| # | Issue | Notes |
-|---|-------|-------|
-| 7 | Replace `carousel_slider` package for edge cases (infinite scroll, gesture conflicts) | Current implementation works but package handles more edge cases |
-| 8 | Add `borderColor` parameter to `InstaCareCard` | Currently hardcoded to `AppColors.primary700` |
-| 9 | Add `borderRadius` parameter to card widgets | Currently hardcoded to `12` |
+| # | Issue | File(s) | Impact | Fix Effort |
+|---|-------|---------|--------|------------|
+| 1 | **Duplicate `InputDecoration`** — 7 input widgets each build identical decoration (fill: `ivory300`, border: `primary700`, focused: `primary900` width 2, radius 8) | `text_field.dart`, `phone_input.dart`, `otp_input.dart`, `dropdown.dart`, `dropdown_with_checkbox.dart`, `search_bar.dart`, `date_picker_field.dart` | More maintenance, risk of inconsistency | Medium — Create `InstaCareInputDecoration` factory |
+| 2 | **Duplicate feedback enums** — `InstaCareSnackbarType` and `InstaCareMessageType` are identical (`info`, `error`, `pending`, `success`) with identical color switch maps | `snackbar.dart:5`, `message_box.dart:5` | Code duplication, confusing for consumers | Low |
+| 3 | **No `Semantics` widgets** on any interactive element | All interactive widgets | Screen readers cannot describe UI | High effort |
+| 4 | **No unit tests** | `test/` directory (boilerplate only) | No regression safety | High effort |
+| 5 | **No dartdoc on most public APIs** | Most widgets | Consumers get no IDE documentation | Medium effort |
+| 6 | **Duplicate custom painters** are private, not reusable | `service_card.dart:139-243` | If grid variant is added, painters must be duplicated | Medium effort |
 
 ---
 
@@ -143,102 +177,102 @@
 
 ### 7.1 Buttons (1 widget, 2 variants)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareButton` | `buttons/button.dart` | StatelessWidget | Primary variant (default) |
-| `InstaCareButton.secondary` | `buttons/button.dart` | StatelessWidget | Outlined secondary variant |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareButton` | `buttons/button.dart` | StatelessWidget | 203 | Primary variant (default) |
+| `InstaCareButton.secondary` | `buttons/button.dart` | StatelessWidget | — | Outlined secondary variant |
 
 **Properties:** `text`, `onPressed`, `isLoading` (skeleton shimmer), `size` (ButtonSize enum: small/medium/large), `icon`, `fullWidth`, `isDisabled`
 
-### 7.2 Input Widgets (8 widgets)
+### 7.2 Input Widgets (9 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareTextField` | `inputs/text_field.dart` | StatefulWidget | Text input with label, hint, validation, password toggle |
-| `InstaCareTextField.password` | `inputs/text_field.dart` | StatefulWidget | Pre-configured password variant |
-| `InstaCarePhoneInput` | `inputs/phone_input.dart` | StatelessWidget | Phone input with country flag & code |
-| `InstaCareOtpInput` | `inputs/otp_input.dart` | StatefulWidget | N-digit OTP entry (default: 6) |
-| `InstaCareDropdown<T>` | `inputs/dropdown.dart` | StatefulWidget | Generic overlay-based dropdown |
-| `InstaCareDropdownWithCheckbox<T>` | `inputs/dropdown_with_checkbox.dart` | StatefulWidget | Multi-select dropdown with checkboxes |
-| `InstaCareSearchBar` | `inputs/search_bar.dart` | StatelessWidget | Search input with icon |
-| `InstaCareDatePickerField` | `inputs/date_picker_field.dart` | StatelessWidget | Date picker trigger field |
-| `InstaCareCheckboxField` | `inputs/checkbox_field.dart` | StatelessWidget | Labeled checkbox |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareTextField` | `inputs/text_field.dart` | StatefulWidget | 166 | Text input with label, hint, validation, customizable colors |
+| `InstaCareTextField.password` | `inputs/text_field.dart` | StatefulWidget | — | Pre-configured password variant with toggle |
+| `InstaCarePhoneInput` | `inputs/phone_input.dart` | StatelessWidget | 162 | Phone input with country flag & code |
+| `InstaCareOtpInput` | `inputs/otp_input.dart` | StatefulWidget | 167 | N-digit OTP entry (default: 6) |
+| `InstaCareDropdown<T>` | `inputs/dropdown.dart` | StatefulWidget | 252 | Generic overlay-based dropdown |
+| `InstaCareDropdownWithCheckbox<T>` | `inputs/dropdown_with_checkbox.dart` | StatefulWidget | 312 | Multi-select dropdown with checkboxes |
+| `InstaCareSearchBar` | `inputs/search_bar.dart` | StatelessWidget | 56 | Search input with icon |
+| `InstaCareDatePickerField` | `inputs/date_picker_field.dart` | StatelessWidget | 91 | Date picker trigger field |
+| `InstaCareCheckboxField` | `inputs/checkbox_field.dart` | StatelessWidget | 44 | Labeled checkbox |
 
 ### 7.3 Card Widgets (7 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareCard` | `cards/card.dart` | StatelessWidget | Base card container |
-| `InstaCareBookingCard` | `cards/booking_card.dart` | StatelessWidget | Patient booking info card |
-| `InstaCareCheckboxCard` | `cards/checkbox_card.dart` | StatelessWidget | Selectable card with checkbox |
-| `InstaCareAttemptsCard` | `cards/attempts_card.dart` | StatelessWidget | Assessment attempts tracker (3 states) |
-| `InstaCareIncomeTile` | `cards/income_tile.dart` | StatelessWidget | Income display with redeem button |
-| `InstaCareServiceCard` | `cards/service_card.dart` | StatelessWidget | Service card with decorative leaf pattern |
-| `InstaCareCardListView` | `cards/card_list_view.dart` | StatelessWidget | Card + title/body list layout |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareCard` | `cards/card.dart` | StatelessWidget | 39 | Base card container with InkWell |
+| `InstaCareBookingCard` | `cards/booking_card.dart` | StatelessWidget | 275 | Patient booking info card |
+| `InstaCareCheckboxCard` | `cards/checkbox_card.dart` | StatelessWidget | 90 | Selectable card with checkbox |
+| `InstaCareAttemptsCard` | `cards/attempts_card.dart` | StatelessWidget | 233 | Assessment attempts tracker (3 states) |
+| `InstaCareIncomeTile` | `cards/income_tile.dart` | StatelessWidget | 63 | Income display with redeem button |
+| `InstaCareServiceCard` | `cards/service_card.dart` | StatelessWidget | 243 | Service card with decorative leaf pattern |
+| `InstaCareCardListView` | `cards/card_list_view.dart` | StatelessWidget | 73 | Card + title/body list layout |
 
 ### 7.4 Navigation Widgets (3 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareBottomAppNavBar` | `navigation/bottom_app_nav_bar.dart` | StatelessWidget | Bottom navigation bar |
-| `InstaCareTopHeaderTitle` | `navigation/top_header_title.dart` | StatelessWidget | AppBar header (PreferredSizeWidget) |
-| `KeyboardAwareScaffold` | `navigation/keyboard_aware_scaffold.dart` | StatelessWidget | Scaffold with keyboard handling |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareBottomAppNavBar` | `navigation/bottom_app_nav_bar.dart` | StatelessWidget | 82 | Bottom navigation bar with customizable colors |
+| `InstaCareTopHeaderTitle` | `navigation/top_header_title.dart` | StatelessWidget | 35 | AppBar header (`PreferredSizeWidget`) |
+| `KeyboardAwareScaffold` | `navigation/keyboard_aware_scaffold.dart` | StatelessWidget | 125 | Scaffold with keyboard handling, scrollable/safeArea flags |
 
 ### 7.5 Selection Widgets (6 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCarePillChip` | `selection/pill_chip.dart` | StatelessWidget | Single toggle pill |
-| `InstaCareFilterPills` | `selection/filter_pills.dart` | StatelessWidget | Multi-select filter pills |
-| `InstaCareServicePills` | `selection/service_pills.dart` | StatelessWidget | Single-select service pills |
-| `InstaCareRadioButtons<T>` | `selection/radio_buttons.dart` | StatelessWidget | Radio option group |
-| `InstaCareRatingScale` | `selection/rating_scale.dart` | StatelessWidget | 1-5 star rating |
-| `InstaCareMcqOptionSelector` | `selection/mcq_option_selector.dart` | StatelessWidget | MCQ with prev/next buttons |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCarePillChip` | `selection/pill_chip.dart` | StatelessWidget | 45 | Single toggle pill |
+| `InstaCareFilterPills` | `selection/filter_pills.dart` | StatelessWidget | 31 | Multi-select filter pills |
+| `InstaCareServicePills` | `selection/service_pills.dart` | StatelessWidget | 31 | Single-select service pills |
+| `InstaCareRadioButtons<T>` | `selection/radio_buttons.dart` | StatelessWidget | 86 | Radio option group (vertical/horizontal) |
+| `InstaCareRatingScale` | `selection/rating_scale.dart` | StatelessWidget | 33 | 1-N star rating (default 5) |
+| `InstaCareMcqOptionSelector` | `selection/mcq_option_selector.dart` | StatelessWidget | 126 | MCQ with prev/next buttons |
 
 ### 7.6 Feedback & Dialog Widgets (4 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareSnackbar.show()` | `dialogs/snackbar.dart` | Static method | Animated top notification |
-| `showInstaCareConfirmationDialog()` | `dialogs/confirmation_dialog.dart` | Function | Confirmation popup dialog |
-| `InstaCareMessageBox` | `feedback/message_box.dart` | StatelessWidget | Inline message with icon |
-| `InstaCareProgressBar` | `feedback/progress_bar.dart` | StatelessWidget | Linear progress with percentage |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareSnackbar.show()` | `dialogs/snackbar.dart` | Static method | 215 | Animated top overlay notification with auto-dismiss |
+| `showInstaCareConfirmationDialog()` | `dialogs/confirmation_dialog.dart` | Function | 148 | Adaptive confirmation popup |
+| `InstaCareMessageBox` | `feedback/message_box.dart` | StatelessWidget | 96 | Inline message with icon |
+| `InstaCareProgressBar` | `feedback/progress_bar.dart` | StatelessWidget | 46 | Linear progress with percentage |
 
 ### 7.7 Animation Widgets (3 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareSkeletonLoading` | `animation/skeleton_loading.dart` | StatefulWidget | Shimmer placeholder |
-| `InstaCareCarousel` | `animation/carousel.dart` | StatefulWidget | Auto-play image carousel with indicators |
-| `InstaCareMarkdown` | `animation/markdown.dart` | StatelessWidget | Styled markdown renderer |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareSkeletonLoading` | `animation/skeleton_loading.dart` | StatefulWidget | 65 | Gradient shimmer placeholder |
+| `InstaCareCarousel` | `animation/carousel.dart` | StatefulWidget | 141 | Auto-play image carousel with indicators |
+| `InstaCareMarkdown` | `animation/markdown.dart` | StatelessWidget | 213 | Styled markdown renderer with custom builders |
 
 ### 7.8 Status & Badge Widgets (3 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareStatusBadge` | `badges/status_badge.dart` | StatelessWidget | Enum-based status badge |
-| `InstaCareHoursSummaryPill` | `pills/hours_summary_pill.dart` | StatelessWidget | Themed text pill |
-| `InstaCareAppointmentStatusPills` | `pills/appointment_status_pills.dart` | StatelessWidget | Status badge selection row |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareStatusBadge` | `badges/status_badge.dart` | StatelessWidget | 58 | Enum-based status badge |
+| `InstaCareHoursSummaryPill` | `pills/hours_summary_pill.dart` | StatelessWidget | 29 | Theme-aware text pill |
+| `InstaCareAppointmentStatusPills` | `pills/appointment_status_pills.dart` | StatelessWidget | 55 | Status badge selection row with opacity |
 
-### 7.9 Other Widgets (5 widgets)
+### 7.9 Other Widgets (6 widgets)
 
-| Widget | File | Type | Description |
-|--------|------|------|-------------|
-| `InstaCareVerticalStepper` | `steps/stepper.dart` | StatefulWidget | Animated step indicator |
-| `InstaCareFileUploadTile` | `upload/file_upload_tile.dart` | StatefulWidget | Upload area with hover state |
-| `InstaCareLogo` | `common/logo.dart` | StatelessWidget | SVG logo + text |
-| `InstaCareLogoIcon` | `common/logo.dart` | StatelessWidget | SVG logo only |
-| `InstaCareLogoText` | `common/logo.dart` | StatelessWidget | Text only |
-| `InstaCareNetworkImage` | `common/network_image.dart` | StatelessWidget | Image loader with shimmer/error |
+| Widget | File | Type | Lines | Description |
+|--------|------|------|-------|-------------|
+| `InstaCareVerticalStepper` | `steps/stepper.dart` | StatefulWidget | 212 | Animated horizontal step indicator |
+| `InstaCareFileUploadTile` | `upload/file_upload_tile.dart` | StatefulWidget | 61 | Upload area with hover/highlight state |
+| `InstaCareLogo` | `common/logo.dart` | StatelessWidget | 101 | SVG logo + text |
+| `InstaCareLogoIcon` | `common/logo.dart` | StatelessWidget | — | SVG logo only |
+| `InstaCareLogoText` | `common/logo.dart` | StatelessWidget | — | Text only |
+| `InstaCareNetworkImage` | `common/network_image.dart` | StatelessWidget | 101 | Image loader with shimmer/error + custom `imageBuilder` hook |
 
 ### 7.10 Theme & Utility Exports
 
-| Export | File | Description |
-|--------|------|-------------|
-| `AppColors` | `theme/color.dart` | Full color palette (90+ constants) |
-| `InstaCareTypography` | `theme/typography.dart` | Text styles (h1-h5, p/body/r, m, s, sm, xs) |
-| `InstaCareHeading` | `theme/heading.dart` | Header helper widgets |
-| `ButtonSize` | `types/button_size.dart` | Enum: small, medium, large |
+| Export | File | Lines | Description |
+|--------|------|-------|-------------|
+| `AppColors` | `theme/color.dart` | 136 | Full color palette (90+ constants, 7 color families + semantic) |
+| `InstaCareTypography` | `theme/typography.dart` | 103 | Text styles (h1-h5, r/p/body, m, s, sm, xs) via Google Fonts |
+| `InstaCareHeading` | `theme/heading.dart` | 48 | Static header helper methods |
+| `ButtonSize` | `types/button_size.dart` | 14 | Enum with height/padding extensions |
 
 ---
 
@@ -252,9 +286,11 @@
 | Secondary | 50-900 | `#DC9251` (Orange) | Accents, secondary actions |
 | Natural | 50-900 | `#A58E74` (Brown) | Earthy backgrounds |
 | Ivory | 50-900 | `#FFEFCD` (Warm Cream) | Input fills, warm backgrounds |
-| Gray | 50-900 | `#000000-#F8F8F8` | Text, borders, disabled states |
+| Gray | 50-900 | `#000000`-`#F8F8F8` | Text, borders, disabled states |
 | Error | 50-900 | `#FB0000` (Red) | Error states, destructive actions |
 | Success | 50-900 | `#00C400` (Green) | Success feedback |
+| Semantic | infoBg/Fg, warningBg/Fg, errorBg/Fg, successBg/Fg, completedBg/Fg | — | Snackbar, message box, attempts card |
+| Service Card | background, title, body, accent | `#6F8572` base | Service card defaults |
 
 ### 8.2 Typography
 
@@ -265,8 +301,8 @@
 | h3 | Crimson Pro | 18 | Medium (500) | Section inner titles |
 | h4 | Crimson Pro | 14 | SemiBold (600) | Small titles |
 | h5 | Figtree | 20 | Medium (500) | Alternate heading |
-| r | Figtree | 14 | Regular (400) | Body/one-liner |
-| p / body | (alias for r) | 14 | Regular (400) | Body text aliases |
+| r | Figtree | 14 | Regular (400) | Body / one-liner (canonical) |
+| p / body | (alias for `r`) | 14 | Regular (400) | Body text aliases |
 | m | Figtree | 14 | Medium (500) | One-liner medium |
 | s | Figtree | 12 | Regular (400) | Small regular |
 | sm | Figtree | 12 | Medium (500) | Small medium |
@@ -280,14 +316,14 @@
 
 | Package | Version | Necessary? | Notes |
 |---------|---------|------------|-------|
-| `google_fonts` | ^8.0.2 | Yes | Core to design system |
-| `flutter_svg` | ^2.0.10+1 | Yes | Logo asset rendering |
+| `google_fonts` | ^8.0.2 | Yes | Core to design system (Crimson Pro + Figtree) |
+| `flutter_svg` | ^2.0.10+1 | Yes | Logo SVG rendering |
 | `country_flags` | ^2.2.0 | Yes | PhoneInput country flags |
 | `flutter_markdown` | ^0.7.7+1 | Yes | Markdown widget core |
 | `markdown` | ^7.3.0 | Yes | Required by flutter_markdown |
-| `flutter_lints` | ^4.0.0 | Dev only | Linting |
+| `flutter_lints` | ^4.0.0 | Dev only | Linting rules |
 
-**Total external dependencies: 5** — reasonable for a UI library. No bloat detected.
+**Total external dependencies: 5** — lean for a UI library. No bloat detected.
 
 ---
 
@@ -295,68 +331,70 @@
 
 ```
 lib/
-  instacare_components.dart              # Main barrel export
+  instacare_components.dart              # Barrel export (46 lines, 45 exports)
   instacare_components_web.dart          # Web platform (empty)
   src/
     animation/
-      carousel.dart                      # 138 lines
-      markdown.dart                      # 214 lines
-      skeleton_loading.dart              # 65 lines
+      carousel.dart                      # 141 lines — Timer.periodic auto-play
+      markdown.dart                      # 213 lines — Custom builders + style
+      skeleton_loading.dart              # 65 lines  — Gradient shimmer
     badges/
       status_badge.dart                  # 58 lines
     buttons/
-      button.dart                        # 204 lines
+      button.dart                        # 203 lines — Primary + secondary variants
     cards/
-      attempts_card.dart                 # 234 lines
-      booking_card.dart                  # 275 lines
-      card.dart                          # 39 lines
+      attempts_card.dart                 # 233 lines — 3-state (passed/exhausted/progress)
+      booking_card.dart                  # 275 lines — Patient booking info
+      card.dart                          # 39 lines  — Base card
       card_list_view.dart                # 73 lines
-      checkbox_card.dart                 # 90 lines
+      checkbox_card.dart                 # 90 lines  — Color-customizable
       income_tile.dart                   # 63 lines
-      service_card.dart                  # 244 lines
+      service_card.dart                  # 243 lines — CustomPaint leaf + dots
     common/
-      logo.dart                          # 101 lines
-      network_image.dart                 # 101 lines
+      logo.dart                          # 101 lines — 3 variants
+      network_image.dart                 # 101 lines — imageBuilder hook
     dialogs/
-      confirmation_dialog.dart           # 148 lines
-      snackbar.dart                      # 216 lines
+      confirmation_dialog.dart           # 148 lines — Adaptive sizing
+      snackbar.dart                      # 215 lines — Overlay + animation
     feedback/
-      message_box.dart                   # 97 lines
+      message_box.dart                   # 96 lines
       progress_bar.dart                  # 46 lines
     inputs/
       checkbox_field.dart                # 44 lines
-      date_picker_field.dart             # 92 lines
-      dropdown.dart                      # 253 lines
-      dropdown_with_checkbox.dart        # 313 lines
-      otp_input.dart                     # 165 lines
-      phone_input.dart                   # 163 lines
-      search_bar.dart                    # 57 lines
-      text_field.dart                    # 167 lines
+      date_picker_field.dart             # 91 lines
+      dropdown.dart                      # 252 lines — Overlay + observer
+      dropdown_with_checkbox.dart        # 312 lines — Multi-select overlay
+      otp_input.dart                     # 167 lines — N controllers/nodes
+      phone_input.dart                   # 162 lines — Country flag prefix
+      search_bar.dart                    # 56 lines
+      text_field.dart                    # 166 lines — Password named constructor
     navigation/
       bottom_app_nav_bar.dart            # 82 lines
-      keyboard_aware_scaffold.dart       # 125 lines
-      top_header_title.dart              # 36 lines
+      keyboard_aware_scaffold.dart       # 125 lines — Configurable flags
+      top_header_title.dart              # 35 lines
     pills/
       appointment_status_pills.dart      # 55 lines
       hours_summary_pill.dart            # 29 lines
     selection/
       filter_pills.dart                  # 31 lines
-      mcq_option_selector.dart           # 126 lines
+      mcq_option_selector.dart           # 126 lines — Responsive dots
       pill_chip.dart                     # 45 lines
-      radio_buttons.dart                 # 86 lines
+      radio_buttons.dart                 # 86 lines — Generic, axis support
       rating_scale.dart                  # 33 lines
       service_pills.dart                 # 31 lines
     steps/
-      stepper.dart                       # 212 lines
+      stepper.dart                       # 212 lines — Animated connectors
     theme/
-      color.dart                         # 136 lines
-      heading.dart                       # 48 lines
-      typography.dart                    # 112 lines
+      color.dart                         # 136 lines — 90+ color constants
+      heading.dart                       # 48 lines  — Static helpers
+      typography.dart                    # 103 lines — 11 styles, 2 fonts
     types/
-      button_size.dart                   # 14 lines
+      button_size.dart                   # 14 lines  — Enum + extension
     upload/
       file_upload_tile.dart              # 61 lines
     assets_patient/                      # SVG/PNG assets
       logo.svg, caretaker.png/svg, liveincare.png/svg,
       nursing.png/svg, physiotheraphy.png/svg
 ```
+
+**Total:** 45 Dart files, 4,905 lines of code.
