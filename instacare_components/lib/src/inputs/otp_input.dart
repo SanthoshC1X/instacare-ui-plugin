@@ -120,7 +120,7 @@ Widget build(BuildContext context) {
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
                   maxLength: 1,
-                  style: InstaCareTypography.h3.copyWith(
+                  style: InstaCareTypography.h5.copyWith(
                     fontSize: fontSize,
                     fontWeight: FontWeight.w700,
                   ),
