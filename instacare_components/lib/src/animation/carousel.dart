@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
 
@@ -33,6 +35,7 @@ class InstaCareCarousel extends StatefulWidget {
 
 class _InstaCareCarouselState extends State<InstaCareCarousel> {
   late PageController _pageController;
+  Timer? _autoPlayTimer;
   int _currentPage = 0;
 
   @override
@@ -49,7 +52,8 @@ class _InstaCareCarouselState extends State<InstaCareCarousel> {
   }
 
   void _startAutoPlay() {
-    Future.delayed(widget.autoPlayDuration, () {
+    _autoPlayTimer?.cancel();
+    _autoPlayTimer = Timer.periodic(widget.autoPlayDuration, (_) {
       if (mounted && widget.autoPlay) {
         final nextPage = (_currentPage + 1) % widget.items.length;
         _pageController.animateToPage(
@@ -57,13 +61,13 @@ class _InstaCareCarouselState extends State<InstaCareCarousel> {
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         );
-        _startAutoPlay();
       }
     });
   }
 
   @override
   void dispose() {
+    _autoPlayTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }

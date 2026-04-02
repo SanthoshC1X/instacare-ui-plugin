@@ -17,7 +17,6 @@ class InstaCareTypography {
     fontSize: 24,
     fontWeight: FontWeight.w600, // SemiBold
     letterSpacing: 0,
-    height: 1.0,
   );
 
   /// -------------------------------
@@ -27,7 +26,6 @@ class InstaCareTypography {
     fontSize: 20,
     fontWeight: FontWeight.w500, // Medium
     letterSpacing: 0,
-    height: 1.0,
   );
 
   /// -------------------------------
@@ -37,7 +35,6 @@ class InstaCareTypography {
     fontSize: 18,
     fontWeight: FontWeight.w500, // Medium
     letterSpacing: 0,
-    height: 1.0,
   );
 
   /// -------------------------------
@@ -47,7 +44,6 @@ class InstaCareTypography {
     fontSize: 14,
     fontWeight: FontWeight.w600, // SemiBold
     letterSpacing: 0,
-    height: 1.0,
   );
   
   //h5
@@ -55,30 +51,19 @@ class InstaCareTypography {
     fontSize: 20,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
-    height: 1.0,
   );
 
   /// -------------------------------
-  /// BODY TEXT (p)
-  /// -------------------------------
-  static final TextStyle p = GoogleFonts.figtree(
-    fontSize: 14,
-    fontWeight: FontWeight.w400, // Regular
-    letterSpacing: 0,
-    height: 1.0,
-  );
-
-  static final TextStyle body = p;
-
-  /// -------------------------------
-  /// ONE LINER - REGULAR (r)
+  /// ONE LINER - REGULAR (r) / BODY TEXT (p)
   /// -------------------------------
   static final TextStyle r = GoogleFonts.figtree(
     fontSize: 14,
     fontWeight: FontWeight.w400, // Regular
     letterSpacing: 0,
-    height: 1.0,
   );
+
+  static final TextStyle p = r;
+  static final TextStyle body = r;
 
   /// -------------------------------
   /// ONE LINER - MEDIUM (m)
@@ -87,7 +72,6 @@ class InstaCareTypography {
     fontSize: 14,
     fontWeight: FontWeight.w500, // Medium
     letterSpacing: 0,
-    height: 1.0,
   );
 
   /// -------------------------------
@@ -97,7 +81,6 @@ class InstaCareTypography {
     fontSize: 12,
     fontWeight: FontWeight.w400, // Regular
     letterSpacing: 0,
-    height: 1.0,
   );
 
   /// -------------------------------
@@ -107,7 +90,6 @@ class InstaCareTypography {
     fontSize: 12,
     fontWeight: FontWeight.w500, // Medium
     letterSpacing: 0,
-    height: 1.0,
   );
 
   /// -------------------------------
@@ -117,6 +99,5 @@ class InstaCareTypography {
     fontSize: 10,
     fontWeight: FontWeight.w500, // Medium
     letterSpacing: 0,
-    height: 1.0,
   );
 }

@@ -19,13 +19,4 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 flutter:
   assets:
-    - lib/src/assessts_patient/
-  plugin:
-    platforms:
-      android:
-        package: com.example.instacare_components
-        pluginClass: InstacareComponentsPlugin
-      ios:
-        pluginClass: InstacareComponentsPlugin
-      macos:
-        pluginClass: InstacareComponentsPlugin
+    - lib/src/assets_patient/

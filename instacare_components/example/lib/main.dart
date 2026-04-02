@@ -783,6 +783,24 @@ class _GalleryState extends State<Gallery> {
   List<_SectionEntry> get _commonSections {
     return [
       const _SectionEntry.heading('Common Components'),
+      const _SectionEntry.heading('Badges & Status'),
+      _SectionEntry.component(
+        title: 'Status Badge',
+        fileName: 'status_badge.dart',
+        builder: (_) => const InstaCareStatusBadge(
+          label: 'Status',
+          type: InstaCareStatusBadgeType.custom,
+        ),
+      ),
+      _SectionEntry.component(
+        title: 'OTP Input',
+        fileName: 'otp_input.dart',
+        builder: (_) => InstaCareOtpInput(
+          length: 4,
+          onChanged: (value) {},
+          onCompleted: (value) {},
+        ),
+      ),
       const _SectionEntry.heading('Logo'),
       _SectionEntry.component(
         title: 'Instacare Logo',
@@ -902,7 +920,7 @@ class _GalleryState extends State<Gallery> {
         fileName: 'text_field.dart',
         builder: (_) => const Column(
           children: [
-            InstaCareTextField(label: 'Text Input', hint: 'placeholder', fillColor: AppColors.ivory700, borderColor: AppColors.primary300, focusedBorderColor: AppColors.primary200, hintColor: AppColors.gray600),
+            InstaCareTextField(label: 'Text Input', hint: 'placeholder'),
             SizedBox(height: 12),
             InstaCareTextField(label: 'Email', hint: 'Enter your email', prefixIcon: Icons.email_outlined),
           ],

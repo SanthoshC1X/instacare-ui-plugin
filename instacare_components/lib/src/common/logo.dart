@@ -29,7 +29,7 @@ class InstaCareLogo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SvgPicture.asset(
-          'lib/src/assessts_patient/logo.svg',
+          'lib/src/assets_patient/logo.svg',
           package: 'instacare_components',
           width: logoWidth,
           height: logoHeight,
@@ -67,7 +67,7 @@ class InstaCareLogoIcon extends StatelessWidget {
     final double logoWidth = size * (22.22 / 20.0);
 
     return SvgPicture.asset(
-      'lib/src/assessts_patient/logo.svg',
+      'lib/src/assets_patient/logo.svg',
       package: 'instacare_components',
       width: logoWidth,
       height: logoHeight,
