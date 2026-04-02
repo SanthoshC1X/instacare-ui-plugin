@@ -920,7 +920,7 @@ class _GalleryState extends State<Gallery> {
         fileName: 'text_field.dart',
         builder: (_) => const Column(
           children: [
-            InstaCareTextField(label: 'Text Input', hint: 'placeholder', fillColor: AppColors.ivory700, borderColor: AppColors.primary300, focusedBorderColor: AppColors.primary200, hintColor: AppColors.gray600),
+            InstaCareTextField(label: 'Text Input', hint: 'placeholder'),
             SizedBox(height: 12),
             InstaCareTextField(label: 'Email', hint: 'Enter your email', prefixIcon: Icons.email_outlined),
           ],

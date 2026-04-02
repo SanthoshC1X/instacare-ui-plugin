@@ -48,14 +48,14 @@ class _ICDropdownWithCheckboxState<T>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _removeOverlay();
+    _removeOverlay(updateState: false);
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   void didChangeMetrics() {
-    if (_expanded) {
+    if (_expanded && mounted) {
       _removeOverlay();
     }
   }
@@ -63,9 +63,15 @@ class _ICDropdownWithCheckboxState<T>
   @override
   void didUpdateWidget(covariant InstaCareDropdownWithCheckbox<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Rebuild overlay when selectedItems change so checkboxes update
+    // Rebuild overlay when selectedItems change so checkboxes update.
+    // Deferred to avoid calling markNeedsBuild() during the current build phase,
+    // which would throw "setState() called during build".
     if (_expanded && _overlayEntry != null) {
-      _overlayEntry!.markNeedsBuild();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _expanded && _overlayEntry != null) {
+          _overlayEntry!.markNeedsBuild();
+        }
+      });
     }
   }
 
@@ -78,15 +84,25 @@ class _ICDropdownWithCheckboxState<T>
   }
 
   void _showOverlay() {
+    if (!mounted) return;
+
     _overlayEntry = _createOverlayEntry();
     Overlay.of(context).insert(_overlayEntry!);
-    setState(() => _expanded = true);
+
+    if (mounted) {
+      setState(() => _expanded = true);
+    }
   }
 
-  void _removeOverlay() {
+  void _removeOverlay({bool updateState = true}) {
     _overlayEntry?.remove();
     _overlayEntry = null;
-    if (mounted) setState(() => _expanded = false);
+
+    if (updateState && mounted) {
+      setState(() => _expanded = false);
+    } else {
+      _expanded = false;
+    }
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -178,14 +194,14 @@ class _ICDropdownWithCheckboxState<T>
                                     width: 18,
                                     child: Checkbox(
                                       value: isChecked,
-                                      onChanged: (_) {
-                                        final next =
-                                            Set<T>.from(selected);
-                                        isChecked
-                                            ? next.remove(item)
-                                            : next.add(item);
-                                        widget.onChanged(next);
-                                      },
+                                      // InkWell.onTap is the sole handler.
+                                      // Keeping onChanged non-null so the
+                                      // checkbox renders as interactive (not
+                                      // disabled/greyed), but it must NOT
+                                      // call widget.onChanged — that would
+                                      // fire the callback twice per tap and
+                                      // cause setState-after-dispose crashes.
+                                      onChanged: (_) {},
                                       side: const BorderSide(
                                         color: AppColors.primary700,
                                       ),
@@ -266,7 +282,7 @@ class _ICDropdownWithCheckboxState<T>
             child: InputDecorator(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: AppColors.ivory300,
+                fillColor: AppColors.ivory700,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 14,
@@ -279,11 +295,11 @@ class _ICDropdownWithCheckboxState<T>
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.primary700),
+                  borderSide: const BorderSide(color: AppColors.primary800),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.primary700),
+                  borderSide: const BorderSide(color: AppColors.primary800),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),

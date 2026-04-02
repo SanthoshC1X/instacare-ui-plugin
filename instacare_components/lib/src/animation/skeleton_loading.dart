@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../theme/color.dart';
 
-class InstaCareSkeletonLoading extends StatefulWidget {
+class InstaCareSkeletonLoading extends StatelessWidget {
   final double? width;
   final double height;
   final BorderRadiusGeometry borderRadius;
@@ -20,46 +21,25 @@ class InstaCareSkeletonLoading extends StatefulWidget {
   });
 
   @override
-  State<InstaCareSkeletonLoading> createState() =>
-      _InstaCareSkeletonLoadingState();
-}
-
-class _InstaCareSkeletonLoadingState extends State<InstaCareSkeletonLoading>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: widget.duration,
-  )..repeat();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final base = widget.baseColor ?? AppColors.gray200;
-    final highlight = widget.highlightColor ?? AppColors.baseWhite;
+    final indicatorColor = highlightColor ?? AppColors.primary700;
+    final bgColor = baseColor ?? AppColors.gray50;
 
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, _) {
-        final slide = (_controller.value * 2) - 1;
-        return Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            borderRadius: widget.borderRadius,
-            gradient: LinearGradient(
-              begin: Alignment(slide - 1, 0),
-              end: Alignment(slide + 1, 0),
-              colors: [base, highlight, base],
-              stops: const [0.2, 0.5, 0.8],
-            ),
+    return SizedBox(
+      width: width,
+      height: height,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: borderRadius,
+        ),
+        child: Center(
+          child: CupertinoActivityIndicator(
+            color: indicatorColor,
+            radius: (height * 0.32).clamp(6.0, 14.0),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

@@ -110,47 +110,69 @@ class _InstaCareVerticalStepperState extends State<InstaCareVerticalStepper>
         final width =
             constraints.maxWidth.isFinite ? constraints.maxWidth : 360.0;
 
-        final circleSize = (width / (widget.items.length * 4)).clamp(26.0, 38.0);
+        final circleSize = (width / (widget.items.length * 4)).clamp(30.0, 40.0);
         final stepNumberSize = (circleSize * 0.45).clamp(12.0, 16.0);
 
-        final primary = Theme.of(context).colorScheme.primary;
-        const inactive = AppColors.gray300;
+        const primary = AppColors.primary900;
+        const inactive = AppColors.primary200;
 
         return Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             for (int index = 0; index < widget.items.length; index++) ...[
-              InkWell(
-                onTap: () => widget.onStepChanged?.call(index),
-                borderRadius: BorderRadius.circular(999),
-                child: Container(
-                  width: circleSize,
-                  height: circleSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: index <= widget.currentStep ? primary : inactive,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '${index + 1}',
-                    style: InstaCareTypography.sm.copyWith(
-                      color:AppColors.ivory300 ,
-                      fontSize: stepNumberSize,
-                      fontWeight: FontWeight.w600,
+              // Circle + label stacked
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () => widget.onStepChanged?.call(index),
+                    borderRadius: BorderRadius.circular(999),
+                    child: Container(
+                      width: circleSize,
+                      height: circleSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: index <= widget.currentStep ? primary : inactive,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${index + 1}',
+                        style: InstaCareTypography.sm.copyWith(
+                          color: AppColors.baseWhite,
+                          fontSize: stepNumberSize,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Step ${index + 1}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: index <= widget.currentStep
+                          ? FontWeight.w600
+                          : FontWeight.w400,
+                      color: index <= widget.currentStep ? primary : inactive,
+                    ),
+                  ),
+                ],
               ),
+              // Connector line between circles
               if (index < widget.items.length - 1)
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: EdgeInsets.only(
+                      top: circleSize / 2 - 1,
+                      left: 6,
+                      right: 6,
+                    ),
                     child: _AnimatedConnector(
                       animation: _animations[index],
                       activeColor: primary,
                       inactiveColor: inactive,
                       isCompleted: index < widget.currentStep,
-                      showArrow: true,
+                      showArrow: false,
                     ),
                   ),
                 ),

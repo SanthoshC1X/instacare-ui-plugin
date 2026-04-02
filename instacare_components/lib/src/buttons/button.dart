@@ -13,6 +13,7 @@ class InstaCareButton extends StatelessWidget {
   final bool fullWidth;
   final _ButtonVariant _variant;
   final bool isDisabled;
+  final Color? disabledBackgroundColor;
 
   const InstaCareButton({
     super.key,
@@ -23,6 +24,7 @@ class InstaCareButton extends StatelessWidget {
     this.icon,
     this.fullWidth = false,
     this.isDisabled = false,
+    this.disabledBackgroundColor,
   }) : _variant = _ButtonVariant.primary;
 
   const InstaCareButton.secondary({
@@ -34,6 +36,7 @@ class InstaCareButton extends StatelessWidget {
     this.icon,
     this.fullWidth = false,
     this.isDisabled = false,
+    this.disabledBackgroundColor,
   }) : _variant = _ButtonVariant.secondary;
 
   bool get _enabled => onPressed != null && !isLoading && !isDisabled;
@@ -51,7 +54,13 @@ class InstaCareButton extends StatelessWidget {
         final Color textColor;
         switch (_variant) {
           case _ButtonVariant.primary:
-            textColor = _enabled ? AppColors.baseWhite : AppColors.gray400;
+            if (_enabled) {
+              textColor = AppColors.baseWhite;
+            } else {
+              textColor = disabledBackgroundColor != null
+                  ? AppColors.baseWhite
+                  : AppColors.gray400;
+            }
           case _ButtonVariant.secondary:
             textColor = _enabled ? AppColors.primary700 : AppColors.gray400;
         }
@@ -109,7 +118,7 @@ class InstaCareButton extends StatelessWidget {
           style: ButtonStyle(
             backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.disabled)) {
-                return AppColors.gray200;
+                return disabledBackgroundColor ?? AppColors.gray200;
               }
               if (states.contains(WidgetState.pressed)) {
                 return AppColors.primary900;

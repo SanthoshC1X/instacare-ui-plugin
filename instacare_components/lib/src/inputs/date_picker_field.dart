@@ -7,6 +7,9 @@ class InstaCareDatePickerField extends StatelessWidget {
   final DateTime? value;
   final ValueChanged<DateTime>? onChanged;
   final String hint;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
+  final bool blockPastDates;
 
   const InstaCareDatePickerField({
     super.key,
@@ -14,6 +17,9 @@ class InstaCareDatePickerField extends StatelessWidget {
     this.value,
     this.onChanged,
     this.hint = 'mm/dd/yyyy',
+    this.firstDate,
+    this.lastDate,
+    this.blockPastDates = false,
   });
 
   @override
@@ -39,11 +45,27 @@ class InstaCareDatePickerField extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           onTap: () async {
             final now = DateTime.now();
+            final effectiveFirstDate = firstDate ?? 
+                (blockPastDates ? now : DateTime(1900));
+            final effectiveLastDate = lastDate ?? DateTime(2100);
+            
             final selected = await showDatePicker(
               context: context,
               initialDate: value ?? now,
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
+              firstDate: effectiveFirstDate,
+              lastDate: effectiveLastDate,
+              builder: (context, child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme: ColorScheme.light(
+                      primary: AppColors.primary900,
+                      onPrimary: AppColors.baseWhite,
+                      surface: AppColors.ivory300,
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
             );
             if (selected != null) {
               onChanged?.call(selected);
