@@ -22,11 +22,13 @@ class InstaCareOtpInput extends StatefulWidget {
 class _ICOtpInputState extends State<InstaCareOtpInput> {
   late List<TextEditingController> _controllers;
   late List<FocusNode> _focusNodes;
+  late List<FocusNode> _keyListenerNodes;
 
   @override
   void initState() {
     super.initState();
     _controllers = List.generate(widget.length, (_) => TextEditingController());
+    _keyListenerNodes = List.generate(widget.length, (_) => FocusNode());
     _focusNodes = List.generate(widget.length, (index) {
       final node = FocusNode();
       node.addListener(() {
@@ -47,6 +49,9 @@ class _ICOtpInputState extends State<InstaCareOtpInput> {
       controller.dispose();
     }
     for (var node in _focusNodes) {
+      node.dispose();
+    }
+    for (var node in _keyListenerNodes) {
       node.dispose();
     }
     super.dispose();
@@ -107,7 +112,7 @@ Widget build(BuildContext context) {
               width: cellSize,
               height: cellSize,
               child: KeyboardListener(
-                focusNode: FocusNode(),
+                focusNode: _keyListenerNodes[index],
                 onKeyEvent: (event) => _handleKeyEvent(index, event),
                 child: TextFormField(
                   controller: _controllers[index],
@@ -115,7 +120,7 @@ Widget build(BuildContext context) {
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
                   maxLength: 1,
-                  style: InstaCareTypography.h3.copyWith(
+                  style: InstaCareTypography.h5.copyWith(
                     fontSize: fontSize,
                     fontWeight: FontWeight.w700,
                   ),

@@ -122,7 +122,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.primary700),
+                  border: Border.all(color: AppColors.primary400),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
