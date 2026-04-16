@@ -120,9 +120,9 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                 width: triggerSize.width,
                 constraints: BoxConstraints(maxHeight: availableHeight),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.ivory300,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.primary400),
+                  border: Border.all(color: AppColors.primary700),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
