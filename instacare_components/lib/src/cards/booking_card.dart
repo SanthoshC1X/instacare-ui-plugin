@@ -102,7 +102,7 @@ class InstaCareBookingCard extends StatelessWidget {
                               Text(
                                 _genderAge,
                                 style: InstaCareTypography.s.copyWith(
-                                  color: AppColors.gray500,
+                                  color: AppColors.primary800,
                                 ),
                               ),
                             ],
@@ -123,27 +123,11 @@ class InstaCareBookingCard extends StatelessWidget {
                   // Row 2: Partner info | Booking ID
                   Row(
                     children: [
-                      // Partner avatar
-                      _buildPartnerAvatar(),
-                      const SizedBox(width: 6),
-                      // Partner name
-                      Expanded(
-                        child: Text(
-                          partnerName != null && partnerName!.isNotEmpty
-                              ? 'Assigned Partner : $partnerName'
-                              : 'Partner not assigned',
-                          style: InstaCareTypography.s.copyWith(
-                            color: AppColors.gray500,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
                       // Booking ID
                       Text(
                         bookingId,
-                        style: InstaCareTypography.s.copyWith(
-                          color: AppColors.gray500,
+                        style: InstaCareTypography.r.copyWith(
+                          color: AppColors.primary800,
                         ),
                       ),
                     ],
@@ -228,26 +212,6 @@ class InstaCareBookingCard extends StatelessWidget {
     }
     return parts.join('/');
   }
-
-  Widget _buildPartnerAvatar() {
-    if (partnerImageUrl != null && partnerImageUrl!.isNotEmpty) {
-      return CircleAvatar(
-        radius: 12,
-        backgroundImage: NetworkImage(partnerImageUrl!),
-        backgroundColor: AppColors.gray200,
-      );
-    }
-    return const CircleAvatar(
-      radius: 12,
-      backgroundColor: AppColors.secondary300,
-      child: Icon(
-        Icons.person,
-        size: 14,
-        color: AppColors.primary800,
-      ),
-    );
-  }
-
   Widget _buildServiceImage() {
     if (serviceImageUrl != null && serviceImageUrl!.isNotEmpty) {
       return InstaCareNetworkImage(
