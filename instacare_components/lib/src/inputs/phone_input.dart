@@ -71,11 +71,15 @@ class InstaCarePhoneInput extends StatelessWidget {
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(maxDigits),
           ],
-          style: InstaCareTypography.r,
+          style: InstaCareTypography.r.copyWith(
+            color: AppColors.primary900,
+            height: 1.0,
+          ),
           decoration: InputDecoration(
             hintText: hint ?? '87921 34521',
             hintStyle: InstaCareTypography.r.copyWith(
               color: AppColors.gray400,
+              height: 1.0,
             ),
             errorText: errorText,
 
@@ -85,21 +89,13 @@ class InstaCarePhoneInput extends StatelessWidget {
 
             /// ───── Prefix ─────
             prefixIcon: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: _outerPadding),
+              padding: const EdgeInsets.only(left: _outerPadding),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Flag
-                  Container(
-                    width: _flagSize + 8,
-                    height: _flagSize + 8,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.baseWhite,
-                    ),
-                    alignment: Alignment.center,
+                  // Flag with vertical alignment fix
+                  Transform.translate(
+                    offset: const Offset(0, -1),
                     child: CountryFlag.fromCountryCode(
                       countryIsoCode,
                       width: _flagSize,
@@ -113,7 +109,9 @@ class InstaCarePhoneInput extends StatelessWidget {
                   // Country code
                   Text(
                     countryCode,
-                    style: InstaCareTypography.r,
+                    style: InstaCareTypography.r.copyWith(
+                      height: 1.0,
+                    ),
                   ),
 
                   const SizedBox(width: _codeGap),

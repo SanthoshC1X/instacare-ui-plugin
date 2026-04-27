@@ -45,6 +45,9 @@ class InstaCareBookingCard extends StatelessWidget {
   /// Number of days until the booking. Null for active/ongoing bookings.
   final int? daysUntil;
 
+  /// Whether to show the partner information row. Defaults to true.
+  final bool showPartnerInfo;
+
   /// Callback when the card is tapped.
   final VoidCallback? onTap;
 
@@ -60,6 +63,7 @@ class InstaCareBookingCard extends StatelessWidget {
     this.serviceImageUrl,
     required this.dateTime,
     this.daysUntil,
+    this.showPartnerInfo = true,
     this.onTap,
   });
 
@@ -82,7 +86,7 @@ class InstaCareBookingCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
               child: Column(
                 children: [
-                  // Row 1: Patient name + gender/age | days until
+                  // Row 1: Patient name + gender/age | days until OR booking ID
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -102,52 +106,60 @@ class InstaCareBookingCard extends StatelessWidget {
                               Text(
                                 _genderAge,
                                 style: InstaCareTypography.s.copyWith(
-                                  color: AppColors.gray500,
+                                  color: AppColors.primary800,
                                 ),
                               ),
                             ],
                           ],
                         ),
                       ),
-                      // "In X Days" badge
+                      // "In X Days" badge OR Booking ID
                       if (daysUntil != null && daysUntil! > 0)
                         Text(
                           'In $daysUntil ${daysUntil == 1 ? 'Day' : 'Days'}',
                           style: InstaCareTypography.s.copyWith(
                             color: AppColors.gray500,
                           ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  // Row 2: Partner info | Booking ID
-                  Row(
-                    children: [
-                      // Partner avatar
-                      _buildPartnerAvatar(),
-                      const SizedBox(width: 6),
-                      // Partner name
-                      Expanded(
-                        child: Text(
-                          partnerName != null && partnerName!.isNotEmpty
-                              ? 'Assigned Partner : $partnerName'
-                              : 'Partner not assigned',
-                          style: InstaCareTypography.s.copyWith(
-                            color: AppColors.gray500,
+                        )
+                      else if (!showPartnerInfo) // Show booking ID when partner info is hidden
+                        Text(
+                          bookingId,
+                          style: InstaCareTypography.r.copyWith(
+                            color: AppColors.primary800,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      // Booking ID
-                      Text(
-                        bookingId,
-                        style: InstaCareTypography.s.copyWith(
-                          color: AppColors.gray500,
-                        ),
-                      ),
                     ],
                   ),
+                  // Row 2: Partner info | Booking ID (conditionally shown)
+                  if (showPartnerInfo) ...[
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _buildPartnerAvatar(),
+                        const SizedBox(width: 6),
+                        // Partner name
+                        Expanded(
+                          child: Text(
+                            partnerName != null && partnerName!.isNotEmpty
+                                ? 'Assigned Partner : $partnerName'
+                                : 'Partner not assigned',
+                            style: InstaCareTypography.s.copyWith(
+                              color: AppColors.gray500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        // Booking ID
+                        Text(
+                          bookingId,
+                          style: InstaCareTypography.r.copyWith(
+                            color: AppColors.primary800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -171,7 +183,7 @@ class InstaCareBookingCard extends StatelessWidget {
                   // Service name + date/time
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -184,7 +196,7 @@ class InstaCareBookingCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           Row(
                             children: [
                               const Icon(
@@ -209,7 +221,7 @@ class InstaCareBookingCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 12),
                 ],
               ),
           ],
@@ -228,8 +240,19 @@ class InstaCareBookingCard extends StatelessWidget {
     }
     return parts.join('/');
   }
+  Widget _buildServiceImage() {
+    if (serviceImageUrl != null && serviceImageUrl!.isNotEmpty) {
+      return InstaCareNetworkImage(
+        imageUrl: serviceImageUrl!,
+        fit: BoxFit.cover,
+        borderRadius: BorderRadius.zero,
+        errorWidget: _placeholderImage(),
+      );
+    }
+    return _placeholderImage();
+  }
 
-  Widget _buildPartnerAvatar() {
+   Widget _buildPartnerAvatar() {
     if (partnerImageUrl != null && partnerImageUrl!.isNotEmpty) {
       return CircleAvatar(
         radius: 12,
@@ -246,18 +269,6 @@ class InstaCareBookingCard extends StatelessWidget {
         color: AppColors.primary800,
       ),
     );
-  }
-
-  Widget _buildServiceImage() {
-    if (serviceImageUrl != null && serviceImageUrl!.isNotEmpty) {
-      return InstaCareNetworkImage(
-        imageUrl: serviceImageUrl!,
-        fit: BoxFit.cover,
-        borderRadius: BorderRadius.zero,
-        errorWidget: _placeholderImage(),
-      );
-    }
-    return _placeholderImage();
   }
 
   Widget _placeholderImage() {

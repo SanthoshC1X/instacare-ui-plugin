@@ -42,8 +42,8 @@ class InstaCareRadioButtons<T> extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: groupValue == option.value
-                            ? Theme.of(context).colorScheme.primary
-                            : AppColors.gray500,
+                            ? AppColors.primary900
+                            : AppColors.primary600,
                         width: 2,
                       ),
                     ),
@@ -54,7 +54,7 @@ class InstaCareRadioButtons<T> extends StatelessWidget {
                               height: 10,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: AppColors.primary900,
                               ),
                             ),
                           )

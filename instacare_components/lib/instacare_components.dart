@@ -1,6 +1,8 @@
 library instacare_components;
 
 export 'src/animation/skeleton_loading.dart';
+export 'src/animation/shimmer_skeleton.dart';
+export 'src/animation/skeleton_layouts.dart';
 export 'src/animation/carousel.dart';
 export 'src/badges/status_badge.dart';
 export 'src/buttons/button.dart';

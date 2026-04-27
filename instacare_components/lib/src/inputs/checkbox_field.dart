@@ -27,7 +27,7 @@ class InstaCareCheckboxField extends StatelessWidget {
             Checkbox(
               value: value,
               onChanged: onChanged,
-              activeColor: Theme.of(context).colorScheme.primary,
+              activeColor: AppColors.primary800,
               checkColor: AppColors.baseWhite,
             ),
             Flexible(

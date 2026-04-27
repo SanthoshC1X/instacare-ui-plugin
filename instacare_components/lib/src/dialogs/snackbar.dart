@@ -61,6 +61,9 @@ class _InstaCareSnackbarWidgetState extends State<_InstaCareSnackbarWidget>
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
+  
+  double _dragOffset = 0.0;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -139,72 +142,105 @@ class _InstaCareSnackbarWidgetState extends State<_InstaCareSnackbarWidget>
     widget.onClose();
   }
 
+  void _onPanUpdate(DragUpdateDetails details) {
+    if (!_isDragging) return;
+    
+    setState(() {
+      // Only allow upward swipes (negative delta)
+      _dragOffset += details.delta.dy;
+      _dragOffset = _dragOffset.clamp(double.negativeInfinity, 0.0);
+    });
+  }
+
+  void _onPanStart(DragStartDetails details) {
+    _isDragging = true;
+  }
+
+  void _onPanEnd(DragEndDetails details) {
+    _isDragging = false;
+    
+    // If dragged up more than 50 pixels or with sufficient velocity, dismiss
+    if (_dragOffset < -50 || details.velocity.pixelsPerSecond.dy < -300) {
+      _handleClose();
+    } else {
+      // Snap back to original position
+      setState(() {
+        _dragOffset = 0.0;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final fg = _foregroundColor();
 
     return Positioned(
-      top: MediaQuery.of(context).padding.top + 16,
+      top: MediaQuery.of(context).padding.top + 16 + _dragOffset,
       left: 16,
       right: 16,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: _backgroundColor(),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.gray400.withValues(alpha: 0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(_icon, size: 24, color: fg),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          widget.title,
-                          style: InstaCareTypography.r.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: fg,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.message,
-                          style: InstaCareTypography.r.copyWith(color: fg),
-                        ),
-                      ],
+      child: GestureDetector(
+        onPanStart: _onPanStart,
+        onPanUpdate: _onPanUpdate,
+        onPanEnd: _onPanEnd,
+        child: SlideTransition(
+          position: _slideAnimation,
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: _backgroundColor(),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.gray400.withValues(alpha: 0.2),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  InkWell(
-                    onTap: _handleClose,
-                    borderRadius: BorderRadius.circular(4),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Icon(
-                        Icons.close,
-                        size: 20,
-                        color: fg,
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(_icon, size: 24, color: fg),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: InstaCareTypography.r.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: fg,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            widget.message,
+                            style: InstaCareTypography.r.copyWith(color: fg),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: _handleClose,
+                      borderRadius: BorderRadius.circular(4),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Icon(
+                          Icons.close,
+                          size: 20,
+                          color: fg,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

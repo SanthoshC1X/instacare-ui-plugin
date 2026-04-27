@@ -115,14 +115,14 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
             child: Material(
               elevation: 4,
               borderRadius: BorderRadius.circular(8),
-              shadowColor: Colors.black26,
+              shadowColor:AppColors.primary400,
               child: Container(
                 width: triggerSize.width,
                 constraints: BoxConstraints(maxHeight: availableHeight),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.ivory300,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.primary400),
+                  border: Border.all(color: AppColors.primary700),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
@@ -147,7 +147,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                           },
                           child: Container(
                             color: isSelected
-                                ? AppColors.gray200
+                                ? AppColors.ivory400
                                 : Colors.transparent,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -193,7 +193,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
             widget.label!,
             style: InstaCareTypography.r.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColors.gray800,
+              color: AppColors.primary700,
             ),
           ),
           const SizedBox(height: 8),
@@ -240,7 +240,7 @@ class _InstaCareDropdownState<T> extends State<InstaCareDropdown<T>>
                 overflow: TextOverflow.ellipsis,
                 style: InstaCareTypography.r.copyWith(
                   color:
-                      widget.value == null ? AppColors.gray400 : AppColors.gray800,
+                      widget.value == null ? AppColors.primary900 : AppColors.primary800,
                 ),
               ),
             ),
